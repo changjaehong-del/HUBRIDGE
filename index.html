@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>허브릿지 — 청년의 자립을 위한 다리</title>
+  <meta name="description" content="사회적협동조합 허브릿지는 청년이 자립할 수 있도록 교육·인턴십·네트워크를 지원합니다." />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #1D4ED8; --primary-dark: #1e3a8a; --primary-light: #3B82F6;
+      --secondary: #059669; --accent: #F59E0B;
+      --dark: #0F172A; --gray-900: #111827; --gray-700: #374151;
+      --gray-500: #6B7280; --gray-200: #E5E7EB; --gray-100: #F3F4F6; --white: #FFFFFF;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans KR', sans-serif; color: var(--gray-900); background: var(--white); line-height: 1.6; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 68px;
+      transition: background 0.3s, box-shadow 0.3s;
+      background: transparent;
+    }
+    nav.scrolled, nav.white { background: rgba(255,255,255,0.97); box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+    /* 모든 페이지 네비 호버 → 다크 */
+    nav:hover { background: rgba(10,15,30,0.90) !important; box-shadow: none !important; }
+    nav:hover .nav-logo img { filter: brightness(0) invert(1) !important; }
+    nav:hover .nav-item > a { color: rgba(255,255,255,0.88) !important; }
+    nav:hover .nav-item > a::after { background: rgba(255,255,255,0.8) !important; }
+    nav:hover .hamburger span { background: var(--white) !important; }
+    nav:hover .nav-cta { color: rgba(255,255,255,0.88) !important; }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 26px; width: auto; filter: brightness(0) invert(1); transition: filter 0.3s; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
+    nav.scrolled .nav-logo img, nav.white .nav-logo img { filter: none; }
+
+    .nav-menu { display: flex; align-items: center; list-style: none; height: 68px; }
+    .nav-item { position: relative; height: 100%; display: flex; align-items: center; }
+    .nav-item > a {
+      display: flex; align-items: center; gap: 4px; padding: 0 1.3rem; height: 100%;
+      text-decoration: none; font-size: 0.86rem; font-weight: 500;
+      color: rgba(255,255,255,0.92); transition: color 0.2s; white-space: nowrap; cursor: pointer;
+      letter-spacing: 0.06em; position: relative;
+    }
+    .nav-item > a::after {
+      content: ''; position: absolute; bottom: 14px;
+      left: 1.3rem; right: 1.3rem; height: 1.5px;
+      background: rgba(255,255,255,0.85);
+      transform: scaleX(0); transition: transform 0.25s ease; transform-origin: center;
+    }
+    .nav-item:hover > a::after { transform: scaleX(1); }
+    nav.scrolled .nav-item > a::after, nav.white .nav-item > a::after { background: var(--primary); }
+    nav.scrolled .nav-item > a, nav.white .nav-item > a { color: var(--gray-700); }
+    .nav-item > a:hover { color: rgba(255,255,255,0.92); }
+    nav.scrolled .nav-item > a:hover, nav.white .nav-item > a:hover { color: var(--gray-900); }
+    .arrow { display: none; }
+    .dropdown {
+      position: absolute; top: 100%; left: 0; background: var(--white);
+      border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      min-width: 180px; padding: 0.5rem 0;
+      opacity: 0; pointer-events: none; transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s; border: 1px solid var(--gray-200);
+    }
+    .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .dropdown a {
+      display: block; padding: 0.65rem 1.25rem;
+      text-decoration: none; font-size: 0.86rem; font-weight: 500;
+      color: var(--gray-700); transition: all 0.15s; cursor: pointer;
+    }
+    .dropdown a:hover { background: var(--gray-100); color: var(--primary); padding-left: 1.5rem; }
+    /* 모든 드롭다운 → 다크 스타일 통일 */
+    .dropdown {
+      background: rgba(10,15,30,0.93) !important;
+      border-color: rgba(255,255,255,0.1) !important;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.45) !important;
+    }
+    .dropdown a { color: rgba(255,255,255,0.78) !important; }
+    .dropdown a:hover {
+      background: rgba(255,255,255,0.07) !important; color: var(--white) !important; padding-left: 1.5rem;
+    }
+    .nav-cta {
+      margin-left: 0;
+      background: transparent !important; color: rgba(255,255,255,0.92) !important;
+      padding: 0 1.3rem !important; border-radius: 0 !important;
+      font-weight: 500 !important; height: 100% !important;
+    }
+    nav.scrolled .nav-cta, nav.white .nav-cta { color: var(--gray-700) !important; }
+    .nav-cta:hover { transform: none !important; box-shadow: none !important; }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.3s; }
+    nav.scrolled .hamburger span, nav.white .hamburger span { background: var(--gray-900); }
+
+    .mobile-nav {
+      display: none; position: fixed; top: 68px; left: 0; right: 0; bottom: 0;
+      background: var(--dark); z-index: 190; overflow-y: auto; padding: 1.5rem;
+    }
+    .mobile-nav.open { display: block; }
+    .m-sec-title { font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 1px; margin: 1rem 0 0.4rem; }
+    .mobile-nav a { display: block; padding: 0.6rem 0; color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.95rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .mobile-nav a.accent { color: var(--accent); font-weight: 700; border: none; margin-top: 0.5rem; }
+
+    /* ── PAGE SYSTEM ── */
+    .page { display: none; min-height: calc(100vh - 68px); padding-top: 68px; }
+    .page.active { display: block; }
+    #page-home { padding-top: 0; }
+
+    /* ── PAGE BANNER ── */
+    .page-banner {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 5rem 5% 3rem; margin-bottom: 0;
+    }
+    .page-banner .breadcrumb { font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-bottom: 0.75rem; }
+    .page-banner .breadcrumb span { color: rgba(255,255,255,0.8); }
+    .page-banner h1 { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; color: var(--white); letter-spacing: -0.5px; }
+    .page-banner p { color: rgba(255,255,255,0.7); margin-top: 0.5rem; font-size: 0.95rem; }
+
+    /* ── SECTIONS ── */
+    .sec { padding: 5rem 5%; }
+    .sec-bg { background: var(--gray-100); }
+    .sec-dark { background: var(--dark); color: var(--white); }
+    .cont { max-width: 1100px; margin: 0 auto; }
+    .sec-head { text-align: center; margin-bottom: 3rem; }
+    .sec-tag { display: inline-block; background: rgba(29,78,216,0.08); color: var(--primary); padding: 0.28rem 0.9rem; border-radius: 100px; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .sec-title { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; color: var(--gray-900); line-height: 1.3; letter-spacing: -0.5px; }
+    .sec-desc { font-size: 0.96rem; color: var(--gray-500); margin-top: 0.5rem; max-width: 500px; margin-inline: auto; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden; text-align: center;
+      background: url('hero.jpg') center center / cover no-repeat, linear-gradient(135deg,#0F172A,#1e3a8a);
+    }
+    #hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(10,15,30,0.55) 0%, rgba(10,15,30,0.72) 100%);
+    }
+    .hero-inner {
+      position: relative; z-index: 1; max-width: 900px; margin: 0 auto;
+      padding: 0 5%; padding-top: 68px;
+      width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;
+    }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.12); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.92); padding: 0.45rem 1.1rem; border-radius: 100px; font-size: 0.82rem; font-weight: 500; margin-bottom: 1.75rem; }
+    .hero-badge::before { content:''; width:7px; height:7px; background:var(--secondary); border-radius:50%; flex-shrink:0; }
+    .hero-title { font-size: clamp(2.4rem,6vw,5rem); font-weight: 800; color: var(--white); line-height: 1.15; margin-bottom: 1.25rem; letter-spacing: -2px; white-space: nowrap; }
+    .hero-title em { font-style:normal; background:linear-gradient(90deg,var(--accent),#fb923c); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero-sub { font-size: clamp(1rem,1.8vw,1.15rem); color: rgba(255,255,255,0.75); max-width: 520px; margin-bottom: 2.5rem; line-height: 1.7; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .btn-p { background:var(--accent); color:var(--dark); padding:0.85rem 2rem; border-radius:100px; font-size:0.95rem; font-weight:700; text-decoration:none; transition:transform 0.2s,box-shadow 0.2s; display:inline-block; border:none; cursor:pointer; }
+    .btn-p:hover { transform:translateY(-3px); box-shadow:0 8px 25px rgba(245,158,11,0.45); }
+    .btn-o { background:rgba(255,255,255,0.1); backdrop-filter:blur(8px); color:var(--white); border:2px solid rgba(255,255,255,0.45); padding:0.85rem 2rem; border-radius:100px; font-size:0.95rem; font-weight:600; text-decoration:none; transition:all 0.2s; display:inline-block; cursor:pointer; }
+    .btn-o:hover { background:rgba(255,255,255,0.2); border-color:var(--white); }
+    .hero-scroll { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:0.4rem; color:rgba(255,255,255,0.5); font-size:0.75rem; animation:scrollBob 2s ease-in-out infinite; cursor:pointer; }
+    .hero-scroll::after { content:'↓'; font-size:1.1rem; }
+    @keyframes scrollBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+
+    /* ── STATS ── */
+    #stats { background:var(--dark); padding:2.5rem 5%; }
+    .stats-grid { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; text-align:center; }
+    .stat-item { padding:1.25rem; border-right:1px solid rgba(255,255,255,0.07); }
+    .stat-item:last-child { border-right:none; }
+    .stat-num { font-size:clamp(1.8rem,3.5vw,2.5rem); font-weight:800; color:var(--accent); display:block; line-height:1; }
+    .stat-unit { font-size:1rem; font-weight:700; color:var(--accent); }
+    .stat-lbl { font-size:0.8rem; color:rgba(255,255,255,0.5); margin-top:0.4rem; }
+
+    /* ── PROGRAMS PREVIEW (home) ── */
+    .prog-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+    .prog-card { background:var(--white); border:2px solid var(--gray-200); border-radius:20px; padding:2rem; transition:all 0.3s; cursor:pointer; }
+    .prog-card:hover { border-color:var(--primary); transform:translateY(-5px); box-shadow:0 16px 40px rgba(29,78,216,0.1); }
+    .prog-icon { width:50px; height:50px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin-bottom:1.1rem; }
+    .pi-blue { background:rgba(29,78,216,0.09); }
+    .pi-green { background:rgba(5,150,105,0.09); }
+    .pi-amber { background:rgba(245,158,11,0.09); }
+    .prog-card h3 { font-size:1.05rem; font-weight:700; margin-bottom:0.5rem; }
+    .prog-card p { font-size:0.88rem; color:var(--gray-500); line-height:1.75; }
+    .prog-tags { display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:1rem; }
+    .ptag { background:var(--gray-100); color:var(--gray-700); font-size:0.74rem; font-weight:500; padding:0.2rem 0.7rem; border-radius:100px; }
+    .prog-link { display:inline-flex; align-items:center; gap:0.3rem; margin-top:1rem; color:var(--primary); font-weight:700; font-size:0.86rem; text-decoration:none; transition:gap 0.2s; cursor:pointer; background:none; border:none; }
+    .prog-link:hover { gap:0.6rem; }
+
+    /* ── INSTAGRAM ── */
+    .ig-section { background: var(--gray-100); padding: 5rem 5%; }
+    .ig-inner { max-width: 1100px; margin: 0 auto; }
+    .ig-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; flex-wrap:wrap; gap:1rem; }
+    .ig-title-group { display:flex; align-items:center; gap:1rem; }
+    .ig-logo { width:44px; height:44px; background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+    .ig-title { font-size:1.4rem; font-weight:800; color:var(--gray-900); }
+    .ig-handle { font-size:0.88rem; color:var(--gray-500); margin-top:0.1rem; }
+    .ig-follow-btn { display:inline-flex; align-items:center; gap:0.5rem; background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color:var(--white); padding:0.65rem 1.4rem; border-radius:100px; font-weight:700; font-size:0.88rem; text-decoration:none; transition:transform 0.2s, box-shadow 0.2s; }
+    .ig-follow-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(220,39,67,0.35); }
+
+    .ig-embed-wrap {
+      background: var(--white); border-radius: 20px; overflow: hidden;
+      border: 1px solid var(--gray-200); padding: 1.5rem;
+    }
+    .ig-embed-wrap iframe { width: 100% !important; border: none; display: block; }
+
+    .ig-posts-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+    .ig-post-wrap { border-radius:16px; overflow:hidden; background:var(--gray-200); aspect-ratio:1; position:relative; }
+    .ig-post-wrap iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; display:block; }
+    .ig-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+    .ig-card { background:var(--white); border-radius:16px; overflow:hidden; border:1px solid var(--gray-200); transition:transform 0.2s, box-shadow 0.2s; cursor:pointer; }
+    .ig-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.1); }
+    .ig-card-thumb { aspect-ratio:1; background:var(--gray-100); display:flex; align-items:center; justify-content:center; font-size:2.5rem; overflow:hidden; }
+    .ig-card-thumb img { width:100%; height:100%; object-fit:cover; }
+    .ig-card-body { padding:0.85rem; }
+    .ig-card-date { font-size:0.75rem; color:var(--gray-500); margin-bottom:0.25rem; }
+    .ig-card-text { font-size:0.82rem; color:var(--gray-700); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .ig-more { text-align:center; margin-top:2rem; }
+
+    /* ── STORIES ── */
+    .story-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+    .story-card { background:var(--gray-100); border-radius:20px; padding:2rem; position:relative; overflow:hidden; }
+    .story-card::before { content:'❝'; position:absolute; top:1rem; right:1.25rem; font-size:3rem; color:var(--primary); opacity:0.1; }
+    .story-text { font-size:0.88rem; color:var(--gray-700); line-height:1.85; margin-bottom:1.25rem; font-style:italic; }
+    .story-prof { display:flex; align-items:center; gap:0.7rem; }
+    .s-av { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.95rem; font-weight:700; color:var(--white); flex-shrink:0; }
+    .sa { background:linear-gradient(135deg,var(--primary),var(--primary-light)); }
+    .sb { background:linear-gradient(135deg,var(--secondary),#34d399); }
+    .sc { background:linear-gradient(135deg,var(--accent),#fb923c); }
+    .s-name { font-weight:700; font-size:0.88rem; }
+    .s-role { font-size:0.76rem; color:var(--gray-500); }
+
+    /* ── DONATE SECTION ── */
+    .donate-wrap { background:linear-gradient(135deg,#0F172A,#1e3a8a); padding:5rem 5%; }
+    .donate-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
+    .donate-text h2 { font-size:clamp(1.6rem,3vw,2.3rem); font-weight:800; line-height:1.3; margin-bottom:1rem; color:var(--white); }
+    .donate-text p { color:rgba(255,255,255,0.65); line-height:1.85; margin-bottom:1.75rem; font-size:0.93rem; }
+    .impact-list { list-style:none; display:flex; flex-direction:column; gap:0.6rem; }
+    .impact-list li { display:flex; align-items:center; gap:0.7rem; font-size:0.9rem; color:rgba(255,255,255,0.82); }
+    .impact-list li::before { content:'✓'; width:20px; height:20px; background:var(--secondary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.62rem; font-weight:700; flex-shrink:0; }
+    .donate-form { background:rgba(255,255,255,0.07); border-radius:24px; padding:2rem; border:1px solid rgba(255,255,255,0.1); }
+    .donate-form h3 { font-size:1.05rem; font-weight:700; margin-bottom:1.1rem; color:var(--white); }
+    .amount-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.55rem; margin-bottom:1rem; }
+    .amt-btn { background:rgba(255,255,255,0.07); border:2px solid rgba(255,255,255,0.12); color:var(--white); padding:0.65rem; border-radius:10px; font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.2s; }
+    .amt-btn:hover,.amt-btn.active { background:var(--accent); border-color:var(--accent); color:var(--dark); }
+    .acct-box { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:0.9rem 1.2rem; margin-top:0.9rem; }
+    .acct-lbl { font-size:0.74rem; color:rgba(255,255,255,0.4); margin-bottom:0.2rem; }
+    .acct-num { font-size:0.93rem; font-weight:700; color:var(--white); }
+    .acct-nm { font-size:0.76rem; color:rgba(255,255,255,0.5); margin-top:0.15rem; }
+    .donate-cta { display:block; width:100%; padding:0.9rem; background:var(--accent); color:var(--dark); border:none; border-radius:100px; font-size:0.93rem; font-weight:700; cursor:pointer; margin-top:0.9rem; transition:transform 0.2s; }
+    .donate-cta:hover { transform:translateY(-2px); }
+
+    /* ── SUB PAGE CONTENT ── */
+    .content-block { padding: 4rem 5%; }
+    .content-block .cont { max-width: 900px; }
+    .content-prose { font-size: 0.97rem; color: var(--gray-700); line-height: 2; }
+    .content-prose p { margin-bottom: 1.25rem; }
+    .content-prose h3 { font-size: 1.2rem; font-weight: 700; color: var(--gray-900); margin: 2rem 0 0.75rem; }
+    .content-prose h4 { font-size: 1rem; font-weight: 700; color: var(--primary); margin: 1.5rem 0 0.5rem; }
+    .content-prose ul { padding-left: 1.25rem; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+    .content-prose ul li { font-size: 0.95rem; }
+
+    /* 인사말 */
+    .greeting-photo { width: 100%; max-width: 600px; border-radius: 20px; overflow: hidden; margin-bottom: 2.5rem; }
+    .greeting-photo img { width: 100%; display: block; }
+    .signature { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-200); font-size: 0.95rem; color: var(--gray-700); }
+    .signature strong { color: var(--gray-900); }
+
+    /* 인사말 캐러셀 */
+    .greeting-carousel { position: relative; width: 100%; overflow: hidden; margin-top: 68px; }
+    .gc-slides { display: flex; transition: transform 0.7s cubic-bezier(0.4,0,0.2,1); will-change: transform; }
+    .gc-slide { min-width: 100%; flex-shrink: 0; }
+    .gc-text-slide { min-height: 520px; background: linear-gradient(135deg, var(--primary-dark), var(--primary)); display: flex; align-items: center; padding: 5rem 5%; }
+    .gc-text-inner { max-width: 760px; margin: 0 auto; color: var(--white); }
+    .gc-text-inner .breadcrumb { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-bottom: 0.75rem; }
+    .gc-text-inner .breadcrumb span { color: rgba(255,255,255,0.75); }
+    .gc-text-inner h1 { font-size: clamp(2rem,4vw,3rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 1.5rem; }
+    .gc-text-inner p { font-size: 1rem; line-height: 1.95; color: rgba(255,255,255,0.82); margin-bottom: 0.7rem; }
+    .gc-photo-slide { min-height: 520px; background: var(--dark); }
+    .gc-photo-slide img { width: 100%; height: 100%; min-height: 520px; object-fit: cover; display: block; }
+    .gc-dots { position: absolute; bottom: 1.25rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.5rem; z-index: 10; }
+    .gc-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.45); border: none; cursor: pointer; transition: all 0.3s; padding: 0; }
+    .gc-dot.active { background: var(--white); width: 28px; border-radius: 100px; }
+    .gc-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border: 2px solid rgba(255,255,255,0.3); color: var(--white); width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.3rem; z-index: 10; transition: background 0.2s; line-height: 1; }
+    .gc-arrow:hover { background: rgba(255,255,255,0.3); }
+    .gc-prev { left: 1.25rem; }
+    .gc-next { right: 1.25rem; }
+    @media(max-width:768px) { .gc-text-slide,.gc-photo-slide,.gc-photo-slide img { min-height: 380px; } }
+
+    /* 미션비전 */
+    .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0; }
+    .mv-card { background: var(--white); border-radius: 20px; padding: 2rem; border: 2px solid var(--gray-200); }
+    .mv-card.primary { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); border-color: transparent; color: var(--white); }
+    .mv-card.secondary { background: linear-gradient(135deg, var(--secondary), #10b981); border-color: transparent; color: var(--white); }
+    .mv-label { font-size: 0.78rem; font-weight: 700; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; }
+    .mv-text { font-size: 1.05rem; font-weight: 700; line-height: 1.6; }
+    .value-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 2.5rem; }
+    .val-card { background: var(--white); border: 2px solid var(--gray-200); border-radius: 20px; padding: 2rem; text-align: center; transition: all 0.3s; }
+    .val-card:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(29,78,216,0.1); }
+    .val-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .val-title { font-size: 1.1rem; font-weight: 800; color: var(--gray-900); margin-bottom: 0.75rem; }
+    .val-desc { font-size: 0.88rem; color: var(--gray-600); line-height: 1.75; }
+    .mv-image { border-radius: 16px; overflow: hidden; margin-top: 2.5rem; }
+    .mv-image img { width: 100%; display: block; max-height: 400px; object-fit: cover; }
+
+    /* 사업소개 공통 */
+    .biz-photo { width: 100%; border-radius: 16px; overflow: hidden; margin-bottom: 2rem; }
+    .biz-photo img { width: 100%; display: block; max-height: 420px; object-fit: cover; }
+    .biz-goal-list { display: flex; flex-direction: column; gap: 0.75rem; margin: 1.25rem 0; }
+    .biz-goal-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem 1.25rem; background: var(--gray-100); border-radius: 12px; font-size: 0.9rem; line-height: 1.65; }
+    .biz-goal-item::before { content: '→'; color: var(--primary); font-weight: 700; flex-shrink: 0; margin-top: 0.1rem; }
+    .biz-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    .biz-tag { background: rgba(29,78,216,0.08); color: var(--primary); padding: 0.35rem 0.9rem; border-radius: 100px; font-size: 0.82rem; font-weight: 600; }
+
+    /* 오시는 길 */
+    .location-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+    .location-info { background: var(--white); border-radius: 20px; padding: 2.5rem; border: 1px solid var(--gray-200); }
+    .location-info h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--gray-900); }
+    .location-row { display: flex; gap: 0.85rem; align-items: flex-start; margin-bottom: 1.1rem; font-size: 0.92rem; color: var(--gray-700); }
+    .location-row .icon { width: 20px; flex-shrink: 0; }
+    .location-row strong { display: block; font-weight: 600; color: var(--gray-900); margin-bottom: 0.2rem; }
+    .map-box { background: linear-gradient(135deg, #dbeafe, #ede9fe); border-radius: 20px; min-height: 300px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
+    .map-box a { background: var(--primary); color: var(--white); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 700; font-size: 0.88rem; text-decoration: none; transition: transform 0.2s; }
+    .map-box a:hover { transform: translateY(-2px); }
+
+    /* 후원 페이지 */
+    .donate-page-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+    .donate-info-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: 20px; padding: 2rem; }
+    .donate-info-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--gray-900); display: flex; align-items: center; gap: 0.5rem; }
+    .donate-method { background: var(--gray-100); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+    .donate-method h4 { font-weight: 700; font-size: 0.9rem; color: var(--primary); margin-bottom: 0.5rem; }
+    .donate-method p { font-size: 0.85rem; color: var(--gray-700); line-height: 1.7; }
+    .acct-highlight { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: var(--white); border-radius: 12px; padding: 1.25rem; margin: 1rem 0; }
+    .acct-highlight .bank { font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.25rem; }
+    .acct-highlight .number { font-size: 1.1rem; font-weight: 800; letter-spacing: 0.5px; }
+    .acct-highlight .owner { font-size: 0.8rem; opacity: 0.7; margin-top: 0.25rem; }
+    .pct-bar { margin: 0.75rem 0; }
+    .pct-item { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; font-size: 0.85rem; }
+    .pct-label { width: 130px; flex-shrink: 0; color: var(--gray-700); }
+    .pct-track { flex: 1; background: var(--gray-200); border-radius: 100px; height: 8px; overflow: hidden; }
+    .pct-fill { height: 100%; border-radius: 100px; background: var(--primary); }
+    .pct-num { width: 32px; text-align: right; font-weight: 700; color: var(--primary); font-size: 0.82rem; }
+    .benefit-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .benefit-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--gray-700); }
+    .benefit-item::before { content: '✓'; color: var(--secondary); font-weight: 700; }
+
+    /* 소식 게시판 */
+    .board-layout { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: start; }
+    .board-tabs { display: flex; border-bottom: 2px solid var(--gray-200); margin-bottom: 1.25rem; }
+    .btab { padding: 0.65rem 1.35rem; font-size: 0.9rem; font-weight: 600; color: var(--gray-500); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; background: none; border-top: none; border-left: none; border-right: none; transition: all 0.2s; }
+    .btab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .board-list { background: var(--white); border-radius: 16px; border: 1px solid var(--gray-200); overflow: hidden; }
+    .board-list-hdr { display: grid; grid-template-columns: 55px 1fr 90px 75px; padding: 0.7rem 1.2rem; background: var(--gray-100); font-size: 0.78rem; font-weight: 700; color: var(--gray-500); }
+    .board-row { display: grid; grid-template-columns: 55px 1fr 90px 75px; padding: 0.85rem 1.2rem; border-top: 1px solid var(--gray-200); align-items: center; cursor: pointer; transition: background 0.15s; }
+    .board-row:hover { background: var(--gray-100); }
+    .bnum { font-size: 0.8rem; color: var(--gray-500); text-align: center; }
+    .btitle { font-size: 0.88rem; font-weight: 500; display: flex; align-items: center; gap: 0.45rem; }
+    .badge { font-size: 0.68rem; font-weight: 700; padding: 0.13rem 0.45rem; border-radius: 4px; }
+    .badge-n { background: #dbeafe; color: var(--primary); }
+    .badge-h { background: #fce7f3; color: #be185d; }
+    .bauthor,.bdate { font-size: 0.8rem; color: var(--gray-500); }
+    .bpager { display:flex; justify-content:center; gap:0.35rem; padding:0.9rem; }
+    .pbn { width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:7px; font-size:0.82rem; font-weight:500; cursor:pointer; border:1px solid var(--gray-200); background:var(--white); color:var(--gray-700); transition:all 0.15s; }
+    .pbn.active { background:var(--primary); border-color:var(--primary); color:var(--white); }
+    .pbn:hover:not(.active) { border-color:var(--primary); color:var(--primary); }
+    .sidebar-card { background: var(--white); border-radius: 16px; border: 1px solid var(--gray-200); overflow: hidden; margin-bottom: 1.25rem; }
+    .sc-hdr { padding: 0.8rem 1.2rem; font-size: 0.85rem; font-weight: 700; color: var(--gray-900); border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; }
+    .sc-hdr a { font-size: 0.75rem; color: var(--primary); text-decoration: none; font-weight: 600; }
+    .sc-item { padding: 0.7rem 1.2rem; border-top: 1px solid var(--gray-200); font-size: 0.83rem; }
+    .sc-item:first-child { border-top: none; }
+    .sc-item-title { color: var(--gray-900); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+    .sc-item-date { color: var(--gray-500); font-size: 0.75rem; margin-top: 0.1rem; }
+    .kakao-box { padding: 1.25rem; text-align: center; }
+    .kakao-icon { font-size: 2.2rem; margin-bottom: 0.6rem; }
+    .kakao-box p { font-size: 0.82rem; color: var(--gray-600); margin-bottom: 0.9rem; line-height: 1.6; }
+    .kakao-btn { display: block; background: #FEE500; color: #3A1D1D; font-weight: 700; font-size: 0.88rem; padding: 0.7rem; border-radius: 12px; text-decoration: none; transition: transform 0.2s; }
+    .kakao-btn:hover { transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--dark); color: rgba(255,255,255,0.65); padding: 4rem 5% 2rem; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; padding-bottom: 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .footer-logo { margin-bottom: 0.75rem; }
+    .footer-logo img { height: 36px; filter: brightness(0) invert(1); }
+    .footer-desc { font-size: 0.84rem; line-height: 1.8; margin-bottom: 1rem; }
+    .footer-contact { font-size: 0.8rem; line-height: 2; }
+    .footer-col h4 { font-size: 0.84rem; font-weight: 700; color: var(--white); margin-bottom: 0.875rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-col a { color: rgba(255,255,255,0.55); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: pointer; }
+    .footer-col a:hover { color: var(--accent); }
+    .footer-bottom { max-width: 1100px; margin: 1.5rem auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; flex-wrap: wrap; gap: 0.5rem; }
+    .social-links { display: flex; gap: 0.6rem; }
+    .social-btn { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 0.88rem; transition: all 0.2s; }
+    .social-btn:hover { background: var(--primary); border-color: var(--primary); }
+
+    /* ── FLOAT CTA ── */
+    .float-cta { position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 50; background: var(--accent); color: var(--dark); padding: 0.7rem 1.4rem; border-radius: 100px; font-weight: 700; font-size: 0.85rem; text-decoration: none; box-shadow: 0 6px 20px rgba(245,158,11,0.4); display: flex; align-items: center; gap: 0.4rem; transition: transform 0.2s; cursor: pointer; border: none; }
+    .float-cta:hover { transform: translateY(-3px); }
+
+    /* ── FADE IN ── */
+    .fi { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fi.v { opacity: 1; transform: translateY(0); }
+    .fi-d1{transition-delay:0.1s;} .fi-d2{transition-delay:0.2s;} .fi-d3{transition-delay:0.3s;}
+
+    /* ── FULL-PAGE SCROLL (HOME) ── */
+    #page-home {
+      height: 100vh;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      scroll-snap-type: y mandatory;
+    }
+    .fp-slide {
+      height: 100vh;
+      scroll-snap-align: start;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .fp-slide > #hero { position:absolute; inset:0; height:100%; min-height:unset; }
+    .fp-slide > #hero .hero-inner { min-height:unset; height:100%; }
+    .fp-slide > #stats { width:100%; flex-shrink:0; }
+    .fp-sec-body { width:100%; max-width:1100px; padding:1.5rem 5%; }
+    .fp-light { background:var(--white); }
+    .fp-gray  { background:var(--gray-100); }
+    .fp-dark  { background:linear-gradient(135deg,var(--primary-dark),#0F172A); }
+    .fp-dark .donate-inner { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; max-width:1100px; margin:0 auto; }
+    .fp-slide .sec-head  { margin-bottom:1.25rem; }
+    .fp-slide .prog-card { padding:1.25rem; }
+    .fp-slide .story-card{ padding:1.25rem; }
+    .fp-slide .ig-posts-grid { gap:0.5rem; }
+    /* Compact footer inside last slide */
+    .fp-footer {
+      width:100%; background:rgba(0,0,0,0.35); padding:1rem 5%;
+      display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; gap:0.5rem; flex-shrink:0;
+    }
+    .fp-footer img { height:22px; filter:brightness(0) invert(1); }
+    .fp-footer-info { font-size:0.75rem; color:rgba(255,255,255,0.55); line-height:1.7; }
+    .fp-footer-links { display:flex; gap:1rem; flex-wrap:wrap; }
+    .fp-footer-links a { font-size:0.78rem; color:rgba(255,255,255,0.6); text-decoration:none; cursor:pointer; transition:color 0.2s; }
+    .fp-footer-links a:hover { color:var(--accent); }
+    /* Side dot navigation */
+    .fp-nav {
+      position:fixed; right:1.5rem; top:50%; transform:translateY(-50%);
+      display:none; flex-direction:column; gap:0.55rem; z-index:150;
+    }
+    .fp-nav.show { display:flex; }
+    .fp-dot-btn {
+      width:10px; height:10px; border-radius:50%;
+      background:rgba(0,0,0,0.18); border:2px solid rgba(0,0,0,0.3);
+      cursor:pointer; transition:all 0.3s; padding:0;
+    }
+    .fp-dot-btn.fp-white { background:rgba(255,255,255,0.35); border-color:rgba(255,255,255,0.65); }
+    .fp-dot-btn.active { transform:scale(1.3); background:var(--primary); border-color:var(--primary); }
+    .fp-dot-btn.fp-white.active { background:white; border-color:white; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px){
+      .footer-inner{grid-template-columns:1fr 1fr;}
+      .board-layout{grid-template-columns:1fr;}
+    }
+    @media(max-width:768px){
+      nav{padding:0 4%;}
+      .nav-menu{display:none;}
+      .hamburger{display:flex;}
+      .hero-inner{grid-template-columns:1fr !important;}
+      .hero-photos{display:none !important;}
+      .stats-grid{grid-template-columns:repeat(2,1fr);}
+      .prog-grid,.story-grid,.value-cards,.mv-grid{grid-template-columns:1fr;}
+      .donate-inner,.donate-page-grid,.location-grid{grid-template-columns:1fr;gap:2rem;}
+      .footer-inner{grid-template-columns:1fr;gap:2rem;}
+      .footer-bottom{flex-direction:column;text-align:center;}
+      .ig-posts-grid{grid-template-columns:repeat(2,1fr);}
+      .ig-grid{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:480px){
+      .amount-grid{grid-template-columns:repeat(2,1fr);}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo" onclick="go('home',event)">
+    <img src="https://cdn.imweb.me/upload/S20251111932f844856fca/fa6fc15bfa5a5.png" alt="허브릿지 로고" />
+  </a>
+  <ul class="nav-menu">
+    <li class="nav-item">
+      <a href="#" onclick="go('home',event)">허브릿지 <span class="arrow">▾</span></a>
+      <div class="dropdown">
+        <a onclick="go('greeting')">인사말</a>
+        <a onclick="go('mission')">미션과 비전</a>
+        <a onclick="go('location')">오시는 길</a>
+      </div>
+    </li>
+    <li class="nav-item">
+      <a href="#" onclick="go('education',event)">사업소개 <span class="arrow">▾</span></a>
+      <div class="dropdown">
+        <a onclick="go('education')">청년교육 및 인턴십</a>
+        <a onclick="go('events')">행사기획 및 대행</a>
+        <a onclick="go('network')">네트워크사업</a>
+      </div>
+    </li>
+    <li class="nav-item">
+      <a href="#" onclick="go('news',event)">소식 <span class="arrow">▾</span></a>
+      <div class="dropdown">
+        <a onclick="go('news')">공지사항</a>
+        <a href="https://blog.naver.com/hubridge-" target="_blank">네이버 블로그</a>
+        <a href="https://www.instagram.com/hubr2025/" target="_blank">인스타그램</a>
+      </div>
+    </li>
+    <li class="nav-item"><a href="#" onclick="go('donate',event)" class="nav-cta">후원하기</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <div class="m-sec-title">허브릿지</div>
+  <a onclick="mgo('greeting')">인사말</a>
+  <a onclick="mgo('mission')">미션과 비전</a>
+  <a onclick="mgo('location')">오시는 길</a>
+  <div class="m-sec-title">사업소개</div>
+  <a onclick="mgo('education')">청년교육 및 인턴십</a>
+  <a onclick="mgo('events')">행사기획 및 대행</a>
+  <a onclick="mgo('network')">네트워크사업</a>
+  <div class="m-sec-title">소통</div>
+  <a onclick="mgo('news')">소식</a>
+  <a href="https://blog.naver.com/hubridge-" target="_blank">네이버 블로그</a>
+  <a href="https://www.instagram.com/hubr2025/" target="_blank">인스타그램</a>
+  <a class="accent" onclick="mgo('donate')">💛 후원하기</a>
+</div>
+
+<!-- FP DOT NAV -->
+<div class="fp-nav" id="fpNav">
+  <button class="fp-dot-btn fp-white active" onclick="fpGoTo(0)" title="홈"></button>
+  <button class="fp-dot-btn" onclick="fpGoTo(1)" title="사업소개 & 스토리"></button>
+  <button class="fp-dot-btn" onclick="fpGoTo(2)" title="인스타그램"></button>
+  <button class="fp-dot-btn fp-white" onclick="fpGoTo(3)" title="후원"></button>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: HOME
+════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- ── Slide 1: Hero ── -->
+  <div class="fp-slide">
+    <section id="hero">
+      <div class="hero-shapes"><div class="hs"></div><div class="hs"></div><div class="hs"></div></div>
+      <div class="hero-inner">
+        <div>
+          <div class="hero-badge">사회적협동조합 허브릿지</div>
+          <h1 class="hero-title">청년과 세상을 잇는<br /><em>다리가 됩니다</em></h1>
+          <p class="hero-sub">허브릿지는 청년이 스스로 자립할 수 있도록<br />교육·인턴십·네트워크로 든든한 발판을 만들어 갑니다.</p>
+          <div class="hero-btns">
+            <button class="btn-p" onclick="go('education')">프로그램 신청하기</button>
+            <button class="btn-o" onclick="go('donate')">후원으로 함께하기</button>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll" onclick="fpGoTo(1)">스크롤</div>
+    </section>
+  </div>
+
+  <!-- ── Slide 2: 사업소개 + 청년 스토리 ── -->
+  <div class="fp-slide fp-light" style="justify-content:center;padding:0 5%;">
+    <div style="width:100%;max-width:1100px;">
+
+      <!-- 사업소개 -->
+      <div style="margin-bottom:2rem;">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem;">
+          <span class="sec-tag" style="margin:0;flex-shrink:0;">사업소개</span>
+          <span style="font-size:1.2rem;font-weight:800;color:var(--gray-900);">청년의 가능성을 현실로 만드는 프로그램</span>
+        </div>
+        <div class="prog-grid" style="gap:1rem;">
+          <div class="prog-card fi" onclick="go('education')" style="padding:1.25rem;">
+            <div class="prog-icon pi-blue" style="width:40px;height:40px;font-size:1.15rem;margin-bottom:0.75rem;">🎓</div>
+            <h3 style="font-size:0.97rem;margin-bottom:0.4rem;">청년교육 및 인턴십</h3>
+            <p style="font-size:0.83rem;line-height:1.6;">실무 중심 교육과 기업 인턴십. 수료 후 장학금(90만원) 지원.</p>
+            <div class="prog-tags" style="margin-top:0.7rem;"><span class="ptag">무료 교육</span><span class="ptag">장학금 지원</span></div>
+          </div>
+          <div class="prog-card fi fi-d1" onclick="go('events')" style="padding:1.25rem;">
+            <div class="prog-icon pi-green" style="width:40px;height:40px;font-size:1.15rem;margin-bottom:0.75rem;">🎪</div>
+            <h3 style="font-size:0.97rem;margin-bottom:0.4rem;">행사기획 및 대행</h3>
+            <p style="font-size:0.83rem;line-height:1.6;">전문가와 함께 행사를 기획·운영하며 현장 경험과 포트폴리오를 쌓습니다.</p>
+            <div class="prog-tags" style="margin-top:0.7rem;"><span class="ptag">실전 프로젝트</span><span class="ptag">포트폴리오</span></div>
+          </div>
+          <div class="prog-card fi fi-d2" onclick="go('network')" style="padding:1.25rem;">
+            <div class="prog-icon pi-amber" style="width:40px;height:40px;font-size:1.15rem;margin-bottom:0.75rem;">🤝</div>
+            <h3 style="font-size:0.97rem;margin-bottom:0.4rem;">네트워크 사업</h3>
+            <p style="font-size:0.83rem;line-height:1.6;">전문가·기관·기업 간 협력 생태계로 취업·창업 기회를 연결합니다.</p>
+            <div class="prog-tags" style="margin-top:0.7rem;"><span class="ptag">멘토링</span><span class="ptag">기업 연계</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 구분선 -->
+      <div style="border-top:2px solid var(--gray-200);margin-bottom:2rem;"></div>
+
+      <!-- 청년 스토리 -->
+      <div>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem;">
+          <span class="sec-tag" style="margin:0;flex-shrink:0;">청년 스토리</span>
+          <span style="font-size:1.2rem;font-weight:800;color:var(--gray-900);">허브릿지를 통해 성장한 청년들</span>
+        </div>
+        <div class="story-grid" style="gap:1rem;">
+          <div class="story-card fi" style="padding:1.25rem;">
+            <p class="story-text" style="font-size:0.84rem;margin-bottom:1rem;">"처음에는 막막하기만 했는데, 허브릿지 인턴십을 통해 실무 경험을 쌓고 원하는 기업에 취업할 수 있었어요."</p>
+            <div class="story-prof"><div class="s-av sa" style="width:36px;height:36px;font-size:0.85rem;">김</div><div><div class="s-name">김○○ 님</div><div class="s-role">2024 인턴십 수료 · 현 IT기업 재직</div></div></div>
+          </div>
+          <div class="story-card fi fi-d1" style="padding:1.25rem;">
+            <p class="story-text" style="font-size:0.84rem;margin-bottom:1rem;">"자립준비청년으로서 막막했던 취업의 벽을 허브릿지가 함께 허물어줬습니다. 멘토님들 덕분에 당당하게 일하고 있어요."</p>
+            <div class="story-prof"><div class="s-av sb" style="width:36px;height:36px;font-size:0.85rem;">이</div><div><div class="s-name">이○○ 님</div><div class="s-role">2024 창업가 양성과정 수료</div></div></div>
+          </div>
+          <div class="story-card fi fi-d2" style="padding:1.25rem;">
+            <p class="story-text" style="font-size:0.84rem;margin-bottom:1rem;">"행사를 직접 기획하고 운영하며 이론이 아닌 실전을 배웠어요. 허브릿지에서 쌓은 포트폴리오가 커리어에 큰 자산이 됐습니다."</p>
+            <div class="story-prof"><div class="s-av sc" style="width:36px;height:36px;font-size:0.85rem;">박</div><div><div class="s-name">박○○ 님</div><div class="s-role">2023 행사기획 프로그램 수료</div></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Slide 4: 인스타그램 + 통계 ── -->
+  <div class="fp-slide fp-gray" style="justify-content:space-between;">
+    <div class="fp-sec-body" style="flex:1;display:flex;align-items:center;">
+      <div style="width:100%;">
+        <div class="ig-posts-grid fi">
+          <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DYV6vz9xLV4/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+          <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DYRZWIOxFiZ/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+          <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DXrWjZXEfwM/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+          <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DXbGFz6kbe_/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+          <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DW-p9eIkVjr/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+          <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DW-oszykQNP/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+          <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DW-l3grkYH6/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+          <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DW-lCZekTCN/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+        </div>
+        <div style="text-align:center;margin-top:0.75rem;">
+          <a href="https://www.instagram.com/hubr2025/" target="_blank" class="ig-follow-btn">인스타그램에서 더 보기 →</a>
+        </div>
+      </div>
+    </div>
+    <!-- 통계 숫자 바 -->
+    <div id="stats" style="width:100%;flex-shrink:0;">
+      <div class="stats-grid">
+        <div class="stat-item fi"><span class="stat-num" data-target="320">0</span><span class="stat-unit">+</span><div class="stat-lbl">수혜 청년</div></div>
+        <div class="stat-item fi fi-d1"><span class="stat-num" data-target="48">0</span><span class="stat-unit">+</span><div class="stat-lbl">협력 기관·기업</div></div>
+        <div class="stat-item fi fi-d2"><span class="stat-num" data-target="95">0</span><span class="stat-unit">%</span><div class="stat-lbl">참여자 만족도</div></div>
+        <div class="stat-item fi fi-d3"><span class="stat-num" data-target="12">0</span><span class="stat-unit">+</span><div class="stat-lbl">진행 프로그램</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Slide 5: 후원 + 푸터 ── -->
+  <div class="fp-slide fp-dark" style="justify-content:space-between;">
+    <div class="fp-sec-body" style="max-width:100%;flex:1;display:flex;align-items:center;">
+      <div class="donate-inner" style="color:var(--white);">
+        <div class="fi">
+          <h2 style="color:var(--white);">당신의 후원이<br />청년의 내일을<br />만듭니다</h2>
+          <p style="color:rgba(255,255,255,0.65);line-height:1.85;margin-bottom:1.5rem;font-size:0.93rem;">여러분의 따뜻한 마음이 청년들의 미래를 밝힙니다. 후원금은 투명하게 공개되며 청년 자립을 위해 직접 사용됩니다.</p>
+          <ul class="impact-list">
+            <li>후원금 40% — 청년 교육 및 인턴십 운영</li>
+            <li>후원금 30% — 전문가 멘토링 프로그램</li>
+            <li>후원금 20% — 취업 연계 및 사후 지원</li>
+            <li>후원금 10% — 조직 운영 및 인프라</li>
+          </ul>
+        </div>
+        <div class="donate-form fi fi-d1">
+          <h3>💛 후원에 참여하기</h3>
+          <div class="amount-grid">
+            <button class="amt-btn" onclick="selAmt(this)">월 1만원</button>
+            <button class="amt-btn active" onclick="selAmt(this)">월 3만원</button>
+            <button class="amt-btn" onclick="selAmt(this)">월 5만원</button>
+            <button class="amt-btn" onclick="selAmt(this)">월 10만원</button>
+            <button class="amt-btn" onclick="selAmt(this)">일시 후원</button>
+            <button class="amt-btn" onclick="selAmt(this)">직접 입력</button>
+          </div>
+          <div class="acct-box"><div class="acct-lbl">후원 계좌</div><div class="acct-num">기업은행 048-163602-04-012</div><div class="acct-nm">예금주: 사회적협동조합 허브릿지</div></div>
+          <button class="donate-cta" onclick="window.open('https://open.kakao.com/o/sLO1NPqi','_blank')">💬 카카오톡으로 후원 문의하기</button>
+        </div>
+      </div>
+    </div>
+    <!-- 인라인 푸터 -->
+    <div class="fp-footer">
+      <div>
+        <img src="https://cdn.imweb.me/thumbnail/20260414/ad28a3e669ff9.png" alt="허브릿지" />
+        <div class="fp-footer-info" style="margin-top:0.3rem;">© 2025 사회적협동조합 허브릿지 · 설립번호 2025-1492-SO-5914호 · 대표 조학수, 장재홍<br />📞 02-6092-0070 · ✉️ hubr@hubr.co.kr · 📍 서울 마포구 월드컵로 163-3, 1층</div>
+      </div>
+      <div class="fp-footer-links">
+        <a onclick="go('greeting')">인사말</a>
+        <a onclick="go('mission')">미션과 비전</a>
+        <a onclick="go('education')">사업소개</a>
+        <a onclick="go('news')">소식</a>
+        <a onclick="go('donate')">후원하기</a>
+        <a href="https://www.instagram.com/hubr2025/" target="_blank">인스타그램</a>
+        <a href="https://pf.kakao.com/_yxcGCX" target="_blank">카카오채널</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 인사말
+════════════════════════════════════════ -->
+<div id="page-greeting" class="page">
+  <div style="max-width:1100px; margin:0 auto; position:relative;">
+    <img src="1.png" alt="허브릿지 인사말" style="width:100%; display:block;" />
+    <div style="position:absolute; inset:0; pointer-events:none;
+      background: linear-gradient(to right,
+        #fff 0%, transparent 4%,
+        transparent 96%, #fff 100%);"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 미션과 비전
+════════════════════════════════════════ -->
+<div id="page-mission" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">허브릿지 <span>› 미션과 비전</span></div>
+      <h1>미션과 비전</h1>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="cont">
+      <div class="mv-grid">
+        <div class="mv-card primary">
+          <div class="mv-label">Mission · 미션</div>
+          <div class="mv-text">"우리는 청년들이<br />자립할 수 있도록 돕는<br />다리가 된다"</div>
+        </div>
+        <div class="mv-card secondary">
+          <div class="mv-label">Vision · 비전</div>
+          <div class="mv-text">"청년의 성장을 위한<br />기회가 열려 있고<br />기다림이 가능한 사회"</div>
+        </div>
+      </div>
+      <div style="margin-top:3rem;">
+        <h3 style="font-size:1.3rem;font-weight:800;color:var(--gray-900);margin-bottom:0.5rem;">핵심 가치</h3>
+        <p style="color:var(--gray-500);font-size:0.92rem;margin-bottom:2rem;">허브릿지가 추구하는 세 가지 핵심 가치입니다.</p>
+        <div class="value-cards">
+          <div class="val-card">
+            <div class="val-icon">🤝</div>
+            <div class="val-title">연결한다</div>
+            <div class="val-desc">사람과 경험, 기회들이 끊어지지 않도록 함께 하는 사람들과 지속적으로 이어지는 관계를 만듭니다.</div>
+          </div>
+          <div class="val-card">
+            <div class="val-icon">❤️</div>
+            <div class="val-title">지지한다</div>
+            <div class="val-desc">청년이 스스로 설 수 있을 때까지 옆에서 기다리며 서로의 버팀이 됩니다.</div>
+          </div>
+          <div class="val-card">
+            <div class="val-icon">🌱</div>
+            <div class="val-title">성장한다</div>
+            <div class="val-desc">실패와 반복을 통해서도 성장할 수 있음을 믿으며 다음 단계로 나아가도록 돕고 함께 성장합니다.</div>
+          </div>
+        </div>
+      </div>
+      <div class="mv-image">
+        <img src="https://cdn.imweb.me/thumbnail/20260119/2572f6cd1f85c.jpg" alt="허브릿지 미션" onerror="this.parentElement.style.display='none'" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 오시는 길
+════════════════════════════════════════ -->
+<div id="page-location" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">허브릿지 <span>› 오시는 길</span></div>
+      <h1>오시는 길</h1>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="cont">
+      <div class="location-grid">
+        <div class="location-info">
+          <h3>📍 찾아오시는 방법</h3>
+          <div class="location-row"><span class="icon">📍</span><div><strong>주소</strong>서울특별시 마포구 월드컵로 163-3, 1층</div></div>
+          <div class="location-row"><span class="icon">📞</span><div><strong>전화</strong>02-6092-0070</div></div>
+          <div class="location-row"><span class="icon">✉️</span><div><strong>이메일</strong>hubr@hubr.co.kr</div></div>
+          <div class="location-row"><span class="icon">🕐</span><div><strong>운영시간</strong>평일 09:00 – 18:00</div></div>
+          <div class="location-row"><span class="icon">🚇</span><div><strong>지하철</strong>마포구청역 5번 출구에서 도보 2분<br /><span style="font-size:0.85rem;color:var(--gray-500);">6호선 마포구청역</span></div></div>
+          <div class="location-row"><span class="icon">🚌</span><div><strong>버스</strong>월드컵로 정류장 하차</div></div>
+        </div>
+        <div class="map-box">
+          <span style="font-size:3.5rem;">🗺️</span>
+          <p style="color:var(--gray-700);font-size:0.9rem;font-weight:600;text-align:center;">서울 마포구 월드컵로 163-3, 1층<br/><span style="font-size:0.82rem;color:var(--gray-500);font-weight:400;">마포구청역 5번 출구 도보 2분</span></p>
+          <a href="https://map.kakao.com/?q=서울+마포구+월드컵로+163-3" target="_blank">카카오맵으로 보기</a>
+          <a href="https://naver.me/FUyNJoSF" target="_blank" style="background:var(--secondary);">네이버지도로 보기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 청년교육 및 인턴십
+════════════════════════════════════════ -->
+<div id="page-education" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">사업소개 <span>› 청년교육 및 인턴십 사업</span></div>
+      <h1>청년교육 및 인턴십 사업</h1>
+      <p>청년이 배운 지식과 기술로 창업가·기획자로 성장할 수 있도록 지원합니다</p>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="cont">
+      <div class="biz-photo">
+        <img src="https://cdn.imweb.me/upload/S20251111932f844856fca/dc87375482d83.jpg" alt="청년교육 및 인턴십" />
+      </div>
+      <div class="content-prose">
+        <p>청년이 교육에서 그치지 않고 배운 지식과 기술을 사용하여 그에 맞는 직장체험 및 인턴십을 경험할 수 있도록 지원합니다.</p>
+        <p>참가자들이 현장 실무자뿐만 아니라 기획하고 조정하는 전문가이자, 더 나아가 창업가로서의 역량을 키워나갈 수 있는 교육과 인턴십을 제공합니다.</p>
+        <h3>사업 목표</h3>
+      </div>
+      <div class="biz-goal-list">
+        <div class="biz-goal-item">청년 기획자 역량 강화 교육 및 현장 밀착형 직무 트레이닝 운영</div>
+        <div class="biz-goal-item">산업별 전문가와의 네트워킹을 통한 진로 가이드 및 기술 자문 제공</div>
+        <div class="biz-goal-item">유관 기관 연계 인턴십 및 프로젝트를 통해 실질적인 사회 진출 발판 제공</div>
+        <div class="biz-goal-item">관련 분야 창업 및 미래산업 기획설계자 양성</div>
+        <div class="biz-goal-item">지역사회 네트워크와의 협력 강화 및 지속 가능한 선순환 구조 확립</div>
+      </div>
+      <div class="biz-tags">
+        <span class="biz-tag">무료 교육</span>
+        <span class="biz-tag">수료 후 장학금 지원</span>
+        <span class="biz-tag">자립준비청년 우대</span>
+        <span class="biz-tag">기업 연계 인턴십</span>
+        <span class="biz-tag">전문가 멘토링</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 행사기획 및 대행사업
+════════════════════════════════════════ -->
+<div id="page-events" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">사업소개 <span>› 행사기획 및 대행사업</span></div>
+      <h1>행사기획 및 대행사업</h1>
+      <p>청년들이 전문가와 함께 기획력과 현장 기술을 습득합니다</p>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="cont">
+      <div class="biz-photo">
+        <img src="https://cdn.imweb.me/upload/S20251111932f844856fca/532f78239c0e9.jpg" alt="행사기획 및 대행" />
+      </div>
+      <div class="content-prose">
+        <p>청년들이 전문가와 함께 기획력과 기술을 습득하고, 영상·음향·사진·무대설치·디자인·방송송출 등 현장 기술 교육을 통해 실전 역량을 키웁니다.</p>
+        <p>관공서, 민간기업, 지자체 행사 대행부터 국제회의, 정책포럼, 학술대회 등을 운영하며 청년들에게 다양한 실전 경험을 제공합니다.</p>
+        <h3>운영 범위</h3>
+      </div>
+      <div class="biz-goal-list">
+        <div class="biz-goal-item">기업·관공서 행사 — 워크숍, 송년회, 창립기념식, 세미나 등</div>
+        <div class="biz-goal-item">전시·박람회 — 부스 설치, 무대 연출, 컨벤션센터 운영</div>
+        <div class="biz-goal-item">시민행사·축제·캠페인 기획 및 운영</div>
+        <div class="biz-goal-item">국제회의, 정책포럼, 학술대회 운영</div>
+        <div class="biz-goal-item">영상·음향·사진·디자인·방송송출 현장 기술 교육</div>
+      </div>
+      <div class="content-prose" style="margin-top:1.5rem;">
+        <p style="background:var(--gray-100);border-radius:12px;padding:1.25rem;font-size:0.9rem;">관련 자회사 <strong>허브플랜(hbplan@hbplan.kr)</strong>을 통해 전문적인 행사기획 운영 서비스를 제공합니다.</p>
+      </div>
+      <div class="biz-tags">
+        <span class="biz-tag">영상·음향 실습</span>
+        <span class="biz-tag">무대 설치·연출</span>
+        <span class="biz-tag">전문가 협업</span>
+        <span class="biz-tag">포트폴리오 제작</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 네트워크사업
+════════════════════════════════════════ -->
+<div id="page-network" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">사업소개 <span>› 네트워크사업</span></div>
+      <h1>네트워크사업</h1>
+      <p>전문가 및 기관 간 협력 구조를 통해 청년에게 기회를 연결합니다</p>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="cont">
+      <div class="biz-photo">
+        <img src="https://cdn.imweb.me/upload/S20251111932f844856fca/3f95f1880b850.jpg" alt="네트워크사업" />
+      </div>
+      <div class="content-prose">
+        <p>청년을 위한 전문가 및 기관 간 협력 구조를 마련하고, 이를 통한 다양한 연구와 연계 활동을 추진합니다.</p>
+        <p>청년들이 사회를 폭넓게 경험하고 다양한 기회를 가질 수 있는 인프라를 구축하기 위해 유관 기관 및 전문가들과 함께 연합 활동을 진행합니다.</p>
+        <h3>사업 목표</h3>
+      </div>
+      <div class="biz-goal-list">
+        <div class="biz-goal-item">지역사회 협력 기관 및 개인·단체 발굴, 유관 기관과의 협력 관계 구축 및 전략적 제휴</div>
+        <div class="biz-goal-item">지역 내 공공기관, 민간기업, 교육기관 등 청년 지원 가능 기관·단체를 지속적으로 발굴하고 최적의 협력 모델 구축</div>
+        <div class="biz-goal-item">정기적인 네트워킹 데이 및 포럼을 통해 실무 중심의 전략적 제휴 추진</div>
+        <div class="biz-goal-item">각 기관의 인프라와 전문성을 결합하여 청년들에게 실질적인 혜택이 돌아갈 수 있는 공동 캠페인, 연구 활동, 연계 프로그램 기획·운영</div>
+      </div>
+      <div class="biz-tags">
+        <span class="biz-tag">청년 친화적 협력 생태계</span>
+        <span class="biz-tag">실천 중심 네트워크</span>
+        <span class="biz-tag">지속 가능한 자립 지원</span>
+        <span class="biz-tag">연합 프로젝트</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 소식
+════════════════════════════════════════ -->
+<div id="page-news" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">소식</div>
+      <h1>소식</h1>
+      <p>허브릿지의 활동 소식과 공지사항을 확인하세요</p>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="cont" style="max-width:1100px;">
+      <div class="board-layout">
+        <div>
+          <div class="board-tabs">
+            <button class="btab active" onclick="switchTab(this,'notice')">공지사항</button>
+            <button class="btab" onclick="switchTab(this,'activity')">활동 소식</button>
+            <button class="btab" onclick="switchTab(this,'press')">보도자료</button>
+          </div>
+          <div id="tab-notice" class="board-list">
+            <div class="board-list-hdr"><span style="text-align:center">번호</span><span>제목</span><span>작성자</span><span>날짜</span></div>
+            <div class="board-row"><span class="bnum">📌</span><div class="btitle"><span class="badge badge-n">NEW</span>[사업홍보] 2026년 4월 28일 기획자 양성과정 교육 실시</div><span class="bauthor">관리자</span><span class="bdate">26.04.15</span></div>
+            <div class="board-row"><span class="bnum">📌</span><div class="btitle">2026년 상반기 청년 창업가 양성과정 모집 안내</div><span class="bauthor">관리자</span><span class="bdate">26.03.10</span></div>
+            <div class="board-row"><span class="bnum">3</span><div class="btitle">허브릿지 사무소 운영시간 변경 안내</div><span class="bauthor">관리자</span><span class="bdate">26.02.20</span></div>
+            <div class="board-row"><span class="bnum">2</span><div class="btitle"><span class="badge badge-h">HOT</span>마포구청 MOU 체결 및 공동 프로그램 기획 안내</div><span class="bauthor">관리자</span><span class="bdate">26.01.15</span></div>
+            <div class="board-row"><span class="bnum">1</span><div class="btitle">사회적협동조합 허브릿지 창립 안내</div><span class="bauthor">관리자</span><span class="bdate">25.06.01</span></div>
+            <div class="bpager"><button class="pbn active">1</button><button class="pbn">2</button><button class="pbn">›</button></div>
+          </div>
+          <div id="tab-activity" class="board-list" style="display:none">
+            <div class="board-list-hdr"><span style="text-align:center">번호</span><span>제목</span><span>작성자</span><span>날짜</span></div>
+            <div class="board-row"><span class="bnum">5</span><div class="btitle"><span class="badge badge-n">NEW</span>2026 상반기 양성과정 수료식 현장 스케치</div><span class="bauthor">허브릿지</span><span class="bdate">26.05.10</span></div>
+            <div class="board-row"><span class="bnum">4</span><div class="btitle"><span class="badge badge-h">HOT</span>청년 페스티벌 성공 개최! 500명 참가</div><span class="bauthor">허브릿지</span><span class="bdate">26.04.18</span></div>
+            <div class="board-row"><span class="bnum">3</span><div class="btitle">창립 1주년 기념 네트워킹 행사 현장</div><span class="bauthor">허브릿지</span><span class="bdate">26.03.15</span></div>
+            <div class="board-row"><span class="bnum">2</span><div class="btitle">5월 멘토링 세션 후기 — 막막함이 설렘으로</div><span class="bauthor">허브릿지</span><span class="bdate">26.05.03</span></div>
+            <div class="board-row"><span class="bnum">1</span><div class="btitle">첫 번째 멘토-멘티 매칭 세션 후기</div><span class="bauthor">허브릿지</span><span class="bdate">25.09.08</span></div>
+            <div class="bpager"><button class="pbn active">1</button><button class="pbn">›</button></div>
+          </div>
+          <div id="tab-press" class="board-list" style="display:none">
+            <div class="board-list-hdr"><span style="text-align:center">번호</span><span>제목</span><span>매체</span><span>날짜</span></div>
+            <div class="board-row"><span class="bnum">3</span><div class="btitle"><span class="badge badge-n">NEW</span>"청년 자립의 다리" 허브릿지, 마포구와 손잡다</div><span class="bauthor">마포일보</span><span class="bdate">26.04.23</span></div>
+            <div class="board-row"><span class="bnum">2</span><div class="btitle">사회적협동조합 허브릿지, 창립 1년 성과 발표</div><span class="bauthor">사회적경제신문</span><span class="bdate">26.03.16</span></div>
+            <div class="board-row"><span class="bnum">1</span><div class="btitle">자립준비청년 위한 새 플랫폼 허브릿지 출범</div><span class="bauthor">한겨레</span><span class="bdate">25.07.01</span></div>
+            <div class="bpager"><button class="pbn active">1</button></div>
+          </div>
+        </div>
+        <div>
+          <div class="sidebar-card">
+            <div class="sc-hdr">📌 최신 공지 <a onclick="go('news')">더보기</a></div>
+            <div class="sc-item"><span class="sc-item-title">[사업홍보] 기획자 양성과정 교육 실시</span><div class="sc-item-date">2026.04.15</div></div>
+            <div class="sc-item"><span class="sc-item-title">2026 상반기 양성과정 모집 안내</span><div class="sc-item-date">2026.03.10</div></div>
+            <div class="sc-item"><span class="sc-item-title">마포구청 MOU 체결 안내</span><div class="sc-item-date">2026.01.15</div></div>
+          </div>
+          <div class="sidebar-card">
+            <div class="sc-hdr">💬 카카오 상담</div>
+            <div class="kakao-box">
+              <div class="kakao-icon">💛</div>
+              <p>프로그램 신청, 후원, 파트너십 등 편하게 문의하세요.</p>
+              <a href="https://open.kakao.com/o/sLO1NPqi" target="_blank" class="kakao-btn">카카오 오픈채팅 바로가기</a>
+            </div>
+          </div>
+          <div class="sidebar-card">
+            <div class="sc-hdr">📷 인스타그램</div>
+            <div class="kakao-box">
+              <div class="kakao-icon">📷</div>
+              <p>허브릿지의 활동 현장을 실시간으로 확인하세요.</p>
+              <a href="https://www.instagram.com/hubr2025/" target="_blank" class="kakao-btn" style="background:linear-gradient(135deg,#f09433,#dc2743,#bc1888);color:white;">@hubr2025 보러가기</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 후원
+════════════════════════════════════════ -->
+<div id="page-donate" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">후원</div>
+      <h1>후원하기</h1>
+      <p>여러분의 따뜻한 마음이 청년들의 미래를 밝힙니다</p>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="cont" style="max-width:1100px;">
+      <div class="donate-page-grid">
+        <div>
+          <div class="donate-info-card" style="margin-bottom:1.5rem;">
+            <h3>💛 왜 후원이 필요한가요?</h3>
+            <div class="content-prose">
+              <p>많은 청년들이 경제적 어려움으로 인해 자립의 기회를 놓치고 있습니다. 허브릿지는 이러한 청년들에게 실질적인 도움을 제공하기 위해 교육과 인턴십을 운영 중입니다.</p>
+              <p>후원금은 교육비, 멘토링 프로그램, 취업 준비 지원, 심리상담 등에 투명하게 공개되며 사용됩니다.</p>
+            </div>
+          </div>
+          <div class="donate-info-card">
+            <h3>📊 후원금 배분</h3>
+            <div class="pct-bar">
+              <div class="pct-item"><span class="pct-label">교육/인턴십</span><div class="pct-track"><div class="pct-fill" style="width:40%"></div></div><span class="pct-num">40%</span></div>
+              <div class="pct-item"><span class="pct-label">멘토링 운영</span><div class="pct-track"><div class="pct-fill" style="width:30%;background:var(--secondary)"></div></div><span class="pct-num" style="color:var(--secondary)">30%</span></div>
+              <div class="pct-item"><span class="pct-label">취업 지원</span><div class="pct-track"><div class="pct-fill" style="width:20%;background:var(--accent)"></div></div><span class="pct-num" style="color:var(--accent)">20%</span></div>
+              <div class="pct-item"><span class="pct-label">운영비</span><div class="pct-track"><div class="pct-fill" style="width:10%;background:var(--gray-400,#9ca3af)"></div></div><span class="pct-num" style="color:var(--gray-500)">10%</span></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="donate-info-card" style="margin-bottom:1.5rem;">
+            <h3>🏦 후원 방법</h3>
+            <div class="donate-method">
+              <h4>정기 후원</h4>
+              <p>월 1만원부터 자동이체 / 소득공제 혜택 / 정기 소식지 발송</p>
+            </div>
+            <div class="donate-method">
+              <h4>일시 후원</h4>
+              <p>금액 제한 없음 / 계좌이체·카드결제 / 기부금 영수증 발급 / 특정 프로그램 지정 가능</p>
+            </div>
+            <div class="acct-highlight">
+              <div class="bank">후원 계좌</div>
+              <div class="number">기업은행 048-163602-04-012</div>
+              <div class="owner">예금주: 사회적협동조합 허브릿지</div>
+            </div>
+            <p style="font-size:0.82rem;color:var(--gray-500);margin-top:0.75rem;">입금 후 <strong>02-6092-0070</strong> 또는 <strong>hubr@hubr.co.kr</strong>로 연락 주세요.</p>
+          </div>
+          <div class="donate-info-card">
+            <h3>🎁 후원자 혜택</h3>
+            <div class="benefit-list">
+              <div class="benefit-item">정기 소식지 발송</div>
+              <div class="benefit-item">연례 행사 초청</div>
+              <div class="benefit-item">기부금 영수증 발급</div>
+              <div class="benefit-item">고액 후원자 감사패 증정</div>
+            </div>
+            <button class="donate-cta" style="margin-top:1.5rem;border-radius:12px;" onclick="window.open('https://open.kakao.com/o/sLO1NPqi','_blank')">💬 카카오톡으로 후원 문의</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="float-cta" onclick="go('donate')">💛 후원하기</button>
+
+<script>
+  const navbar    = document.getElementById('navbar');
+  const mobileNav = document.getElementById('mobileNav');
+  const fpHome    = document.getElementById('page-home');
+  const fpNavEl   = document.getElementById('fpNav');
+  let   fpSlides  = Array.from(fpHome.querySelectorAll('.fp-slide'));
+  const darkSlides = new Set([0, 3]);
+
+  // ── FP 이동 & 점 업데이트 ──
+  function fpGoTo(idx) {
+    if (fpSlides[idx]) fpSlides[idx].scrollIntoView({ behavior: 'smooth' });
+  }
+  function fpSetActive(idx) {
+    const isDark = darkSlides.has(idx);
+    fpNavEl.querySelectorAll('.fp-dot-btn').forEach((d, i) => {
+      d.classList.toggle('active', i === idx);
+      d.classList.toggle('fp-white', isDark);
+    });
+  }
+
+  // ── 페이지 전환 ──
+  function go(pageId, e) {
+    if (e) e.preventDefault();
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('page-' + pageId);
+    if (target) target.classList.add('active');
+
+    if (pageId === 'home') {
+      navbar.classList.remove('white', 'scrolled');
+      fpNavEl.classList.add('show');
+      fpHome.scrollTop = 0;
+      fpSetActive(0);
+    } else {
+      navbar.classList.add('white');
+      navbar.classList.remove('scrolled');
+      fpNavEl.classList.remove('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    mobileNav.classList.remove('open');
+    setTimeout(() => {
+      if (target) target.querySelectorAll('.fi:not(.v)').forEach(el => {
+        if (isVisible(el)) el.classList.add('v');
+      });
+    }, 100);
+  }
+  function mgo(id) { go(id); }
+
+  // ── NAV 스크롤 (홈: fpHome / 서브: window) ──
+  fpHome.addEventListener('scroll', () => {
+    if (!fpHome.classList.contains('active')) return;
+    const idx = Math.min(Math.round(fpHome.scrollTop / fpHome.clientHeight), fpSlides.length - 1);
+    fpSetActive(idx);
+    navbar.classList.toggle('scrolled', idx > 0 || fpHome.scrollTop > 60);
+  });
+  window.addEventListener('scroll', () => {
+    if (fpHome.classList.contains('active')) return;
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ── 햄버거 ──
+  document.getElementById('hamburger').addEventListener('click', () => mobileNav.classList.toggle('open'));
+
+  // ── 페이드인 ──
+  function isVisible(el) {
+    const r = el.getBoundingClientRect();
+    return r.top < window.innerHeight * 0.92;
+  }
+  const fiObserver = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('v'); }),
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll('.fi').forEach(el => fiObserver.observe(el));
+
+  // ── 카운터 ──
+  function runCounter(el) {
+    if (el._done) return;
+    el._done = true;
+    const tgt = parseInt(el.dataset.target);
+    let cur = 0;
+    const step = tgt / (1800 / 16);
+    const t = setInterval(() => {
+      cur = Math.min(cur + step, tgt);
+      el.textContent = Math.floor(cur);
+      if (cur >= tgt) clearInterval(t);
+    }, 16);
+  }
+  new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) e.target.querySelectorAll('.stat-num[data-target]').forEach(runCounter);
+    }),
+    { threshold: 0.5 }
+  ).observe(document.getElementById('stats'));
+
+  // ── 게시판 탭 ──
+  function switchTab(btn, tab) {
+    btn.closest('.board-tabs').querySelectorAll('.btab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ['notice','activity','press'].forEach(t => {
+      const el = document.getElementById('tab-' + t);
+      if (el) el.style.display = t === tab ? 'block' : 'none';
+    });
+  }
+
+  // ── 후원 금액 선택 ──
+  function selAmt(btn) {
+    btn.closest('.amount-grid').querySelectorAll('.amt-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // ── 초기화 (홈 active) ──
+  fpNavEl.classList.add('show');
+</script>
+</body>
+</html>
