@@ -1,0 +1,2627 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>허브릿지 — 청년의 자립을 위한 다리</title>
+  <meta name="description" content="사회적협동조합 허브릿지는 청년이 자립할 수 있도록 교육·인턴십·네트워크를 지원합니다." />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet" />
+  <link rel="preload" as="image" href="https://homepage-ruby-pi.vercel.app/23.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #1D4ED8; --primary-dark: #1e3a8a; --primary-light: #3B82F6;
+      --secondary: #059669; --accent: #F59E0B;
+      --dark: #0F172A; --gray-900: #111827; --gray-700: #374151;
+      --gray-500: #6B7280; --gray-200: #E5E7EB; --gray-100: #F3F4F6; --white: #FFFFFF;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans KR', sans-serif; color: var(--gray-900); background: var(--white); line-height: 1.6; word-break: keep-all; overflow-wrap: break-word; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 68px;
+      background: #fff;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled, nav.white { box-shadow: 0 1px 0 rgba(0,0,0,0.07), 0 4px 20px rgba(0,0,0,0.05); }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 28px; width: auto; display: block; object-fit: contain; }
+
+    .nav-menu { display: flex; align-items: center; list-style: none; height: 68px; }
+    .nav-item { position: relative; height: 100%; display: flex; align-items: center; }
+    .nav-item > a {
+      display: flex; align-items: center; gap: 4px; padding: 0 1.3rem; height: 100%;
+      text-decoration: none; font-size: 14px; font-weight: 500;
+      color: var(--gray-700); transition: color 0.2s; white-space: nowrap; cursor: pointer;
+      letter-spacing: 0.04em; position: relative;
+    }
+    .nav-item > a::after {
+      content: ''; position: absolute; bottom: 14px;
+      left: 1.3rem; right: 1.3rem; height: 2px;
+      background: var(--primary);
+      transform: scaleX(0); transition: transform 0.25s ease; transform-origin: center;
+    }
+    .nav-item:hover > a::after { transform: scaleX(1); }
+    .nav-item > a:hover { color: var(--gray-900); }
+    .arrow { display: none; }
+    .dropdown {
+      position: absolute; top: 100%; left: 0; background: var(--white);
+      border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      min-width: 180px; padding: 0.5rem 0;
+      opacity: 0; pointer-events: none; transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s; border: 1px solid var(--gray-200);
+    }
+    .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .dropdown a {
+      display: block; padding: 0.65rem 1.25rem;
+      text-decoration: none; font-size: 13px; font-weight: 500;
+      color: var(--gray-700); transition: all 0.15s; cursor: pointer;
+    }
+    .dropdown a:hover { background: var(--gray-100); color: var(--primary); padding-left: 1.5rem; }
+    /* 드롭다운 — 밝은 스타일 */
+    .dropdown {
+      background: #fff !important;
+      border-color: var(--gray-200) !important;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.10) !important;
+    }
+    .dropdown a { color: var(--gray-700) !important; }
+    .dropdown a:hover {
+      background: var(--gray-100) !important; color: var(--primary) !important; padding-left: 1.5rem;
+    }
+    .nav-cta {
+      margin-left: 0;
+      background: transparent !important; color: var(--gray-700) !important;
+      padding: 0 1.3rem !important; border-radius: 0 !important;
+      font-weight: 500 !important; height: 100% !important;
+    }
+    .nav-cta:hover { transform: none !important; box-shadow: none !important; color: var(--gray-900) !important; }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--gray-900); border-radius: 2px; transition: all 0.3s; }
+
+    .mobile-nav {
+      display: none; position: fixed; top: 68px; left: 0; right: 0; bottom: 0;
+      background: var(--dark); z-index: 190; overflow-y: auto; padding: 1.5rem;
+    }
+    .mobile-nav.open { display: block; }
+    .m-sec-title { font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 1px; margin: 1rem 0 0.4rem; }
+    .mobile-nav a { display: block; padding: 0.6rem 0; color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.95rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .mobile-nav a.accent { color: var(--accent); font-weight: 700; border: none; margin-top: 0.5rem; }
+
+    /* ── PAGE SYSTEM ── */
+    .page { display: none; min-height: calc(100vh - 68px); padding-top: 68px; }
+    .page.active { display: block; }
+    #page-home { padding-top: 68px; }
+
+    /* ── PAGE BANNER ── */
+    .page-banner {
+      position: relative;
+      background: url('https://homepage-ruby-pi.vercel.app/000.png') center center / cover no-repeat;
+      padding: 5rem 5% 3rem; margin-bottom: 0; overflow: hidden;
+    }
+    .page-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(10,20,60,0.62) 0%, rgba(29,78,216,0.45) 100%);
+    }
+    .page-banner .cont { position: relative; z-index: 1; }
+    .page-banner .breadcrumb { font-size: 0.8rem; color: rgba(255,255,255,0.65); margin-bottom: 0.75rem; }
+    .page-banner .breadcrumb span { color: rgba(255,255,255,0.9); }
+    .page-banner h1 { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; color: var(--white); letter-spacing: -0.5px; text-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+    .page-banner p { color: rgba(255,255,255,0.82); margin-top: 0.5rem; font-size: 0.95rem; text-shadow: 0 1px 6px rgba(0,0,0,0.25); }
+
+    /* ── GREETING ── */
+    .greeting-wrap { display:flex; gap:4rem; align-items:flex-start; max-width:1100px; margin:0 auto; padding:4.5rem 5%; }
+    .greeting-photo { flex:0 0 360px; }
+    .greeting-photo img { width:100%; height:auto; display:block; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.12); }
+    .greeting-text { flex:1; padding-top:0.5rem; font-family:'Pretendard Variable','Pretendard',sans-serif; }
+    .greeting-text p { font-size:1.02rem; font-weight:400; line-height:2.05; color:#374151; margin-bottom:1.6rem; word-break:keep-all; overflow-wrap:break-word; }
+    .gt-hello { font-size:1.45rem !important; font-weight:700 !important; color:#0f172a !important; margin-bottom:2rem !important; line-height:1.75 !important; letter-spacing:-0.02em !important; }
+    .gt-thanks { font-size:1.05rem !important; font-weight:600 !important; color:#0f172a !important; margin-top:2.5rem !important; margin-bottom:0.4rem !important; }
+    .gt-sign { font-size:0.92rem !important; font-weight:500 !important; color:var(--primary) !important; letter-spacing:0.02em !important; }
+    @media(max-width:768px) {
+      .greeting-wrap { flex-direction:column; gap:2rem; padding:2.5rem 5%; }
+      .greeting-photo { flex:none; width:100%; }
+      .gt-hello { font-size:1.2rem !important; }
+      .greeting-text p { font-size:0.97rem; }
+    }
+
+    /* ── SECTIONS ── */
+    .sec { padding: 5rem 5%; }
+    .sec-bg { background: var(--gray-100); }
+    .sec-dark { background: var(--dark); color: var(--white); }
+    .cont { max-width: 1100px; margin: 0 auto; }
+    .sec-head { text-align: center; margin-bottom: 3rem; }
+    .sec-tag { display: inline-block; background: rgba(29,78,216,0.08); color: var(--primary); padding: 0.28rem 0.9rem; border-radius: 100px; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .sec-title { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; color: var(--gray-900); line-height: 1.3; letter-spacing: -0.5px; }
+    .sec-desc { font-size: 0.96rem; color: var(--gray-500); margin-top: 0.5rem; max-width: 500px; margin-inline: auto; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: flex-start;
+      position: relative; overflow: hidden; text-align: left;
+      background: url('https://homepage-ruby-pi.vercel.app/23.png') center center / cover no-repeat, linear-gradient(135deg,#0F172A,#1e3a8a);
+    }
+    #hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(10,15,30,0.88) 0%, rgba(10,15,30,0.65) 50%, rgba(10,15,30,0.18) 100%);
+    }
+    .hero-inner {
+      position: relative; z-index: 1; max-width: 1100px; margin: 0 auto;
+      padding: 0 5%; padding-top: 68px;
+      width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; min-height: 100vh;
+    }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.10); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.20); color: rgba(255,255,255,0.88); padding: 0.45rem 1.1rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1.5rem; letter-spacing: 0.04em; }
+    .hero-badge::before { content:''; width:6px; height:6px; background:var(--accent); border-radius:50%; flex-shrink:0; }
+    .hero-title { font-size: clamp(2.4rem,5.5vw,4.8rem); font-weight: 800; color: var(--white); line-height: 1.18; margin-bottom: 1.25rem; letter-spacing: -1.5px; white-space: nowrap; }
+    .hero-title em { font-style:normal; background:linear-gradient(90deg,var(--accent),#fb923c); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero-sub { font-size: clamp(0.97rem,1.6vw,1.1rem); color: rgba(255,255,255,0.75); max-width: 480px; margin-bottom: 2.5rem; line-height: 1.8; }
+    .hero-btns { display: flex; gap: 0.85rem; flex-wrap: wrap; justify-content: flex-start; }
+    .btn-p { background:var(--accent); color:var(--dark); padding:0.85rem 2rem; border-radius:6px; font-size:0.92rem; font-weight:700; text-decoration:none; transition:transform 0.2s,box-shadow 0.2s; display:inline-block; border:none; cursor:pointer; letter-spacing:0.01em; }
+    .btn-p:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(245,158,11,0.4); }
+    .btn-o { background:transparent; color:var(--white); border:1.5px solid rgba(255,255,255,0.5); padding:0.85rem 2rem; border-radius:6px; font-size:0.92rem; font-weight:600; text-decoration:none; transition:all 0.2s; display:inline-block; cursor:pointer; letter-spacing:0.01em; }
+    .btn-o:hover { background:rgba(255,255,255,0.12); border-color:var(--white); }
+    .hero-scroll { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:0.4rem; color:rgba(255,255,255,0.5); font-size:0.75rem; animation:scrollBob 2s ease-in-out infinite; cursor:pointer; }
+    .hero-scroll::after { content:'↓'; font-size:1.1rem; }
+    @keyframes scrollBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+
+    /* ── STATS ── */
+    #stats { background: var(--white); padding:3rem 5%; border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); position:relative; overflow:hidden; }
+    #stats::after { content:''; position:absolute; top:0; left:-100%; width:60%; height:100%; background:linear-gradient(90deg,transparent,rgba(29,78,216,0.03),transparent); animation:statsSweep 3.5s ease-in-out infinite; pointer-events:none; }
+    @keyframes statsSweep { 0%{left:-60%} 100%{left:160%} }
+    .stats-grid { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; text-align:center; }
+    .stat-item { padding:1.5rem 1rem; border-right:1px solid var(--gray-200); display:flex; flex-direction:column; align-items:center; gap:0.4rem; }
+    .stat-item:last-child { border-right:none; }
+    .stat-val { display:flex; align-items:baseline; gap:0.15rem; }
+    .stat-num { font-size:clamp(1.8rem,3.5vw,2.6rem); font-weight:800; color:var(--primary); display:inline; line-height:1; transition:transform 0.3s; }
+    .stat-num.popped { animation:statPop 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+    @keyframes statPop { 0%{transform:scale(0.7);opacity:0} 60%{transform:scale(1.08)} 100%{transform:scale(1);opacity:1} }
+    .stat-collecting { font-size:clamp(1.1rem,2.5vw,1.5rem) !important; color:var(--gray-500) !important; letter-spacing:0.05em; animation:collectBlink 1.8s ease-in-out infinite; }
+    @keyframes collectBlink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .stat-unit { font-size:1rem; font-weight:800; color:var(--primary); }
+    .stat-lbl { font-size:0.8rem; color:var(--gray-500); margin-top:0.5rem; font-weight:500; }
+
+    /* 실시간 배지 */
+    #live-badge {
+      display:flex; align-items:center; justify-content:center; gap:0.45rem;
+      margin-top:1.25rem; padding:0.5rem;
+      font-size:0.72rem; color:var(--gray-500);
+    }
+    .lb-dot { width:6px; height:6px; border-radius:50%; background:#22c55e; flex-shrink:0; animation:lbBlink 1.4s ease-in-out infinite; }
+    @keyframes lbBlink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+    .lb-date { color:var(--gray-500); font-weight:500; }
+    .lb-sep { color:var(--gray-300); }
+    #lb-clock { color:var(--gray-700); font-weight:700; font-variant-numeric:tabular-nums; letter-spacing:0.06em; }
+
+    /* ── PROGRAMS PREVIEW (home) ── */
+    .prog-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+    .prog-card { background:var(--white); border:1px solid var(--gray-200); border-radius:12px; overflow:hidden; transition:all 0.3s; cursor:pointer; }
+    .prog-card:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(0,0,0,0.08); }
+    .prog-photo { width:100%; aspect-ratio:16/9; background-repeat:no-repeat; background-size:cover; background-position:center; }
+    .prog-card-body { padding:1.5rem; }
+    .prog-card p { word-break:keep-all; }
+    .pi-blue { background:rgba(29,78,216,0.09); }
+    .pi-green { background:rgba(5,150,105,0.09); }
+    .pi-amber { background:rgba(245,158,11,0.09); }
+    .prog-card h3 { font-size:1.05rem; font-weight:700; margin-bottom:0.5rem; }
+    .prog-card p { font-size:0.88rem; color:var(--gray-500); line-height:1.75; }
+    .prog-tags { display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:1rem; }
+    .ptag { background:var(--gray-100); color:var(--gray-700); font-size:0.74rem; font-weight:500; padding:0.2rem 0.7rem; border-radius:100px; }
+    .prog-link { display:inline-flex; align-items:center; gap:0.3rem; margin-top:1rem; color:var(--primary); font-weight:700; font-size:0.86rem; text-decoration:none; transition:gap 0.2s; cursor:pointer; background:none; border:none; }
+    .prog-link:hover { gap:0.6rem; }
+
+    /* ── INSTAGRAM ── */
+    .ig-section { background: var(--gray-100); padding: 5rem 5%; }
+    .ig-inner { max-width: 1100px; margin: 0 auto; }
+    .ig-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; flex-wrap:wrap; gap:1rem; }
+    .ig-title-group { display:flex; align-items:center; gap:1rem; }
+    .ig-logo { width:44px; height:44px; background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+    .ig-title { font-size:1.4rem; font-weight:800; color:var(--gray-900); }
+    .ig-handle { font-size:0.88rem; color:var(--gray-500); margin-top:0.1rem; }
+    .ig-follow-btn { display:inline-flex; align-items:center; gap:0.5rem; background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color:var(--white); padding:0.65rem 1.4rem; border-radius:100px; font-weight:700; font-size:0.88rem; text-decoration:none; transition:transform 0.2s, box-shadow 0.2s; }
+    .ig-follow-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(220,39,67,0.35); }
+
+    .ig-embed-wrap {
+      background: var(--white); border-radius: 20px; overflow: hidden;
+      border: 1px solid var(--gray-200); padding: 1.5rem;
+    }
+    .ig-embed-wrap iframe { width: 100% !important; border: none; display: block; }
+
+    .ig-posts-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+    .ig-post-wrap { border-radius:16px; overflow:hidden; background:var(--gray-200); aspect-ratio:1; position:relative; }
+    .ig-post-wrap iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; display:block; }
+    .ig-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+    .ig-card { background:var(--white); border-radius:16px; overflow:hidden; border:1px solid var(--gray-200); transition:transform 0.2s, box-shadow 0.2s; cursor:pointer; }
+    .ig-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.1); }
+    .ig-card-thumb { aspect-ratio:1; background:var(--gray-100); display:flex; align-items:center; justify-content:center; font-size:2.5rem; overflow:hidden; }
+    .ig-card-thumb img { width:100%; height:100%; object-fit:cover; }
+    .ig-card-body { padding:0.85rem; }
+    .ig-card-date { font-size:0.75rem; color:var(--gray-500); margin-bottom:0.25rem; }
+    .ig-card-text { font-size:0.82rem; color:var(--gray-700); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .ig-more { text-align:center; margin-top:2rem; }
+
+    /* ── STORIES ── */
+    .story-roller { overflow:hidden; position:relative; margin-top:2rem; }
+    .story-roller::before,.story-roller::after { content:''; position:absolute; top:0; bottom:0; width:100px; z-index:2; pointer-events:none; }
+    .story-roller::before { left:0; background:linear-gradient(to right,var(--white),transparent); }
+    .story-roller::after { right:0; background:linear-gradient(to left,var(--white),transparent); }
+    .story-track { display:flex; gap:1.5rem; animation:rollRight 28s linear infinite; width:max-content; }
+    .story-track:hover { animation-play-state:paused; }
+    .story-track .story-card { width:320px; flex-shrink:0; }
+    @keyframes rollRight { 0%{transform:translateX(-50%);} 100%{transform:translateX(0);} }
+    .story-card { background:var(--white); border:1px solid var(--gray-200); border-radius:12px; padding:2rem; position:relative; overflow:hidden; transition: box-shadow 0.3s; }
+    .story-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.07); }
+    .story-card::before { content:'❝'; position:absolute; top:1rem; right:1.25rem; font-size:3rem; color:var(--primary); opacity:0.07; }
+    .story-text { font-size:0.88rem; color:var(--gray-700); line-height:1.85; margin-bottom:1.25rem; font-style:italic; min-height:90px; }
+    .story-prof { display:flex; align-items:center; gap:0.7rem; }
+    .s-av { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.95rem; font-weight:700; color:var(--white); flex-shrink:0; }
+    .sa { background:linear-gradient(135deg,var(--primary),var(--primary-light)); }
+    .sb { background:linear-gradient(135deg,var(--secondary),#34d399); }
+    .sc { background:linear-gradient(135deg,var(--accent),#fb923c); }
+    .sd { background:linear-gradient(135deg,#7C3AED,#a78bfa); }
+    .s-name { font-weight:700; font-size:0.88rem; }
+    .s-role { font-size:0.76rem; color:var(--gray-500); }
+    .sk-bar { height:12px; background:var(--gray-100); border-radius:4px; }
+
+    /* ── PRESS ── */
+    .press-sec { padding: 5rem 5%; background: var(--white); }
+    .press-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 2rem; }
+    .press-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; transition: all 0.3s; display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+    .press-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+    .press-thumb { aspect-ratio: 16/9; overflow: hidden; background: var(--gray-200); }
+    .press-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+    .press-card:hover .press-thumb img { transform: scale(1.04); }
+    .press-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+    .press-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
+    .press-outlet { font-size: 12px; font-weight: 700; color: var(--primary); background: rgba(29,78,216,0.08); padding: 0.2rem 0.6rem; border-radius: 4px; }
+    .press-date { font-size: 12px; color: var(--gray-500); }
+    .press-title { font-size: 15px; font-weight: 700; color: var(--gray-900); line-height: 1.5; margin-bottom: 0.5rem; flex: 1; }
+    .press-desc { font-size: 13px; color: var(--gray-500); line-height: 1.7; }
+    .press-link { display: inline-flex; align-items: center; gap: 0.3rem; margin-top: 1rem; color: var(--primary); font-size: 13px; font-weight: 700; transition: gap 0.2s; }
+    .press-card:hover .press-link { gap: 0.5rem; }
+    .review-cta { text-align: center; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--gray-200); }
+    .review-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary); color: var(--white); padding: 0.8rem 2rem; border-radius: 100px; font-size: 0.92rem; font-weight: 700; text-decoration: none; transition: all 0.2s; box-shadow: 0 4px 14px rgba(29,78,216,0.25); }
+    .review-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(29,78,216,0.35); }
+    @media(max-width:768px) { .press-grid { grid-template-columns: 1fr; } }
+
+    /* ── DONATE SECTION ── */
+    .donate-wrap { background:linear-gradient(160deg,#0c1428 0%,#1a2f6e 60%,#1D4ED8 100%); padding:5rem 5%; }
+    .donate-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
+    .donate-text h2 { font-size:clamp(1.6rem,3vw,2.3rem); font-weight:800; line-height:1.3; margin-bottom:1rem; color:var(--white); }
+    .donate-text p { color:rgba(255,255,255,0.65); line-height:1.85; margin-bottom:1.75rem; font-size:0.93rem; }
+    .impact-list { list-style:none; display:flex; flex-direction:column; gap:0.6rem; }
+    .impact-list li { display:flex; align-items:center; gap:0.7rem; font-size:0.9rem; color:rgba(255,255,255,0.82); }
+    .impact-list li::before { content:'✓'; width:20px; height:20px; background:var(--secondary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.62rem; font-weight:700; flex-shrink:0; }
+    .donate-form { background:rgba(255,255,255,0.07); border-radius:24px; padding:2rem; border:1px solid rgba(255,255,255,0.1); }
+    .donate-form h3 { font-size:1.05rem; font-weight:700; margin-bottom:1.1rem; color:var(--white); }
+    .amount-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.55rem; margin-bottom:1rem; }
+    .amt-btn { background:rgba(255,255,255,0.07); border:2px solid rgba(255,255,255,0.12); color:var(--white); padding:0.65rem; border-radius:10px; font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.2s; }
+    .amt-btn:hover,.amt-btn.active { background:var(--accent); border-color:var(--accent); color:var(--dark); }
+    .acct-box { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:0.9rem 1.2rem; margin-top:0.9rem; }
+    .acct-lbl { font-size:0.74rem; color:rgba(255,255,255,0.4); margin-bottom:0.2rem; }
+    .acct-num { font-size:0.93rem; font-weight:700; color:var(--white); }
+    .acct-nm { font-size:0.76rem; color:rgba(255,255,255,0.5); margin-top:0.15rem; }
+    .donate-cta { display:block; width:100%; padding:0.9rem; background:var(--accent); color:var(--dark); border:none; border-radius:100px; font-size:0.93rem; font-weight:700; cursor:pointer; margin-top:0.9rem; transition:transform 0.2s; }
+    .donate-cta:hover { transform:translateY(-2px); }
+
+    /* ── SUB PAGE CONTENT ── */
+    .content-block { padding: 4rem 5%; }
+    .content-block .cont { max-width: 900px; }
+    .content-prose { font-size: 0.97rem; color: var(--gray-700); line-height: 2; }
+    .content-prose p { margin-bottom: 1.25rem; }
+    .content-prose h3 { font-size: 1.2rem; font-weight: 700; color: var(--gray-900); margin: 2rem 0 0.75rem; }
+    .content-prose h4 { font-size: 1rem; font-weight: 700; color: var(--primary); margin: 1.5rem 0 0.5rem; }
+    .content-prose ul { padding-left: 1.25rem; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+    .content-prose ul li { font-size: 0.95rem; }
+
+    /* 인사말 */
+    .greeting-photo { width: 100%; max-width: 600px; border-radius: 20px; overflow: hidden; margin-bottom: 2.5rem; }
+    .greeting-photo img { width: 100%; display: block; }
+    .signature { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-200); font-size: 0.95rem; color: var(--gray-700); }
+    .signature strong { color: var(--gray-900); }
+
+    /* 인사말 캐러셀 */
+    .greeting-carousel { position: relative; width: 100%; overflow: hidden; margin-top: 68px; }
+    .gc-slides { display: flex; transition: transform 0.7s cubic-bezier(0.4,0,0.2,1); will-change: transform; }
+    .gc-slide { min-width: 100%; flex-shrink: 0; }
+    .gc-text-slide { min-height: 520px; background: linear-gradient(135deg, var(--primary-dark), var(--primary)); display: flex; align-items: center; padding: 5rem 5%; }
+    .gc-text-inner { max-width: 760px; margin: 0 auto; color: var(--white); }
+    .gc-text-inner .breadcrumb { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-bottom: 0.75rem; }
+    .gc-text-inner .breadcrumb span { color: rgba(255,255,255,0.75); }
+    .gc-text-inner h1 { font-size: clamp(2rem,4vw,3rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 1.5rem; }
+    .gc-text-inner p { font-size: 1rem; line-height: 1.95; color: rgba(255,255,255,0.82); margin-bottom: 0.7rem; }
+    .gc-photo-slide { min-height: 520px; background: var(--dark); }
+    .gc-photo-slide img { width: 100%; height: 100%; min-height: 520px; object-fit: cover; display: block; }
+    .gc-dots { position: absolute; bottom: 1.25rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.5rem; z-index: 10; }
+    .gc-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.45); border: none; cursor: pointer; transition: all 0.3s; padding: 0; }
+    .gc-dot.active { background: var(--white); width: 28px; border-radius: 100px; }
+    .gc-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border: 2px solid rgba(255,255,255,0.3); color: var(--white); width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.3rem; z-index: 10; transition: background 0.2s; line-height: 1; }
+    .gc-arrow:hover { background: rgba(255,255,255,0.3); }
+    .gc-prev { left: 1.25rem; }
+    .gc-next { right: 1.25rem; }
+    @media(max-width:768px) { .gc-text-slide,.gc-photo-slide,.gc-photo-slide img { min-height: 380px; } }
+
+    /* 미션비전 (legacy — kept for safety) */
+    .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0; }
+    .mv-card { background: var(--white); border-radius: 20px; padding: 2rem; border: 2px solid var(--gray-200); }
+    .mv-card.primary { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); border-color: transparent; color: var(--white); }
+    .mv-card.secondary { background: linear-gradient(135deg, var(--secondary), #10b981); border-color: transparent; color: var(--white); }
+    .mv-label { font-size: 0.78rem; font-weight: 700; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; }
+    .mv-text { font-size: 1.05rem; font-weight: 700; line-height: 1.6; }
+    .value-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 2.5rem; }
+    .val-card { background: var(--white); border: 2px solid var(--gray-200); border-radius: 20px; padding: 2rem; text-align: center; transition: all 0.3s; }
+    .val-card:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(29,78,216,0.1); }
+    .val-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .val-title { font-size: 1.1rem; font-weight: 800; color: var(--gray-900); margin-bottom: 0.75rem; }
+    .val-desc { font-size: 0.88rem; color: var(--gray-600); line-height: 1.75; }
+    .mv-image { border-radius: 16px; overflow: hidden; margin-top: 2.5rem; }
+    .mv-image img { width: 100%; display: block; max-height: 400px; object-fit: cover; }
+
+    /* 미션비전 v2 */
+    .mv-hero {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, #3b82f6 100%);
+      padding: 5rem 5% 4rem; position: relative; overflow: hidden;
+    }
+    .mv-hero::after {
+      content: ''; position: absolute; right: -80px; top: -80px;
+      width: 360px; height: 360px; border-radius: 50%;
+      background: rgba(255,255,255,0.05); pointer-events: none;
+    }
+    .mv2-section { background: var(--gray-100); padding: 4rem 5%; }
+    .mv2-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .mv2-card {
+      background: var(--white); border-radius: 24px; padding: 2.5rem;
+      border: 1px solid var(--gray-200);
+      display: flex; flex-direction: column; gap: 0.85rem;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .mv2-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); }
+    .mv2-icon-wrap {
+      width: 52px; height: 52px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .mv2-mission .mv2-icon-wrap { background: rgba(29,78,216,0.08); color: var(--primary); }
+    .mv2-vision  .mv2-icon-wrap { background: rgba(5,150,105,0.08); color: var(--secondary); }
+    .mv2-badge {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .mv2-mission .mv2-badge { color: var(--primary); }
+    .mv2-vision  .mv2-badge { color: var(--secondary); }
+    .mv2-quote {
+      font-size: 1.15rem; font-weight: 800; color: var(--gray-900);
+      line-height: 1.55; border: none; margin: 0; padding: 0;
+      quotes: none; letter-spacing: -0.3px;
+    }
+    .mv2-sub { font-size: 0.88rem; color: var(--gray-500); line-height: 1.8; }
+
+    .mv2-values-section { padding: 5rem 5%; background: var(--white); }
+    .mv2-value-list { display: flex; flex-direction: column; gap: 0; }
+    .mv2-val {
+      display: flex; align-items: flex-start; gap: 2rem;
+      padding: 2.25rem 0; border-bottom: 1px solid var(--gray-200);
+    }
+    .mv2-val:last-child { border-bottom: none; }
+    .mv2-val-icon {
+      width: 56px; height: 56px; border-radius: 18px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 0.15rem;
+    }
+    .mv2-vi-blue  { background: rgba(29,78,216,0.08);  color: var(--primary); }
+    .mv2-vi-green { background: rgba(5,150,105,0.08);  color: var(--secondary); }
+    .mv2-vi-amber { background: rgba(245,158,11,0.08); color: var(--accent); }
+    .mv2-val-body { flex: 1; }
+    .mv2-val-num { font-size: 0.72rem; font-weight: 800; color: var(--gray-500); letter-spacing: 0.1em; margin-bottom: 0.35rem; }
+    .mv2-val-title { font-size: 1.2rem; font-weight: 800; color: var(--gray-900); margin-bottom: 0.5rem; }
+    .mv2-val-desc { font-size: 0.9rem; color: var(--gray-500); line-height: 1.85; max-width: 600px; }
+
+    @media(max-width:768px) {
+      .mv2-cards { grid-template-columns: 1fr; }
+      .mv2-val { gap: 1.25rem; padding: 1.75rem 0; }
+      .mv2-val-icon { width: 48px; height: 48px; border-radius: 14px; }
+      .mv2-val-title { font-size: 1.05rem; }
+    }
+
+    /* 사업소개 공통 */
+    .biz-photo { width: 100%; border-radius: 16px; overflow: hidden; margin-bottom: 2rem; }
+    .biz-photo img { width: 100%; display: block; max-height: 420px; object-fit: cover; }
+    .biz-goal-list { display: flex; flex-direction: column; gap: 0.75rem; margin: 1.25rem 0; }
+    .biz-goal-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem 1.25rem; background: var(--gray-100); border-radius: 12px; font-size: 0.9rem; line-height: 1.65; }
+    .biz-goal-item::before { content: '→'; color: var(--primary); font-weight: 700; flex-shrink: 0; margin-top: 0.1rem; }
+    .biz-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    .biz-tag { background: rgba(29,78,216,0.08); color: var(--primary); padding: 0.35rem 0.9rem; border-radius: 100px; font-size: 0.82rem; font-weight: 600; }
+
+    /* 오시는 길 */
+    .location-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+    .location-info { background: var(--white); border-radius: 20px; padding: 2.5rem; border: 1px solid var(--gray-200); }
+    .location-info h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--gray-900); }
+    .location-row { display: flex; gap: 0.85rem; align-items: flex-start; margin-bottom: 1.1rem; font-size: 0.92rem; color: var(--gray-700); }
+    .location-row .icon { width: 20px; flex-shrink: 0; }
+    .location-row strong { display: block; font-weight: 600; color: var(--gray-900); margin-bottom: 0.2rem; }
+    .map-box { border-radius: 20px; overflow: hidden; position: relative; min-height: 360px; box-shadow: 0 4px 24px rgba(0,0,0,.1); }
+    .map-box iframe { width: 100%; height: 360px; border: 0; display: block; }
+    .map-btns { display: flex; gap: .6rem; padding: .85rem 1rem; background: #fff; border-top: 1px solid var(--gray-200); }
+    .map-btns a { flex: 1; text-align: center; background: var(--primary); color: var(--white); padding: .6rem 0; border-radius: 8px; font-weight: 700; font-size: .82rem; text-decoration: none; transition: background .2s; }
+    .map-btns a:hover { background: var(--primary-dark); }
+    .map-btns a.naver { background: #03C75A; }
+    .map-btns a.naver:hover { background: #02a84c; }
+
+    /* 후원 페이지 */
+    .donate-page-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+    .donate-info-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: 20px; padding: 2rem; }
+    .donate-info-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--gray-900); display: flex; align-items: center; gap: 0.5rem; }
+    .donate-method { background: var(--gray-100); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+    .donate-method h4 { font-weight: 700; font-size: 0.9rem; color: var(--primary); margin-bottom: 0.5rem; }
+    .donate-method p { font-size: 0.85rem; color: var(--gray-700); line-height: 1.7; }
+    .acct-highlight { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: var(--white); border-radius: 12px; padding: 1.25rem; margin: 1rem 0; }
+    .acct-highlight .bank { font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.25rem; }
+    .acct-highlight .number { font-size: 1.1rem; font-weight: 800; letter-spacing: 0.5px; }
+    .acct-highlight .owner { font-size: 0.8rem; opacity: 0.7; margin-top: 0.25rem; }
+    .pct-bar { margin: 0.75rem 0; }
+    .pct-item { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; font-size: 0.85rem; }
+    .pct-label { width: 130px; flex-shrink: 0; color: var(--gray-700); }
+    .pct-track { flex: 1; background: var(--gray-200); border-radius: 100px; height: 8px; overflow: hidden; }
+    .pct-fill { height: 100%; border-radius: 100px; background: var(--primary); }
+    .pct-num { width: 32px; text-align: right; font-weight: 700; color: var(--primary); font-size: 0.82rem; }
+    .benefit-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .benefit-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--gray-700); }
+    .benefit-item::before { content: '✓'; color: var(--secondary); font-weight: 700; }
+
+    /* 소식 게시판 */
+    .board-loading { padding: 2rem; text-align: center; color: var(--gray-500); font-size: 0.88rem; }
+    .board-empty { padding: 2rem; text-align: center; color: var(--gray-500); font-size: 0.88rem; }
+    .board-toolbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; }
+    .board-toolbar .board-tabs { border-bottom:none; margin-bottom:0; }
+    .btn-write { padding:0.5rem 1.1rem; background:var(--primary); color:#fff; border:none; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; font-family:inherit; transition:background 0.2s; }
+    .btn-write:hover { background:var(--primary-dark); }
+    /* 작성 모달 */
+    .write-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:500; align-items:center; justify-content:center; padding:1rem; }
+    .write-overlay.open { display:flex; }
+    .write-modal { background:#fff; border-radius:16px; padding:2rem; width:100%; max-width:560px; box-shadow:0 8px 40px rgba(0,0,0,0.18); max-height:90vh; overflow-y:auto; }
+    .write-modal h3 { font-size:1.05rem; font-weight:700; margin-bottom:1.25rem; }
+    .wf-row { margin-bottom:0.85rem; }
+    .wf-row label { display:block; font-size:0.8rem; font-weight:600; color:var(--gray-700); margin-bottom:0.3rem; }
+    .wf-row input, .wf-row select, .wf-row textarea { width:100%; padding:0.6rem 0.85rem; border:1.5px solid var(--gray-200); border-radius:8px; font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.2s; }
+    .wf-row input:focus, .wf-row select:focus, .wf-row textarea:focus { border-color:var(--primary); }
+    .wf-row textarea { min-height:100px; resize:vertical; line-height:1.6; }
+    .wf-checks { display:flex; gap:1.25rem; margin-bottom:1rem; }
+    .wf-checks label { font-size:0.87rem; display:flex; align-items:center; gap:0.35rem; cursor:pointer; }
+    .wf-btns { display:flex; gap:0.65rem; justify-content:flex-end; }
+    .wf-cancel { padding:0.55rem 1.1rem; background:none; border:1.5px solid var(--gray-200); border-radius:8px; font-size:0.88rem; cursor:pointer; font-family:inherit; color:var(--gray-700); }
+    .wf-submit { padding:0.55rem 1.25rem; background:var(--primary); color:#fff; border:none; border-radius:8px; font-size:0.88rem; font-weight:600; cursor:pointer; font-family:inherit; transition:background 0.2s; }
+    .wf-submit:hover { background:var(--primary-dark); }
+    .wf-submit:disabled { background:var(--gray-200); color:var(--gray-500); cursor:not-allowed; }
+    .wf-msg { font-size:0.8rem; margin-top:0.65rem; padding:0.5rem 0.8rem; border-radius:6px; display:none; }
+    .wf-msg.err { background:#fef2f2; color:#dc2626; display:block; }
+    .wf-msg.ok { background:#f0fdf4; color:#059669; display:block; }
+    /* 보도자료 카드 */
+    .press-cards-wrap { display:grid; grid-template-columns:repeat(2,1fr); gap:1.25rem; padding:.5rem 0; }
+    .pc-card { background:var(--white); border:1px solid var(--gray-200); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; transition:all .3s; text-decoration:none; color:inherit; }
+    .pc-card:hover { transform:translateY(-3px); box-shadow:0 10px 28px rgba(0,0,0,.09); }
+    .pc-thumb { aspect-ratio:16/9; overflow:hidden; background:var(--gray-100); }
+    .pc-thumb img { width:100%; height:100%; object-fit:cover; transition:transform .3s; }
+    .pc-card:hover .pc-thumb img { transform:scale(1.04); }
+    .pc-body { padding:1rem 1.1rem 1.1rem; flex:1; display:flex; flex-direction:column; }
+    .pc-meta { display:flex; align-items:center; gap:.4rem; margin-bottom:.5rem; }
+    .pc-outlet { font-size:11px; font-weight:700; color:var(--primary); background:rgba(29,78,216,.08); padding:.15rem .55rem; border-radius:4px; }
+    .pc-date { font-size:11px; color:var(--gray-500); }
+    .pc-title { font-size:.9rem; font-weight:700; color:var(--gray-900); line-height:1.5; flex:1; }
+    .pc-link { display:inline-flex; align-items:center; gap:.25rem; margin-top:.75rem; color:var(--primary); font-size:.8rem; font-weight:700; }
+    @media(max-width:600px) { .press-cards-wrap { grid-template-columns:1fr; } }
+    /* 비밀번호 모달 */
+    .pw-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:600; align-items:center; justify-content:center; }
+    .pw-overlay.open { display:flex; }
+    .pw-box { background:#fff; border-radius:14px; padding:1.75rem 1.5rem; width:100%; max-width:320px; text-align:center; box-shadow:0 8px 40px rgba(0,0,0,0.18); }
+    .pw-box h4 { font-size:1rem; font-weight:700; margin-bottom:0.4rem; }
+    .pw-box p { font-size:0.82rem; color:var(--gray-500); margin-bottom:1rem; }
+    .pw-box input { width:100%; padding:0.65rem 1rem; border:1.5px solid var(--gray-200); border-radius:8px; font-size:0.95rem; font-family:inherit; outline:none; margin-bottom:0.65rem; text-align:center; letter-spacing:0.1em; }
+    .pw-box input:focus { border-color:var(--primary); }
+    .pw-confirm { width:100%; padding:0.65rem; background:var(--primary); color:#fff; border:none; border-radius:8px; font-size:0.95rem; font-weight:600; cursor:pointer; font-family:inherit; }
+    .pw-err { color:#dc2626; font-size:0.8rem; margin-top:0.4rem; display:none; }
+    .board-layout { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: start; }
+    .board-tabs { display: flex; border-bottom: 2px solid var(--gray-200); margin-bottom: 1.25rem; }
+    .btab { padding: 0.65rem 1.35rem; font-size: 0.9rem; font-weight: 600; color: var(--gray-500); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; background: none; border-top: none; border-left: none; border-right: none; transition: all 0.2s; }
+    .btab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .board-list { background: var(--white); border-radius: 16px; border: 1px solid var(--gray-200); overflow: hidden; }
+    .board-list-hdr { display: grid; grid-template-columns: 55px 1fr 90px 75px; padding: 0.7rem 1.2rem; background: var(--gray-100); font-size: 0.78rem; font-weight: 700; color: var(--gray-500); }
+    .board-row { display: grid; grid-template-columns: 55px 1fr 90px 75px; padding: 0.85rem 1.2rem; border-top: 1px solid var(--gray-200); align-items: center; cursor: pointer; transition: background 0.15s; }
+    .board-row:hover { background: var(--gray-100); }
+    .bnum { font-size: 0.8rem; color: var(--gray-500); text-align: center; }
+    .btitle { font-size: 0.88rem; font-weight: 500; display: flex; align-items: center; gap: 0.45rem; }
+    .badge { font-size: 0.68rem; font-weight: 700; padding: 0.13rem 0.45rem; border-radius: 4px; }
+    .badge-n { background: #dbeafe; color: var(--primary); }
+    .badge-h { background: #fce7f3; color: #be185d; }
+    .bauthor,.bdate { font-size: 0.8rem; color: var(--gray-500); }
+    .bpager { display:flex; justify-content:center; gap:0.35rem; padding:0.9rem; }
+    .pbn { width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:7px; font-size:0.82rem; font-weight:500; cursor:pointer; border:1px solid var(--gray-200); background:var(--white); color:var(--gray-700); transition:all 0.15s; }
+    .pbn.active { background:var(--primary); border-color:var(--primary); color:var(--white); }
+    .pbn:hover:not(.active) { border-color:var(--primary); color:var(--primary); }
+    .sidebar-card { background: var(--white); border-radius: 16px; border: 1px solid var(--gray-200); overflow: hidden; margin-bottom: 1.25rem; }
+    .sc-hdr { padding: 0.8rem 1.2rem; font-size: 0.85rem; font-weight: 700; color: var(--gray-900); border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; }
+    .sc-hdr a { font-size: 0.75rem; color: var(--primary); text-decoration: none; font-weight: 600; }
+    .sc-item { padding: 0.7rem 1.2rem; border-top: 1px solid var(--gray-200); font-size: 0.83rem; }
+    .sc-item:first-child { border-top: none; }
+    .sc-item-title { color: var(--gray-900); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+    .sc-item-date { color: var(--gray-500); font-size: 0.75rem; margin-top: 0.1rem; }
+    .kakao-box { padding: 1.25rem; text-align: center; }
+    .kakao-icon { font-size: 2.2rem; margin-bottom: 0.6rem; }
+    .kakao-box p { font-size: 0.82rem; color: var(--gray-600); margin-bottom: 0.9rem; line-height: 1.6; }
+    .kakao-btn { display: block; background: #FEE500; color: #3A1D1D; font-weight: 700; font-size: 0.88rem; padding: 0.7rem; border-radius: 12px; text-decoration: none; transition: transform 0.2s; }
+    .kakao-btn:hover { transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--dark); color: rgba(255,255,255,0.65); padding: 4rem 5% 2rem; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; padding-bottom: 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .footer-logo { margin-bottom: 0.75rem; }
+    .footer-logo img { height: 36px; filter: brightness(0) invert(1); }
+    .footer-desc { font-size: 13px; line-height: 1.8; margin-bottom: 1rem; }
+    .footer-contact { font-size: 13px; line-height: 2; }
+    .footer-col h4 { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 0.875rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-col a { color: rgba(255,255,255,0.55); text-decoration: none; font-size: 13px; transition: color 0.2s; cursor: pointer; }
+    .footer-col a:hover { color: var(--accent); }
+    .footer-bottom { max-width: 1100px; margin: 1.5rem auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 12px; flex-wrap: wrap; gap: 0.5rem; }
+    .social-links { display: flex; gap: 0.6rem; }
+    .social-btn { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 0.88rem; transition: all 0.2s; }
+    .social-btn:hover { background: var(--primary); border-color: var(--primary); }
+
+    /* ── FLOAT CTA ── */
+    .float-cta { position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 50; background: var(--accent); color: var(--dark); padding: 0.7rem 1.4rem; border-radius: 100px; font-weight: 700; font-size: 0.85rem; text-decoration: none; box-shadow: 0 6px 20px rgba(245,158,11,0.4); display: flex; align-items: center; gap: 0.4rem; transition: transform 0.2s; cursor: pointer; border: none; }
+    .float-cta:hover { transform: translateY(-3px); }
+
+    /* ── HERO CAROUSEL ── */
+    #hero-carousel {
+      position: relative; overflow: hidden;
+      height: calc(100vh - 68px); min-height: 560px;
+    }
+    .hc-track {
+      display: flex; height: 100%;
+      transition: transform 0.75s cubic-bezier(0.4,0,0.2,1);
+      will-change: transform;
+    }
+    .hc-slide {
+      min-width: 100%; height: 100%;
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+      background-color: #0c1428;
+      position: relative; display: flex; align-items: center;
+    }
+    .hc-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(10,15,30,0.88) 0%, rgba(10,15,30,0.58) 50%, rgba(10,15,30,0.18) 100%);
+    }
+    .hc-content {
+      position: relative; z-index: 1;
+      max-width: 1100px; margin: 0 auto; padding: 0 5%; width: 100%;
+    }
+    .hc-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.12); backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255,255,255,0.28); color: #fff;
+      width: 50px; height: 50px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.2rem; z-index: 10;
+      transition: background 0.2s, border-color 0.2s; line-height: 1;
+    }
+    .hc-arrow:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.55); }
+    .hc-prev { left: 1.5rem; }
+    .hc-next { right: 1.5rem; }
+    .hc-dots {
+      position: absolute; bottom: 1.75rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 0.5rem; z-index: 10;
+    }
+    .hc-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: rgba(255,255,255,0.4); border: none; cursor: pointer;
+      transition: all 0.35s; padding: 0;
+    }
+    .hc-dot.active { background: #fff; width: 28px; border-radius: 100px; }
+    @media(max-width:768px) {
+      #hero-carousel { min-height: 440px; }
+      .hc-content { text-align: center; }
+      .hc-content .hero-btns { justify-content: center; }
+      .hc-arrow { width: 38px; height: 38px; font-size: 1rem; }
+      .hc-prev { left: 0.6rem; } .hc-next { right: 0.6rem; }
+    }
+
+    /* ── FADE IN ── */
+    .fi { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fi.v { opacity: 1; transform: translateY(0); }
+    .fi-d1{transition-delay:0.1s;} .fi-d2{transition-delay:0.2s;} .fi-d3{transition-delay:0.3s;}
+
+    /* ── HOME PAGE: 히어로만 전체화면, 이후 일반 스크롤 ── */
+    #page-home { padding-top: 68px; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px){
+      .footer-inner{grid-template-columns:1fr 1fr;}
+      .board-layout{grid-template-columns:1fr;}
+    }
+    @media(max-width:768px){
+      nav{padding:0 4%;}
+      .nav-menu{display:none;}
+      .hamburger{display:flex;}
+
+      /* Hero */
+      .hero-title{white-space:normal;letter-spacing:-1px;}
+      .hero-sub{font-size:0.93rem;max-width:100%;}
+      .hero-inner{align-items:center;text-align:center;}
+      .hero-btns{flex-direction:column;align-items:stretch;gap:0.75rem;justify-content:center;}
+      .btn-p,.btn-o{text-align:center;}
+
+      /* Sections */
+      .sec{padding:3rem 4%;}
+      .sec-head{margin-bottom:2rem;}
+      .content-block{padding:2.5rem 4%;}
+      .page-banner{padding:3.5rem 4% 2rem;}
+      .donate-wrap{padding:3rem 4%;}
+      .ig-section{padding:3rem 4%;}
+
+      /* Layouts */
+      .hero-inner{grid-template-columns:1fr !important;}
+      .hero-photos{display:none !important;}
+      .stats-grid{grid-template-columns:repeat(2,1fr);}
+      .stat-item{padding:1.25rem 0.5rem;}
+      #stats{padding:2rem 4%;}
+      .prog-grid,.story-grid,.value-cards,.mv-grid{grid-template-columns:1fr;}
+      .prog-card,.story-card,.val-card{padding:1.5rem;}
+      .donate-inner,.donate-page-grid,.location-grid{grid-template-columns:1fr;gap:1.75rem;}
+      .donate-form{padding:1.5rem;}
+      .footer-inner{grid-template-columns:1fr;gap:1.5rem;}
+      footer{padding:3rem 4% 1.5rem;}
+      .footer-bottom{flex-direction:column;text-align:center;}
+
+      /* Instagram */
+      .ig-header{flex-direction:column;align-items:flex-start;gap:0.75rem;}
+      .ig-posts-grid{grid-template-columns:repeat(2,1fr);gap:0.5rem;}
+      .ig-grid{grid-template-columns:repeat(2,1fr);}
+
+      /* Board */
+      .board-list-hdr{display:none;}
+      .board-row{grid-template-columns:1fr auto;gap:0.25rem;padding:0.85rem 1rem;}
+      .bnum,.bauthor{display:none;}
+      .bdate{font-size:0.75rem;white-space:nowrap;}
+
+      /* Map */
+      .map-box{min-height:200px;}
+    }
+    @media(max-width:480px){
+      .amount-grid{grid-template-columns:repeat(2,1fr);}
+      .hero-title{font-size:clamp(1.85rem,7.5vw,2.5rem);}
+      .hero-badge{font-size:0.76rem;padding:0.4rem 0.9rem;}
+      .sec{padding:2.5rem 4%;}
+      .content-block{padding:2rem 4%;}
+      .page-banner{padding:3rem 4% 1.75rem;}
+      .stat-num{font-size:clamp(1.5rem,8vw,2rem);}
+      .ig-posts-grid{gap:0.4rem;}
+      .acct-highlight .number{font-size:0.95rem;letter-spacing:0;}
+      .donate-page-grid,.location-grid{gap:1.25rem;}
+      .prog-card,.story-card,.val-card{padding:1.25rem;}
+    }
+
+    /* ── 프로그램 신청 페이지 ── */
+    .hl-tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1.75rem; }
+    .hl-tab {
+      padding:.45rem 1.1rem; border-radius:100px; font-size:.83rem; font-weight:600;
+      border:1.5px solid var(--gray-200); background:var(--white); color:var(--gray-500);
+      cursor:pointer; transition:all .2s;
+    }
+    .hl-tab.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+
+    .hl-slider-wrap { position:relative; }
+    .hl-slider { overflow:hidden; }
+    .hl-track {
+      display:flex; gap:1.25rem;
+      transition:transform .5s cubic-bezier(.4,0,.2,1);
+      will-change:transform;
+    }
+    .hl-card {
+      flex:0 0 calc((100% - 3*1.25rem)/4); min-width:0;
+      background:#fff; border:1px solid var(--gray-200); border-radius:14px;
+      overflow:hidden; transition:transform .25s,box-shadow .25s; cursor:pointer;
+    }
+    .hl-card:hover { transform:translateY(-3px); box-shadow:0 10px 28px rgba(0,0,0,.09); }
+    .hl-thumb {
+      aspect-ratio:16/9; overflow:hidden; background:var(--gray-100);
+      position:relative; display:flex; align-items:center; justify-content:center;
+    }
+    .hl-thumb img { width:100%; height:100%; object-fit:cover; transition:transform .3s; }
+    .hl-card:hover .hl-thumb img { transform:scale(1.04); }
+    .hl-play {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      background:rgba(0,0,0,.28);
+    }
+    .hl-play svg { width:44px; height:44px; filter:drop-shadow(0 2px 8px rgba(0,0,0,.4)); }
+    .hl-body { padding:1rem; }
+    .hl-meta { display:flex; align-items:center; gap:.45rem; margin-bottom:.45rem; }
+    .hl-badge {
+      font-size:.7rem; font-weight:700; padding:.15rem .6rem; border-radius:4px;
+    }
+    .hl-badge-ig  { background:#fce7f3; color:#be185d; }
+    .hl-badge-yt  { background:#fee2e2; color:#dc2626; }
+    .hl-badge-bl  { background:rgba(5,150,105,.1); color:var(--secondary); }
+    .hl-badge-pr  { background:rgba(29,78,216,.09); color:var(--primary); }
+    .hl-date { font-size:.74rem; color:var(--gray-500); }
+    .hl-title { font-size:.88rem; font-weight:600; color:var(--gray-900); line-height:1.5;
+      display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .hl-arrow {
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:#fff; border:1.5px solid var(--gray-200); border-radius:50%;
+      width:38px; height:38px; display:flex; align-items:center; justify-content:center;
+      cursor:pointer; font-size:1rem; z-index:5; box-shadow:0 2px 8px rgba(0,0,0,.1);
+      transition:background .2s,border-color .2s; color:var(--gray-700);
+    }
+    .hl-arrow:hover { background:var(--primary); border-color:var(--primary); color:#fff; }
+    .hl-prev { left:-18px; } .hl-next { right:-18px; }
+    @media(max-width:900px) {
+      .hl-card { flex:0 0 calc((100% - 1.25rem)/2); }
+      .hl-prev { left:-10px; } .hl-next { right:-10px; }
+    }
+    @media(max-width:560px) { .hl-card { flex:0 0 calc(100% - 2rem); } }
+
+    /* 신청 폼 섹션 */
+    .apply-counter-bar {
+      display:flex; align-items:center; gap:1.5rem; background:#fff;
+      border-radius:16px; padding:1.25rem 1.75rem; margin-bottom:2rem;
+      border:1px solid var(--gray-200); box-shadow:0 2px 12px rgba(0,0,0,.05);
+      flex-wrap:wrap;
+    }
+    .ac-total { display:flex; flex-direction:column; }
+    .ac-num { font-size:2.2rem; font-weight:800; color:var(--primary); line-height:1; }
+    .ac-lbl { font-size:.78rem; color:var(--gray-500); margin-top:.2rem; }
+    .ac-live { display:flex; align-items:center; gap:.4rem; font-size:.78rem; color:#22c55e; font-weight:600; }
+    .ac-dot { width:7px; height:7px; border-radius:50%; background:#22c55e; animation:lbBlink 1.4s ease-in-out infinite; }
+    .ac-divider { width:1px; height:40px; background:var(--gray-200); }
+    .ac-prog-list { display:flex; gap:1rem; flex-wrap:wrap; }
+    .ac-prog-item { font-size:.82rem; color:var(--gray-700); }
+    .ac-prog-item strong { color:var(--primary); }
+
+    .apply-form-card {
+      background:#fff; border-radius:20px; padding:2.5rem;
+      border:1px solid var(--gray-200); box-shadow:0 4px 20px rgba(0,0,0,.06);
+      max-width:680px; margin:0 auto;
+    }
+    .apply-form-card h3 { font-size:1.2rem; font-weight:800; margin-bottom:1.75rem; color:var(--gray-900); }
+    .af-row { margin-bottom:1.1rem; }
+    .af-row label { display:block; font-size:.82rem; font-weight:600; color:var(--gray-700); margin-bottom:.35rem; }
+    .af-row label .req { color:var(--primary); margin-left:2px; }
+    .af-row input, .af-row select, .af-row textarea {
+      width:100%; padding:.65rem 1rem; border:1.5px solid var(--gray-200);
+      border-radius:10px; font-size:.92rem; font-family:inherit; outline:none;
+      transition:border-color .2s; background:#fff; color:var(--gray-900);
+    }
+    .af-row input:focus, .af-row select:focus, .af-row textarea:focus { border-color:var(--primary); }
+    .af-row textarea { min-height:90px; resize:vertical; line-height:1.6; }
+    .af-row-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    @media(max-width:560px) { .af-row-2 { grid-template-columns:1fr; } }
+    .af-submit {
+      width:100%; padding:.9rem; background:var(--primary); color:#fff;
+      border:none; border-radius:100px; font-size:.95rem; font-weight:700;
+      cursor:pointer; margin-top:1rem; transition:transform .2s,box-shadow .2s;
+      font-family:inherit;
+    }
+    .af-submit:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(29,78,216,.35); }
+    .af-submit:disabled { background:var(--gray-200); color:var(--gray-500); cursor:not-allowed; transform:none; box-shadow:none; }
+    .af-msg { font-size:.85rem; text-align:center; margin-top:.85rem; padding:.65rem 1rem; border-radius:10px; display:none; }
+    .af-msg.ok { background:#f0fdf4; color:#059669; display:block; }
+    .af-msg.err { background:#fef2f2; color:#dc2626; display:block; }
+
+    /* 접수 명단 */
+    .apply-list-wrap { background:#fff; border-radius:16px; border:1px solid var(--gray-200); overflow:hidden; }
+    .al-hdr {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:.9rem 1.4rem; border-bottom:1px solid var(--gray-200);
+    }
+    .al-hdr h4 { font-size:.95rem; font-weight:700; color:var(--gray-900); }
+    .al-hdr span { font-size:.8rem; color:var(--gray-500); }
+    .al-table-hdr {
+      display:grid; grid-template-columns:40px 1fr 130px 90px 90px;
+      padding:.6rem 1.4rem; background:var(--gray-100);
+      font-size:.76rem; font-weight:700; color:var(--gray-500);
+    }
+    .al-row {
+      display:grid; grid-template-columns:40px 1fr 130px 90px 90px;
+      padding:.8rem 1.4rem; border-top:1px solid var(--gray-200);
+      align-items:center; font-size:.85rem; animation:alFadeIn .4s ease;
+    }
+    @keyframes alFadeIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+    .al-num { color:var(--gray-500); font-size:.78rem; }
+    .al-name { font-weight:600; color:var(--gray-900); }
+    .al-prog { font-size:.8rem; color:var(--primary); background:rgba(29,78,216,.08); padding:.15rem .55rem; border-radius:4px; display:inline-block; }
+    .al-date { font-size:.78rem; color:var(--gray-500); }
+    .al-status { font-size:.76rem; font-weight:700; color:var(--secondary); }
+    .al-empty { padding:2.5rem; text-align:center; color:var(--gray-500); font-size:.88rem; }
+    @media(max-width:680px) {
+      .al-table-hdr { grid-template-columns:32px 1fr 100px; }
+      .al-row { grid-template-columns:32px 1fr 100px; }
+      .al-date, .al-status { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo" onclick="go('home',event)">
+    <img src="https://cdn.imweb.me/upload/S20251111932f844856fca/fa6fc15bfa5a5.png" alt="허브릿지 로고" />
+  </a>
+  <ul class="nav-menu">
+    <li class="nav-item">
+      <a href="#" onclick="go('home',event)">허브릿지 <span class="arrow">▾</span></a>
+      <div class="dropdown">
+        <a onclick="go('greeting')">인사말</a>
+        <a onclick="go('mission')">미션과 비전</a>
+        <a onclick="go('location')">오시는 길</a>
+      </div>
+    </li>
+    <li class="nav-item">
+      <a href="#" onclick="go('education',event)">사업소개 <span class="arrow">▾</span></a>
+      <div class="dropdown">
+        <a onclick="go('education')">청년교육 및 인턴십</a>
+        <a onclick="go('events')">행사기획 및 대행</a>
+        <a onclick="go('network')">네트워크사업</a>
+      </div>
+    </li>
+    <li class="nav-item">
+      <a href="#" onclick="go('news',event)">소식 <span class="arrow">▾</span></a>
+      <div class="dropdown">
+        <a onclick="go('news')">공지사항</a>
+        <a href="https://blog.naver.com/hubridge-" target="_blank">네이버 블로그</a>
+        <a href="https://www.instagram.com/hubr2025/" target="_blank">인스타그램</a>
+      </div>
+    </li>
+    <li class="nav-item"><a href="#" onclick="go('donate',event)" class="nav-cta">후원하기</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <div class="m-sec-title">허브릿지</div>
+  <a onclick="mgo('greeting')">인사말</a>
+  <a onclick="mgo('mission')">미션과 비전</a>
+  <a onclick="mgo('location')">오시는 길</a>
+  <div class="m-sec-title">사업소개</div>
+  <a onclick="mgo('education')">청년교육 및 인턴십</a>
+  <a onclick="mgo('events')">행사기획 및 대행</a>
+  <a onclick="mgo('network')">네트워크사업</a>
+  <div class="m-sec-title">소통</div>
+  <a onclick="mgo('news')">소식</a>
+  <a href="https://blog.naver.com/hubridge-" target="_blank">네이버 블로그</a>
+  <a href="https://www.instagram.com/hubr2025/" target="_blank">인스타그램</a>
+  <a class="accent" onclick="mgo('donate')">💛 후원하기</a>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: HOME
+════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- ── Hero Carousel ── -->
+  <div id="hero-carousel">
+    <div class="hc-track">
+
+      <!-- Slide 1 -->
+      <div class="hc-slide" style="background-image:url('https://homepage-ruby-pi.vercel.app/23.png'),linear-gradient(135deg,#0c1428,#1a2f6e)">
+        <div class="hc-overlay"></div>
+        <div class="hc-content">
+          <div class="hero-badge">청년 창업 워크숍</div>
+          <h1 class="hero-title">청년과 세상을 잇는<br /><em>다리가 됩니다</em></h1>
+          <p class="hero-sub">허브릿지는 청년이 스스로 자립할 수 있도록<br />교육·워크숍·네트워크로 든든한 발판을 만들어 드립니다.</p>
+          <div class="hero-btns">
+            <button class="btn-p" onclick="go('apply')">프로그램 신청하기</button>
+            <a href="PDF_URL_HERE" download class="btn-o" style="display:inline-flex;align-items:center;gap:.4rem;">📄 허브릿지 소개서 받기</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="hc-slide" style="background-image:url('https://homepage-ruby-pi.vercel.app/34.png'),linear-gradient(135deg,#064e3b,#065f46)">
+        <div class="hc-overlay"></div>
+        <div class="hc-content">
+          <div class="hero-badge">프로젝트 설계 및 운영</div>
+          <h1 class="hero-title">배운 것을 현장에서<br /><em>직접 경험합니다</em></h1>
+          <p class="hero-sub">전문가와 함께 다양한 프로젝트를 기획·운영하며<br />실무 경험을 축적하고 현장의 운영 노하우를 익힙니다.</p>
+          <div class="hero-btns">
+            <a href="https://hbplan.kr" target="_blank" rel="noopener" class="btn-p" style="text-decoration:none;">포트폴리오 보기</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="hc-slide" style="background-image:url('https://homepage-ruby-pi.vercel.app/3bg.png'),linear-gradient(135deg,#0c2340,#1a4a7a)">
+        <div class="hc-overlay"></div>
+        <div class="hc-content">
+          <div class="hero-badge">함께 만드는 변화</div>
+          <h1 class="hero-title">청년과 사회를<br /><em>함께 연결합니다</em></h1>
+          <p class="hero-sub">허브릿지는 청년이 사회와 따뜻하게 이어질 수 있도록<br />든든한 다리가 되어 드립니다.</p>
+          <div class="hero-btns">
+            <button class="btn-p" onclick="go('donate')">후원참여하기</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4 -->
+      <div class="hc-slide" style="background-image:url('https://homepage-ruby-pi.vercel.app/45.png'),linear-gradient(135deg,#1e1b4b,#4338ca)">
+        <div class="hc-overlay"></div>
+        <div class="hc-content">
+          <div class="hero-badge">청년 기회 연결 플랫폼</div>
+          <h1 class="hero-title">기회를 연결하고<br /><em>성장을 만듭니다</em></h1>
+          <p class="hero-sub">청년을 중심으로 기관, 전문가, 기업, 선배 창업가,<br />지역 자원을 연결하여 성장의 기회를 만들어 갑니다.</p>
+          <div class="hero-btns">
+            <button class="btn-p" onclick="openPartnerModal()">협력업체 신청하기</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="hc-arrow hc-prev" aria-label="이전">&#8592;</button>
+    <button class="hc-arrow hc-next" aria-label="다음">&#8594;</button>
+
+    <div class="hc-dots">
+      <button class="hc-dot active" data-idx="0"></button>
+      <button class="hc-dot" data-idx="1"></button>
+      <button class="hc-dot" data-idx="2"></button>
+      <button class="hc-dot" data-idx="3"></button>
+    </div>
+  </div>
+
+  <!-- ── 사업소개 + 청년 스토리 ── -->
+  <section id="home-programs" class="sec sec-bg">
+    <div class="cont">
+      <div style="margin-bottom:3rem;">
+        <div class="sec-head" style="text-align:left;margin-bottom:1.5rem;">
+          <span class="sec-tag">사업소개</span>
+          <h2 class="sec-title">청년의 가능성을 현실로 만드는 프로그램</h2>
+        </div>
+        <div class="prog-grid">
+          <div class="prog-card fi" onclick="go('education')">
+            <div class="prog-photo" style="background-image:url('https://homepage-ruby-pi.vercel.app/44.JPG');"></div>
+            <div class="prog-card-body">
+              <h3>청년교육 및 인턴십</h3>
+              <p>실무 중심 교육과 기업 인턴십. 수료 후 장학금 지원.</p>
+              <div class="prog-tags"><span class="ptag">무료 교육</span><span class="ptag">장학금 지원</span></div>
+            </div>
+          </div>
+          <div class="prog-card fi fi-d1" onclick="go('events')">
+            <div class="prog-photo" style="background-image:url('https://homepage-ruby-pi.vercel.app/55.jpg');"></div>
+            <div class="prog-card-body">
+              <h3>행사기획 및 대행</h3>
+              <p>전문가와 함께 행사를 기획·운영하며 현장 경험과 포트폴리오를 쌓습니다.</p>
+              <div class="prog-tags"><span class="ptag">실전 프로젝트</span><span class="ptag">포트폴리오</span></div>
+            </div>
+          </div>
+          <div class="prog-card fi fi-d2" onclick="go('network')">
+            <div class="prog-photo" style="background-image:url('https://homepage-ruby-pi.vercel.app/66.png');"></div>
+            <div class="prog-card-body">
+              <h3>네트워크 사업</h3>
+              <p>전문가·기관·기업 간 협력 생태계로 취업·창업 기회를 연결합니다.</p>
+              <div class="prog-tags"><span class="ptag">멘토링</span><span class="ptag">기업 연계</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top:2px solid var(--gray-200);margin-bottom:3rem;"></div>
+
+      <div>
+        <div class="sec-head" style="text-align:left;margin-bottom:1.5rem;">
+          <span class="sec-tag">청년 스토리</span>
+          <h2 class="sec-title">허브릿지를 통해 성장한 청년들</h2>
+        </div>
+        <div class="story-roller">
+          <div class="story-track">
+            <div class="story-card"><p class="story-text"></p><div class="story-prof"><div class="s-av sa"></div><div><div class="sk-bar" style="width:64px;margin-bottom:.4rem;"></div><div class="sk-bar" style="width:130px;"></div></div></div></div>
+            <div class="story-card"><p class="story-text"></p><div class="story-prof"><div class="s-av sb"></div><div><div class="sk-bar" style="width:64px;margin-bottom:.4rem;"></div><div class="sk-bar" style="width:130px;"></div></div></div></div>
+            <div class="story-card"><p class="story-text"></p><div class="story-prof"><div class="s-av sc"></div><div><div class="sk-bar" style="width:64px;margin-bottom:.4rem;"></div><div class="sk-bar" style="width:130px;"></div></div></div></div>
+            <div class="story-card"><p class="story-text"></p><div class="story-prof"><div class="s-av sd"></div><div><div class="sk-bar" style="width:64px;margin-bottom:.4rem;"></div><div class="sk-bar" style="width:130px;"></div></div></div></div>
+            <div class="story-card"><p class="story-text"></p><div class="story-prof"><div class="s-av sa"></div><div><div class="sk-bar" style="width:64px;margin-bottom:.4rem;"></div><div class="sk-bar" style="width:130px;"></div></div></div></div>
+            <div class="story-card"><p class="story-text"></p><div class="story-prof"><div class="s-av sb"></div><div><div class="sk-bar" style="width:64px;margin-bottom:.4rem;"></div><div class="sk-bar" style="width:130px;"></div></div></div></div>
+            <div class="story-card"><p class="story-text"></p><div class="story-prof"><div class="s-av sc"></div><div><div class="sk-bar" style="width:64px;margin-bottom:.4rem;"></div><div class="sk-bar" style="width:130px;"></div></div></div></div>
+            <div class="story-card"><p class="story-text"></p><div class="story-prof"><div class="s-av sd"></div><div><div class="sk-bar" style="width:64px;margin-bottom:.4rem;"></div><div class="sk-bar" style="width:130px;"></div></div></div></div>
+          </div>
+        </div>
+        <div class="review-cta">
+          <p style="font-size:0.9rem;color:var(--gray-500);margin-bottom:1rem;">허브릿지를 경험하셨나요? 여러분의 이야기를 들려주세요.</p>
+          <a href="https://open.kakao.com/o/sLO1NPqi" target="_blank" class="review-btn">✏️ 후기 남기기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 보도자료 ── -->
+  <section class="press-sec">
+    <div class="cont">
+      <div class="sec-head" style="text-align:left;margin-bottom:0;">
+        <span class="sec-tag">언론 보도</span>
+        <h2 class="sec-title">허브릿지, 세상과 만나다</h2>
+        <p class="sec-desc" style="text-align:left;margin-inline:0;">허브릿지의 활동이 언론에 소개되고 있습니다.</p>
+      </div>
+      <div class="press-grid">
+        <a href="https://www.cstimes.com/news/articleView.html?idxno=707960" target="_blank" class="press-card fi">
+          <div class="press-thumb"><img src="https://www.cstimes.com/news/photo/202606/707960_627732_1630.jpg" alt="컨슈머타임스 기사" /></div>
+          <div class="press-body">
+            <div class="press-meta"><span class="press-outlet">컨슈머타임스</span><span class="press-date">2026.06.01</span></div>
+            <div class="press-title">허브릿지·마포청년나루, 청년 창업가 대상 실전 IR 및 커뮤니케이션 교육 실시</div>
+            <div class="press-desc">사회적협동조합 허브릿지가 마포청년나루와 협력하여 청년 창업가들을 위한 실무형 IR 스피칭 교육을 진행했습니다.</div>
+            <span class="press-link">기사 보기 →</span>
+          </div>
+        </a>
+        <a href="https://www.kdpress.co.kr/news/articleView.html?idxno=205673" target="_blank" class="press-card fi fi-d1">
+          <div class="press-thumb"><img src="https://cdn.kdpress.co.kr/news/photo/202605/205673_131938_1332.jpg" alt="데일리경제 기사" /></div>
+          <div class="press-body">
+            <div class="press-meta"><span class="press-outlet">데일리경제</span><span class="press-date">2026.05.28</span></div>
+            <div class="press-title">허브릿지, 봉앤설이니셔티브 박강빈 PM과 청년 창업가 대상 브랜딩 교육 진행</div>
+            <div class="press-desc">사회적협동조합 허브릿지가 청년 대상 실무형 기획 교육 과정 'MINT 프로젝트'의 일환으로 브랜딩 교육을 진행했습니다.</div>
+            <span class="press-link">기사 보기 →</span>
+          </div>
+        </a>
+        <div class="press-card fi fi-d2" style="border:2px dashed var(--gray-200);background:var(--gray-100);align-items:center;justify-content:center;min-height:220px;">
+          <div style="text-align:center;color:var(--gray-500);padding:2rem;">
+            <div style="font-size:2.2rem;margin-bottom:.6rem;">📰</div>
+            <div style="font-size:14px;font-weight:600;">다음 보도자료</div>
+            <div style="font-size:13px;margin-top:.3rem;color:var(--gray-500);">업데이트 예정</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 인스타그램 ── -->
+  <div class="ig-section">
+    <div class="ig-inner">
+      <div class="ig-header">
+        <div class="ig-title-group">
+          <div class="ig-logo">📷</div>
+          <div>
+            <div class="ig-title">Instagram</div>
+            <div class="ig-handle">@hubr2025 — 허브릿지의 현장을 실시간으로</div>
+          </div>
+        </div>
+        <a href="https://www.instagram.com/hubr2025/" target="_blank" class="ig-follow-btn">팔로우하기 →</a>
+      </div>
+      <div class="ig-posts-grid fi">
+        <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DYV6vz9xLV4/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+        <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DYRZWIOxFiZ/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+        <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DXrWjZXEfwM/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+        <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DXbGFz6kbe_/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+        <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DW-p9eIkVjr/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+        <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DW-oszykQNP/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+        <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DW-l3grkYH6/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+        <div class="ig-post-wrap"><iframe src="https://www.instagram.com/p/DW-lCZekTCN/embed/" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 통계 ── -->
+  <div id="stats">
+    <div class="stats-grid">
+      <div class="stat-item fi"><div class="stat-val"><span class="stat-num" data-target="63">0</span><span class="stat-unit">명</span></div><div class="stat-lbl">수혜 청년</div></div>
+      <div class="stat-item fi fi-d1"><div class="stat-val"><span class="stat-num" data-target="6">0</span><span class="stat-unit">개</span></div><div class="stat-lbl">협력 기관·기업</div></div>
+      <div class="stat-item fi fi-d2"><div class="stat-val"><span class="stat-num" data-target="95">0</span><span class="stat-unit">%</span></div><div class="stat-lbl">참여자 만족도</div></div>
+      <div class="stat-item fi fi-d3"><div class="stat-val"><span class="stat-num" data-target="11">0</span><span class="stat-unit">개</span></div><div class="stat-lbl">진행 프로그램</div></div>
+    </div>
+    <div id="live-badge">
+      <span class="lb-dot"></span>
+      <span id="lb-date" class="lb-date"></span>
+    </div>
+  </div>
+
+  <!-- ── 후원 ── -->
+  <div class="donate-wrap">
+    <div class="donate-inner">
+      <div class="fi">
+        <h2 style="color:var(--white);">당신의 후원이<br />청년의 내일을<br />만듭니다</h2>
+        <p style="color:rgba(255,255,255,0.65);line-height:1.85;margin-bottom:1.5rem;font-size:0.93rem;">여러분의 따뜻한 마음이 청년들의 미래를 밝힙니다. 후원금은 투명하게 공개되며 청년 자립을 위해 직접 사용됩니다.</p>
+        <ul class="impact-list">
+          <li>후원금 40% — 청년 교육 및 인턴십 운영</li>
+          <li>후원금 30% — 전문가 멘토링 프로그램</li>
+          <li>후원금 20% — 취업 연계 및 사후 지원</li>
+          <li>후원금 10% — 조직 운영 및 인프라</li>
+        </ul>
+      </div>
+      <div class="donate-form fi fi-d1">
+        <h3>💛 후원에 참여하기</h3>
+        <div class="amount-grid">
+          <button class="amt-btn" onclick="selAmt(this)">월 1만원</button>
+          <button class="amt-btn active" onclick="selAmt(this)">월 3만원</button>
+          <button class="amt-btn" onclick="selAmt(this)">월 5만원</button>
+          <button class="amt-btn" onclick="selAmt(this)">월 10만원</button>
+          <button class="amt-btn" onclick="selAmt(this)">일시 후원</button>
+          <button class="amt-btn" onclick="selAmt(this)">직접 입력</button>
+        </div>
+        <div class="acct-box"><div class="acct-lbl">후원 계좌</div><div class="acct-num">기업은행 048-163602-04-020</div><div class="acct-nm">예금주: 사회적협동조합 허브릿지</div></div>
+        <button class="donate-cta" onclick="window.open('https://open.kakao.com/o/sLO1NPqi','_blank')">💬 카카오톡으로 후원 문의하기</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 인사말
+════════════════════════════════════════ -->
+<div id="page-greeting" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">허브릿지 <span>› 인사말</span></div>
+      <h1>인사말</h1>
+      <p>허브릿지 대표의 인사말씀을 전합니다</p>
+    </div>
+  </div>
+  <div class="greeting-wrap">
+    <div class="greeting-photo">
+      <img src="https://homepage-ruby-pi.vercel.app/888.jpg" alt="허브릿지 인사말" />
+    </div>
+    <div class="greeting-text">
+      <p class="gt-hello">안녕하세요.<br/>사회적협동조합 허브릿지입니다.</p>
+      <p>허브릿지는 청년이 자립하는 과정에서 이 사회로부터 따뜻한 관심과 기회를 얻을 수 있길 바라는 마음에서 출발하였습니다. 출발선이 다르고 속도가 다르다는 이유로, 청년이 자신의 가능성을 포기하는 사회가 되어선 안 된다는 생각이 들었습니다.</p>
+      <p>그래서 우리는 청년이 스스로 설 수 있게 기회를 연결하는 다리가 되고자 합니다. 선택을 강요하거나 앞서서 이끌어 가려 하기보다는, 충분히 실수하고 만회하고 또 다시 앞으로 나아갈 수 있도록 지탱해주는 다리가 되어주려 합니다.</p>
+      <p>조금 늦더라도 기다림이 가능한 사회를 향해, 실패해도 다시 돌아올 수 있는 작지만 단단한 연결을 만들어가고자 합니다. 허브릿지는 청년이 일과 사회를 직접 경험하고, 자신만의 속도로 다음 단계로 나아갈 수 있도록 함께 돕는 파트너가 되고자 합니다. 완성된 답을 가지고 있지는 않습니다.</p>
+      <p>다만 사람과 경험, 기회가 모여 다시 연결로 확장되는 출발점이 되고자 합니다. 그리고 그 연결이 다시금 청년들의 마음에 용기를 지필 수 있도록 묵묵히 그 자리에 놓인 다리로 남고자 합니다. 허브릿지의 이 걸음에 따뜻한 관심과 동행을 부탁드립니다.</p>
+      <p class="gt-thanks">감사합니다.</p>
+      <p class="gt-sign">사회적협동조합 허브릿지 임직원 일동</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 미션과 비전
+════════════════════════════════════════ -->
+<div id="page-mission" class="page">
+
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">허브릿지 <span>› 미션과 비전</span></div>
+      <h1>미션과 비전</h1>
+      <p>허브릿지가 존재하는 이유, 그리고 우리가 향하는 방향</p>
+    </div>
+  </div>
+
+  <!-- 미션 / 비전 -->
+  <div class="mv2-section">
+    <div class="cont">
+      <div class="mv2-cards">
+
+        <div class="mv2-card mv2-mission">
+          <div class="mv2-icon-wrap">
+            <!-- Target / Compass -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+              <line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/>
+              <line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/>
+            </svg>
+          </div>
+          <div class="mv2-badge">Mission · 미션</div>
+          <blockquote class="mv2-quote">"청년들이 자립할 수 있도록 돕는 다리가 된다"</blockquote>
+        </div>
+
+        <div class="mv2-card mv2-vision">
+          <div class="mv2-icon-wrap">
+            <!-- Star / North Star -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <div class="mv2-badge">Vision · 비전</div>
+          <blockquote class="mv2-quote" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">"청년의 성장 기회가 열린 사회"</blockquote>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 핵심 가치 -->
+  <div class="mv2-values-section">
+    <div class="cont">
+      <div class="sec-head" style="margin-bottom:2.5rem;">
+        <span class="sec-tag">Core Values</span>
+        <h2 class="sec-title">핵심 가치</h2>
+        <p class="sec-desc">허브릿지가 모든 활동에서 지켜나가는 세 가지 원칙</p>
+      </div>
+      <div class="mv2-value-list">
+
+        <div class="mv2-val fi">
+          <div class="mv2-val-icon mv2-vi-blue">
+            <!-- Network nodes -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+          </div>
+          <div class="mv2-val-body">
+            <div class="mv2-val-num">01</div>
+            <h3 class="mv2-val-title">연결한다</h3>
+            <p class="mv2-val-desc">사람·경험·기회를 끊임없이 이어주는 관계를 만듭니다.</p>
+          </div>
+        </div>
+
+        <div class="mv2-val fi fi-d1">
+          <div class="mv2-val-icon mv2-vi-green">
+            <!-- Shield with check -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <polyline points="9 12 11 14 15 10"/>
+            </svg>
+          </div>
+          <div class="mv2-val-body">
+            <div class="mv2-val-num">02</div>
+            <h3 class="mv2-val-title">지지한다</h3>
+            <p class="mv2-val-desc">청년이 스스로 설 수 있을 때까지 옆에서 기다리며 함께합니다.</p>
+          </div>
+        </div>
+
+        <div class="mv2-val fi fi-d2">
+          <div class="mv2-val-icon mv2-vi-amber">
+            <!-- Sprout / Growth -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22V12"/>
+              <path d="M12 12C12 12 7 10 7 5c0 0 3-1 5 2 2-3 5-2 5-2 0 5-5 7-5 7z"/>
+              <path d="M12 12C12 12 9 15 5 14"/>
+            </svg>
+          </div>
+          <div class="mv2-val-body">
+            <div class="mv2-val-num">03</div>
+            <h3 class="mv2-val-title">성장한다</h3>
+            <p class="mv2-val-desc">실패를 통해서도 다음 단계로 나아갈 수 있도록 함께 성장합니다.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 이미지 -->
+  <div style="padding:0 5% 5rem;">
+    <div class="cont">
+      <div class="mv-image">
+        <img src="https://cdn.imweb.me/thumbnail/20260119/2572f6cd1f85c.jpg" alt="허브릿지 미션" onerror="this.parentElement.style.display='none'" />
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 오시는 길
+════════════════════════════════════════ -->
+<div id="page-location" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">허브릿지 <span>› 오시는 길</span></div>
+      <h1>오시는 길</h1>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="cont">
+      <div class="location-grid">
+        <div class="location-info">
+          <h3>📍 찾아오시는 방법</h3>
+          <div class="location-row"><span class="icon">📍</span><div><strong>주소</strong>서울특별시 마포구 월드컵로 163-3, 1층</div></div>
+          <div class="location-row"><span class="icon">📞</span><div><strong>전화</strong>02-6092-0070</div></div>
+          <div class="location-row"><span class="icon">✉️</span><div><strong>이메일</strong>hubr@hubr.co.kr</div></div>
+          <div class="location-row"><span class="icon">🕐</span><div><strong>운영시간</strong>평일 09:00 – 18:00</div></div>
+          <div class="location-row"><span class="icon">🚇</span><div><strong>지하철</strong>마포구청역 5번 출구에서 도보 2분<br /><span style="font-size:0.85rem;color:var(--gray-500);">6호선 마포구청역</span></div></div>
+
+        </div>
+        <div class="map-box">
+          <iframe
+            src="https://maps.google.com/maps?q=서울특별시+마포구+월드컵로+163-3&t=m&z=17&ie=UTF8&iwloc=near&output=embed"
+            allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            title="허브릿지 위치 — 서울시 마포구 월드컵로 163-3 1층"></iframe>
+
+          <div class="map-btns">
+            <a href="https://map.kakao.com/?q=서울+마포구+월드컵로+163-3" target="_blank">🗺 카카오맵</a>
+            <a href="https://naver.me/FUyNJoSF" target="_blank" class="naver">🟢 네이버지도</a>
+            <a href="https://goo.gl/maps/mapo163" target="_blank" style="background:#EA4335;">📍 구글지도</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 청년교육 및 인턴십
+════════════════════════════════════════ -->
+<div id="page-education" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">사업소개 <span>› 청년교육 및 인턴십 사업</span></div>
+      <h1>청년교육 및 인턴십 사업</h1>
+      <p>청년이 배운 지식과 기술로 창업가·기획자로 성장할 수 있도록 지원합니다</p>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="cont">
+      <div class="biz-photo">
+        <img src="https://homepage-ruby-pi.vercel.app/44.JPG" alt="청년교육 및 인턴십" />
+      </div>
+      <div class="content-prose">
+        <p>청년이 배운 지식과 기술로 직장체험·인턴십을 경험하고, 현장 실무자를 넘어 기획자·창업가로 성장할 수 있는 교육을 제공합니다.</p>
+        <h3>사업 목표</h3>
+      </div>
+      <div class="biz-goal-list">
+        <div class="biz-goal-item">청년 기획자 역량 강화 교육 및 현장 밀착형 직무 트레이닝 운영</div>
+        <div class="biz-goal-item">산업별 전문가와의 네트워킹을 통한 진로 가이드 및 기술 자문 제공</div>
+        <div class="biz-goal-item">유관 기관 연계 인턴십 및 프로젝트를 통해 실질적인 사회 진출 발판 제공</div>
+        <div class="biz-goal-item">관련 분야 창업 및 미래산업 기획설계자 양성</div>
+        <div class="biz-goal-item">지역사회 네트워크와의 협력 강화 및 지속 가능한 선순환 구조 확립</div>
+      </div>
+      <div class="biz-tags">
+        <span class="biz-tag">무료 교육</span>
+        <span class="biz-tag">수료 후 장학금 지원</span>
+        <span class="biz-tag">자립준비청년 우대</span>
+        <span class="biz-tag">기업 연계 인턴십</span>
+        <span class="biz-tag">전문가 멘토링</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 행사기획 및 대행사업
+════════════════════════════════════════ -->
+<div id="page-events" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">사업소개 <span>› 행사기획 및 대행사업</span></div>
+      <h1>행사기획 및 대행사업</h1>
+      <p>청년들이 전문가와 함께 기획력과 현장 기술을 습득합니다</p>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="cont">
+      <div class="biz-photo">
+        <img src="https://cdn.imweb.me/upload/S20251111932f844856fca/532f78239c0e9.jpg" alt="행사기획 및 대행" />
+      </div>
+      <div class="content-prose">
+        <p>전문가와 함께 영상·음향·무대 등 현장 기술을 습득하고, 관공서·기업·지자체 행사 대행을 통해 청년들에게 실전 경험을 제공합니다.</p>
+        <h3>운영 범위</h3>
+      </div>
+      <div class="biz-goal-list">
+        <div class="biz-goal-item">기업·관공서 행사 — 워크숍, 송년회, 창립기념식, 세미나 등</div>
+        <div class="biz-goal-item">전시·박람회 — 부스 설치, 무대 연출, 컨벤션센터 운영</div>
+        <div class="biz-goal-item">시민행사·축제·캠페인 기획 및 운영</div>
+        <div class="biz-goal-item">국제회의, 정책포럼, 학술대회 운영</div>
+        <div class="biz-goal-item">영상·음향·사진·디자인·방송송출 현장 기술 교육</div>
+      </div>
+      <div class="content-prose" style="margin-top:1.5rem;">
+        <p style="background:var(--gray-100);border-radius:12px;padding:1.25rem;font-size:0.9rem;">관련 자회사 <strong>허브플랜(hbplan@hbplan.kr)</strong>을 통해 전문적인 행사기획 운영 서비스를 제공합니다.</p>
+      </div>
+      <div class="biz-tags">
+        <span class="biz-tag">영상·음향 실습</span>
+        <span class="biz-tag">무대 설치·연출</span>
+        <span class="biz-tag">전문가 협업</span>
+        <span class="biz-tag">포트폴리오 제작</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 네트워크사업
+════════════════════════════════════════ -->
+<div id="page-network" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">사업소개 <span>› 네트워크사업</span></div>
+      <h1>네트워크사업</h1>
+      <p>전문가 및 기관 간 협력 구조를 통해 청년에게 기회를 연결합니다</p>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="cont">
+      <div class="biz-photo">
+        <img src="https://cdn.imweb.me/upload/S20251111932f844856fca/3f95f1880b850.jpg" alt="네트워크사업" />
+      </div>
+      <div class="content-prose">
+        <p>전문가 및 유관 기관 간 협력 구조를 마련하여, 청년이 사회를 폭넓게 경험하고 다양한 기회를 가질 수 있는 연계 인프라를 구축합니다.</p>
+        <h3>사업 목표</h3>
+      </div>
+      <div class="biz-goal-list">
+        <div class="biz-goal-item">지역사회 협력 기관 및 개인·단체 발굴, 유관 기관과의 협력 관계 구축 및 전략적 제휴</div>
+        <div class="biz-goal-item">지역 내 공공기관, 민간기업, 교육기관 등 청년 지원 가능 기관·단체를 지속적으로 발굴하고 최적의 협력 모델 구축</div>
+        <div class="biz-goal-item">정기적인 네트워킹 데이 및 포럼을 통해 실무 중심의 전략적 제휴 추진</div>
+        <div class="biz-goal-item">각 기관의 인프라와 전문성을 결합하여 청년들에게 실질적인 혜택이 돌아갈 수 있는 공동 캠페인, 연구 활동, 연계 프로그램 기획·운영</div>
+      </div>
+      <div class="biz-tags">
+        <span class="biz-tag">청년 친화적 협력 생태계</span>
+        <span class="biz-tag">실천 중심 네트워크</span>
+        <span class="biz-tag">지속 가능한 자립 지원</span>
+        <span class="biz-tag">연합 프로젝트</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 소식
+════════════════════════════════════════ -->
+<div id="page-news" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">소식</div>
+      <h1>소식</h1>
+      <p>허브릿지의 활동 소식과 공지사항을 확인하세요</p>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="cont" style="max-width:1100px;">
+      <div class="board-layout">
+        <div>
+          <div class="board-toolbar">
+            <div class="board-tabs">
+              <button class="btab active" onclick="switchTab(this,'notice')">공지사항</button>
+              <button class="btab" onclick="switchTab(this,'activity')">활동 소식</button>
+              <button class="btab" onclick="switchTab(this,'press')">보도자료</button>
+              <button class="btab" onclick="switchTab(this,'youtube')">유튜브</button>
+            </div>
+            <button class="btn-write" onclick="openPwModal()">+ 작성하기</button>
+          </div>
+          <div id="tab-notice" class="board-list">
+            <div class="board-list-hdr"><span style="text-align:center">번호</span><span>제목</span><span>작성자</span><span>날짜</span></div>
+            <div id="rows-notice" class="board-rows-wrap"><div class="board-loading">불러오는 중…</div></div>
+          </div>
+          <div id="tab-activity" class="board-list" style="display:none">
+            <div class="board-list-hdr"><span style="text-align:center">번호</span><span>제목</span><span>작성자</span><span>날짜</span></div>
+            <div id="rows-activity" class="board-rows-wrap"><div class="board-loading">불러오는 중…</div></div>
+          </div>
+          <div id="tab-press" style="display:none">
+            <div id="rows-press" class="press-cards-wrap"><div class="board-loading">불러오는 중…</div></div>
+          </div>
+          <div id="tab-youtube" style="display:none">
+            <div id="rows-youtube" class="press-cards-wrap" style="grid-template-columns:repeat(3,1fr);"><div class="board-loading">불러오는 중…</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="sidebar-card">
+            <div class="sc-hdr">📌 최신 공지 <a onclick="go('news')">더보기</a></div>
+            <div id="sidebar-notices"><div class="sc-item" style="color:var(--gray-500);font-size:0.82rem;">불러오는 중…</div></div>
+          </div>
+          <div class="sidebar-card">
+            <a href="https://open.kakao.com/o/sLO1NPqi" target="_blank" style="display:flex;align-items:center;gap:.75rem;padding:.85rem 1.2rem;text-decoration:none;background:#FEF9C3;border-radius:12px;transition:background .2s;" onmouseover="this.style.background='#FDE047'" onmouseout="this.style.background='#FEF9C3'">
+              <span style="font-size:1.3rem;flex-shrink:0;">💬</span>
+              <span style="flex:1;font-size:.85rem;font-weight:600;color:#3A1D1D;line-height:1.4;">프로그램·후원·파트너십 문의</span>
+              <span style="font-size:.78rem;font-weight:700;color:#92400E;white-space:nowrap;">오픈채팅 →</span>
+            </a>
+          </div>
+          <div class="sidebar-card">
+            <a href="https://www.youtube.com/@hub_ridge" target="_blank" style="display:flex;align-items:center;gap:.75rem;padding:.85rem 1.2rem;text-decoration:none;background:#FEF2F2;border-radius:12px;transition:background .2s;" onmouseover="this.style.background='#FECACA'" onmouseout="this.style.background='#FEF2F2'">
+              <span style="font-size:1.3rem;flex-shrink:0;">▶️</span>
+              <span style="flex:1;font-size:.85rem;font-weight:600;color:#7F1D1D;line-height:1.4;">교육 현장·활동 영상 보기</span>
+              <span style="font-size:.78rem;font-weight:700;color:#991B1B;white-space:nowrap;">채널 가기 →</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 후원
+════════════════════════════════════════ -->
+<div id="page-donate" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">후원</div>
+      <h1>후원하기</h1>
+      <p>여러분의 따뜻한 마음이 청년들의 미래를 밝힙니다</p>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="cont" style="max-width:1100px;">
+      <div class="donate-page-grid">
+        <div>
+          <div class="donate-info-card" style="margin-bottom:1.5rem;">
+            <h3>💛 왜 후원이 필요한가요?</h3>
+            <div class="content-prose">
+              <p>많은 청년들이 경제적 어려움으로 인해 자립의 기회를 놓치고 있습니다. 허브릿지는 이러한 청년들에게 실질적인 도움을 제공하기 위해 교육과 인턴십을 운영 중입니다.</p>
+              <p>후원금은 교육비, 멘토링 프로그램, 취업 준비 지원, 심리상담 등에 투명하게 공개되며 사용됩니다.</p>
+            </div>
+          </div>
+          <div class="donate-info-card">
+            <h3>📊 후원금 배분</h3>
+            <div class="pct-bar">
+              <div class="pct-item"><span class="pct-label">교육/인턴십</span><div class="pct-track"><div class="pct-fill" style="width:40%"></div></div><span class="pct-num">40%</span></div>
+              <div class="pct-item"><span class="pct-label">멘토링 운영</span><div class="pct-track"><div class="pct-fill" style="width:30%;background:var(--secondary)"></div></div><span class="pct-num" style="color:var(--secondary)">30%</span></div>
+              <div class="pct-item"><span class="pct-label">취업 지원</span><div class="pct-track"><div class="pct-fill" style="width:20%;background:var(--accent)"></div></div><span class="pct-num" style="color:var(--accent)">20%</span></div>
+              <div class="pct-item"><span class="pct-label">운영비</span><div class="pct-track"><div class="pct-fill" style="width:10%;background:var(--gray-400,#9ca3af)"></div></div><span class="pct-num" style="color:var(--gray-500)">10%</span></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="donate-info-card" style="margin-bottom:1.5rem;">
+            <h3>🏦 후원 방법</h3>
+            <div class="donate-method">
+              <h4>정기 후원</h4>
+              <p>월 1만원부터 자동이체 / 소득공제 혜택 / 정기 소식지 발송</p>
+            </div>
+            <div class="donate-method">
+              <h4>일시 후원</h4>
+              <p>금액 제한 없음 / 계좌이체·카드결제 / 기부금 영수증 발급 / 특정 프로그램 지정 가능</p>
+            </div>
+            <div class="acct-highlight">
+              <div class="bank">후원 계좌</div>
+              <div class="number">기업은행 048-163602-04-020</div>
+              <div class="owner">예금주: 사회적협동조합 허브릿지</div>
+            </div>
+            <p style="font-size:0.82rem;color:var(--gray-500);margin-top:0.75rem;">입금 후 <strong>02-6092-0070</strong> 또는 <strong>hubr@hubr.co.kr</strong>로 연락 주세요.</p>
+          </div>
+          <div class="donate-info-card">
+            <h3>🎁 후원자 혜택</h3>
+            <div class="benefit-list">
+              <div class="benefit-item">정기 소식지 발송</div>
+              <div class="benefit-item">연례 행사 초청</div>
+              <div class="benefit-item">기부금 영수증 발급</div>
+              <div class="benefit-item">고액 후원자 감사패 증정</div>
+            </div>
+            <button class="donate-cta" style="margin-top:1.5rem;border-radius:12px;" onclick="window.open('https://open.kakao.com/o/sLO1NPqi','_blank')">💬 카카오톡으로 후원 문의</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: 프로그램 신청
+════════════════════════════════════════ -->
+<div id="page-apply" class="page">
+  <div class="page-banner">
+    <div class="cont">
+      <div class="breadcrumb">사업소개 <span>› 프로그램 신청</span></div>
+      <h1>프로그램 신청</h1>
+      <p>허브릿지와 함께 성장할 청년을 기다립니다</p>
+    </div>
+  </div>
+
+  <!-- 지난 교육 하이라이트 -->
+  <section class="sec">
+    <div class="cont">
+      <div class="sec-head fi">
+        <span class="sec-tag">지난 교육 하이라이트</span>
+        <h2 class="sec-title">함께 만들어온 성장의 기록</h2>
+        <p class="sec-desc">인스타그램 · 유튜브 · 블로그 · 보도자료로 돌아보는 허브릿지의 발자취</p>
+      </div>
+
+      <!-- 필터 탭 -->
+      <div class="hl-tabs fi">
+        <button class="hl-tab active" data-type="all" onclick="hlFilter('all',this)">전체</button>
+        <button class="hl-tab" data-type="ig" onclick="hlFilter('ig',this)">인스타그램</button>
+        <button class="hl-tab" data-type="yt" onclick="hlFilter('yt',this)">유튜브</button>
+        <button class="hl-tab" data-type="bl" onclick="hlFilter('bl',this)">블로그</button>
+        <button class="hl-tab" data-type="pr" onclick="hlFilter('pr',this)">보도자료</button>
+      </div>
+
+      <!-- 슬라이더 -->
+      <div class="hl-slider-wrap fi">
+        <div class="hl-slider" id="hl-slider">
+          <div class="hl-track" id="hl-track">
+
+            <!-- ── 보도자료 1 (실제) ── -->
+            <a class="hl-card" data-type="pr" href="https://www.cstimes.com/news/articleView.html?idxno=707960" target="_blank" rel="noopener" style="text-decoration:none;">
+              <div class="hl-thumb">
+                <img src="https://www.cstimes.com/news/photo/202606/707960_627732_1630.jpg" alt="컨슈머타임스" loading="lazy" />
+              </div>
+              <div class="hl-body">
+                <div class="hl-meta">
+                  <span class="hl-badge hl-badge-pr">컨슈머타임스</span>
+                  <span class="hl-date">2026.06.01</span>
+                </div>
+                <div class="hl-title">허브릿지·마포청년나루, 청년 창업가 대상 실전 IR 및 커뮤니케이션 교육 실시</div>
+              </div>
+            </a>
+
+            <!-- ── 보도자료 2 (실제) ── -->
+            <a class="hl-card" data-type="pr" href="https://www.kdpress.co.kr/news/articleView.html?idxno=205673" target="_blank" rel="noopener" style="text-decoration:none;">
+              <div class="hl-thumb">
+                <img src="https://cdn.kdpress.co.kr/news/photo/202605/205673_131938_1332.jpg" alt="데일리경제" loading="lazy" />
+              </div>
+              <div class="hl-body">
+                <div class="hl-meta">
+                  <span class="hl-badge hl-badge-pr">데일리경제</span>
+                  <span class="hl-date">2026.05.28</span>
+                </div>
+                <div class="hl-title">허브릿지, 봉앤설이니셔티브 박강빈 PM과 청년 창업가 대상 브랜딩 교육 진행</div>
+              </div>
+            </a>
+
+            <!-- ── 인스타그램 1 ── -->
+            <a class="hl-card" data-type="ig" href="https://www.instagram.com/hub_ridge/" target="_blank" rel="noopener" style="text-decoration:none;">
+              <div class="hl-thumb">
+                <img src="https://homepage-ruby-pi.vercel.app/23.png" alt="MINT 프로젝트" loading="lazy" />
+              </div>
+              <div class="hl-body">
+                <div class="hl-meta">
+                  <span class="hl-badge hl-badge-ig">인스타그램</span>
+                  <span class="hl-date">2026.05</span>
+                </div>
+                <div class="hl-title">MINT 프로젝트 현장 — 청년 창업가들의 브랜드 서사 만들기</div>
+              </div>
+            </a>
+
+            <!-- ── 인스타그램 2 ── -->
+            <a class="hl-card" data-type="ig" href="https://www.instagram.com/hub_ridge/" target="_blank" rel="noopener" style="text-decoration:none;">
+              <div class="hl-thumb">
+                <img src="https://cdn.imweb.me/upload/S20251111932f844856fca/dc87375482d83.jpg" alt="청년교육" loading="lazy" />
+              </div>
+              <div class="hl-body">
+                <div class="hl-meta">
+                  <span class="hl-badge hl-badge-ig">인스타그램</span>
+                  <span class="hl-date">2026.05</span>
+                </div>
+                <div class="hl-title">IR 스피칭 교육 현장 — 나의 아이디어를 설득력 있게 전달하다</div>
+              </div>
+            </a>
+
+            <!-- ── 인스타그램 3 ── -->
+            <a class="hl-card" data-type="ig" href="https://www.instagram.com/hub_ridge/" target="_blank" rel="noopener" style="text-decoration:none;">
+              <div class="hl-thumb">
+                <img src="https://cdn.imweb.me/upload/S20251111932f844856fca/3f95f1880b850.jpg" alt="네트워크" loading="lazy" />
+              </div>
+              <div class="hl-body">
+                <div class="hl-meta">
+                  <span class="hl-badge hl-badge-ig">인스타그램</span>
+                  <span class="hl-date">2026.04</span>
+                </div>
+                <div class="hl-title">청년 네트워킹 데이 — 서로의 꿈을 공유한 소중한 시간</div>
+              </div>
+            </a>
+
+            <!-- ── 인스타그램 4 ── -->
+            <a class="hl-card" data-type="ig" href="https://www.instagram.com/hub_ridge/" target="_blank" rel="noopener" style="text-decoration:none;">
+              <div class="hl-thumb">
+                <img src="https://cdn.imweb.me/upload/S20251111932f844856fca/532f78239c0e9.jpg" alt="행사기획" loading="lazy" />
+              </div>
+              <div class="hl-body">
+                <div class="hl-meta">
+                  <span class="hl-badge hl-badge-ig">인스타그램</span>
+                  <span class="hl-date">2026.03</span>
+                </div>
+                <div class="hl-title">행사기획 현장 실습 — 기획부터 진행까지 직접 경험했어요</div>
+              </div>
+            </a>
+
+            <!-- ── 유튜브 1 ── -->
+            <a class="hl-card" data-type="yt" href="https://www.youtube.com/@hub_ridge" target="_blank" rel="noopener" style="text-decoration:none;">
+              <div class="hl-thumb" style="background:#0f172a;">
+                <img src="https://homepage-ruby-pi.vercel.app/34.png" alt="유튜브" loading="lazy" style="opacity:.88;" />
+                <div class="hl-play">
+                  <svg viewBox="0 0 68 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="68" height="48" rx="10" fill="#FF0000"/><path d="M45 24L28 34V14L45 24Z" fill="white"/></svg>
+                </div>
+              </div>
+              <div class="hl-body">
+                <div class="hl-meta">
+                  <span class="hl-badge hl-badge-yt">유튜브</span>
+                  <span class="hl-date">2026.05</span>
+                </div>
+                <div class="hl-title">MINT 청년 창업 교육 현장 스케치 — LIVE</div>
+              </div>
+            </a>
+
+            <!-- ── 유튜브 2 ── -->
+            <a class="hl-card" data-type="yt" href="https://www.youtube.com/@hub_ridge" target="_blank" rel="noopener" style="text-decoration:none;">
+              <div class="hl-thumb" style="background:#0f172a;">
+                <img src="https://homepage-ruby-pi.vercel.app/44.JPG" alt="유튜브" loading="lazy" style="opacity:.88;" />
+                <div class="hl-play">
+                  <svg viewBox="0 0 68 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="68" height="48" rx="10" fill="#FF0000"/><path d="M45 24L28 34V14L45 24Z" fill="white"/></svg>
+                </div>
+              </div>
+              <div class="hl-body">
+                <div class="hl-meta">
+                  <span class="hl-badge hl-badge-yt">유튜브</span>
+                  <span class="hl-date">2026.04</span>
+                </div>
+                <div class="hl-title">허브릿지 프로그램 소개 — 청년의 자립을 위한 다리</div>
+              </div>
+            </a>
+
+            <!-- ── 블로그 1 ── -->
+            <a class="hl-card" data-type="bl" href="https://blog.naver.com/hubr_org" target="_blank" rel="noopener" style="text-decoration:none;">
+              <div class="hl-thumb">
+                <img src="https://homepage-ruby-pi.vercel.app/23.png" alt="블로그" loading="lazy" />
+              </div>
+              <div class="hl-body">
+                <div class="hl-meta">
+                  <span class="hl-badge hl-badge-bl">블로그</span>
+                  <span class="hl-date">2026.05</span>
+                </div>
+                <div class="hl-title">MINT 1기 수료 후기 — 브랜딩부터 IR 스피칭까지 성장한 8주</div>
+              </div>
+            </a>
+
+            <!-- ── 블로그 2 ── -->
+            <a class="hl-card" data-type="bl" href="https://blog.naver.com/hubr_org" target="_blank" rel="noopener" style="text-decoration:none;">
+              <div class="hl-thumb">
+                <img src="https://cdn.imweb.me/thumbnail/20260119/2572f6cd1f85c.jpg" alt="블로그" loading="lazy" />
+              </div>
+              <div class="hl-body">
+                <div class="hl-meta">
+                  <span class="hl-badge hl-badge-bl">블로그</span>
+                  <span class="hl-date">2026.04</span>
+                </div>
+                <div class="hl-title">허브릿지가 걸어온 길 — 설립부터 지금까지의 이야기</div>
+              </div>
+            </a>
+
+          </div>
+        </div>
+        <!-- 자동 슬라이드 닷 인디케이터 -->
+        <div class="hl-dots-wrap" id="hl-dots-wrap" style="display:flex;justify-content:center;gap:.4rem;margin-top:1.25rem;"></div>
+        <button class="hl-arrow hl-prev" id="hl-prev" onclick="hlManualMove(-1)" aria-label="이전">&#8592;</button>
+        <button class="hl-arrow hl-next" id="hl-next" onclick="hlManualMove(1)" aria-label="다음">&#8594;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 신청 폼 섹션 -->
+  <section class="sec sec-bg">
+    <div class="cont">
+      <div class="sec-head fi">
+        <span class="sec-tag">프로그램 신청</span>
+        <h2 class="sec-title">지금 바로 신청하세요</h2>
+        <p class="sec-desc">아래 양식을 작성하면 담당자가 확인 후 연락드립니다</p>
+      </div>
+
+      <!-- 실시간 카운터 -->
+      <div class="apply-counter-bar fi">
+        <div class="ac-total">
+          <span class="ac-num" id="ac-total">0</span>
+          <span class="ac-lbl">총 신청 인원</span>
+        </div>
+        <div class="ac-divider"></div>
+        <div class="ac-live">
+          <span class="ac-dot"></span> 실시간 접수 중
+        </div>
+        <div class="ac-divider"></div>
+        <div class="ac-prog-list" id="ac-prog-list"></div>
+      </div>
+
+      <!-- 폼 -->
+      <div class="apply-form-card fi">
+        <h3>신청 정보 입력</h3>
+        <div class="af-row-2">
+          <div class="af-row">
+            <label>이름 <span class="req">*</span></label>
+            <input type="text" id="af-name" placeholder="홍길동" />
+          </div>
+          <div class="af-row">
+            <label>연락처 <span class="req">*</span></label>
+            <input type="tel" id="af-phone" placeholder="010-0000-0000" />
+          </div>
+        </div>
+        <div class="af-row">
+          <label>이메일</label>
+          <input type="email" id="af-email" placeholder="example@email.com" />
+        </div>
+        <div class="af-row">
+          <label>신청 프로그램 <span class="req">*</span></label>
+          <select id="af-program">
+            <option value="">— 선택하세요 —</option>
+            <option value="청년교육 및 인턴십">청년교육 및 인턴십</option>
+            <option value="창업 워크숍">창업 워크숍</option>
+            <option value="행사기획 실무 교육">행사기획 실무 교육</option>
+            <option value="네트워킹 프로그램">네트워킹 프로그램</option>
+            <option value="기타">기타</option>
+          </select>
+        </div>
+        <div class="af-row">
+          <label>신청 동기 / 궁금한 점</label>
+          <textarea id="af-motive" placeholder="참여 동기나 궁금한 점을 자유롭게 작성해 주세요."></textarea>
+        </div>
+        <button class="af-submit" id="af-submit" onclick="submitApply()">신청하기</button>
+        <div class="af-msg" id="af-msg"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 실시간 접수 명단 -->
+  <section class="sec">
+    <div class="cont">
+      <div class="sec-head fi">
+        <span class="sec-tag">실시간 접수 현황</span>
+        <h2 class="sec-title">접수자 명단</h2>
+        <p class="sec-desc">개인정보 보호를 위해 이름 일부는 마스킹 처리됩니다</p>
+      </div>
+
+      <div class="apply-list-wrap fi">
+        <div class="al-hdr">
+          <h4>접수 명단 <span id="al-count-badge" style="font-size:.8rem;font-weight:500;color:var(--gray-500);margin-left:.5rem;">총 0명</span></h4>
+          <span id="al-last-time" style="font-size:.78rem;color:var(--gray-500);"></span>
+        </div>
+        <div class="al-table-hdr">
+          <span>번호</span><span>이름</span><span>신청 프로그램</span><span>신청일</span><span>상태</span>
+        </div>
+        <div id="al-body">
+          <div class="al-empty">아직 접수된 신청이 없습니다.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ── 협력업체 신청 모달 ── -->
+<div class="pw-overlay" id="partner-modal" onclick="if(event.target===this)closePartnerModal()">
+  <div class="pw-box" style="max-width:480px;text-align:left;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+      <h4 style="font-size:1.05rem;margin:0;">협력업체 신청</h4>
+      <button onclick="closePartnerModal()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--gray-500);line-height:1;">&times;</button>
+    </div>
+    <p style="font-size:.85rem;color:var(--gray-500);margin-bottom:1.25rem;line-height:1.6;">허브릿지와 함께 청년 성장을 지원하는 협력업체로 참여해 주세요.</p>
+    <div class="af-row-2" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div class="af-row" style="margin-bottom:0;">
+        <label style="display:block;font-size:.8rem;font-weight:600;color:var(--gray-700);margin-bottom:.3rem;">기업/기관명 <span style="color:var(--primary)">*</span></label>
+        <input type="text" id="pf-company" placeholder="(주)예시기업" style="width:100%;padding:.6rem .9rem;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.9rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--gray-200)'" />
+      </div>
+      <div class="af-row" style="margin-bottom:0;">
+        <label style="display:block;font-size:.8rem;font-weight:600;color:var(--gray-700);margin-bottom:.3rem;">담당자명 <span style="color:var(--primary)">*</span></label>
+        <input type="text" id="pf-name" placeholder="홍길동" style="width:100%;padding:.6rem .9rem;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.9rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--gray-200)'" />
+      </div>
+    </div>
+    <div class="af-row" style="margin-top:1rem;">
+      <label style="display:block;font-size:.8rem;font-weight:600;color:var(--gray-700);margin-bottom:.3rem;">연락처 <span style="color:var(--primary)">*</span></label>
+      <input type="tel" id="pf-phone" placeholder="010-0000-0000" style="width:100%;padding:.6rem .9rem;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.9rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--gray-200)'" />
+    </div>
+    <div class="af-row" style="margin-top:1rem;">
+      <label style="display:block;font-size:.8rem;font-weight:600;color:var(--gray-700);margin-bottom:.3rem;">이메일</label>
+      <input type="email" id="pf-email" placeholder="contact@company.com" style="width:100%;padding:.6rem .9rem;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.9rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--gray-200)'" />
+    </div>
+    <div class="af-row" style="margin-top:1rem;">
+      <label style="display:block;font-size:.8rem;font-weight:600;color:var(--gray-700);margin-bottom:.3rem;">협력 희망 내용</label>
+      <select id="pf-type" style="width:100%;padding:.6rem .9rem;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.9rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--gray-200)'">
+        <option value="">— 선택하세요 —</option>
+        <option value="인턴십 연계">인턴십 연계</option>
+        <option value="교육 강사 파견">교육 강사 파견</option>
+        <option value="행사 기획·운영 협력">행사 기획·운영 협력</option>
+        <option value="후원 및 파트너십">후원 및 파트너십</option>
+        <option value="기타">기타</option>
+      </select>
+    </div>
+    <div class="af-row" style="margin-top:1rem;">
+      <label style="display:block;font-size:.8rem;font-weight:600;color:var(--gray-700);margin-bottom:.3rem;">추가 내용</label>
+      <textarea id="pf-memo" placeholder="협력 방향이나 문의사항을 자유롭게 작성해 주세요." style="width:100%;padding:.6rem .9rem;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.9rem;font-family:inherit;outline:none;min-height:80px;resize:vertical;line-height:1.6;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--gray-200)'"></textarea>
+    </div>
+    <div id="pf-msg" style="font-size:.82rem;margin-top:.65rem;padding:.5rem .8rem;border-radius:8px;display:none;"></div>
+    <button onclick="submitPartner()" style="width:100%;padding:.85rem;background:var(--primary);color:#fff;border:none;border-radius:100px;font-size:.93rem;font-weight:700;cursor:pointer;margin-top:1rem;font-family:inherit;transition:transform .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">신청하기</button>
+  </div>
+</div>
+
+<!-- ── 공통 푸터 ── -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo"><img src="https://cdn.imweb.me/thumbnail/20260414/ad28a3e669ff9.png" alt="허브릿지" /></div>
+      <p class="footer-desc">사회적협동조합 허브릿지는 청년이 자립할 수 있도록<br />교육·인턴십·네트워크로 든든한 발판을 만들어 갑니다.</p>
+      <div class="footer-contact">
+        📞 02-6092-0070<br />
+        ✉️ hubr@hubr.co.kr<br />
+        📍 서울 마포구 월드컵로 163-3, 1층<br />
+        설립번호 2025-1492-SO-5914호
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>허브릿지</h4>
+      <ul>
+        <li><a onclick="go('greeting')">인사말</a></li>
+        <li><a onclick="go('mission')">미션과 비전</a></li>
+        <li><a onclick="go('location')">오시는 길</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>사업소개</h4>
+      <ul>
+        <li><a onclick="go('education')">청년교육 및 인턴십</a></li>
+        <li><a onclick="go('events')">행사기획 및 대행</a></li>
+        <li><a onclick="go('network')">네트워크사업</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>소통</h4>
+      <ul>
+        <li><a onclick="go('news')">소식</a></li>
+        <li><a onclick="go('donate')">후원하기</a></li>
+        <li><a href="https://blog.naver.com/hubridge-" target="_blank">네이버 블로그</a></li>
+        <li><a href="https://www.instagram.com/hubr2025/" target="_blank">인스타그램</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 사회적협동조합 허브릿지 · 대표 조학수, 장재홍</span>
+    <div class="social-links">
+      <a href="https://www.instagram.com/hubr2025/" target="_blank" class="social-btn">📷</a>
+      <a href="https://pf.kakao.com/_yxcGCX" target="_blank" class="social-btn">💬</a>
+      <a href="https://blog.naver.com/hubridge-" target="_blank" class="social-btn">📝</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ── 글 작성 모달 ── -->
+<div class="write-overlay" id="writeOverlay">
+  <div class="write-modal">
+    <h3>✏️ 게시물 작성</h3>
+    <div class="wf-row">
+      <label>카테고리</label>
+      <select id="wf-cat">
+        <option value="notice">공지사항</option>
+        <option value="activity">활동 소식</option>
+        <option value="press">보도자료</option>
+      </select>
+    </div>
+    <div class="wf-row">
+      <label>제목</label>
+      <input type="text" id="wf-title" placeholder="제목을 입력하세요" />
+    </div>
+    <div class="wf-row" id="wf-media-wrap" style="display:none">
+      <label>매체명 (보도자료)</label>
+      <input type="text" id="wf-media" placeholder="예: 조선일보" />
+    </div>
+    <div class="wf-row" id="wf-link-wrap" style="display:none">
+      <label>기사 링크 (보도자료)</label>
+      <input type="text" id="wf-link" placeholder="https://..." />
+    </div>
+    <div class="wf-row">
+      <label>작성자</label>
+      <input type="text" id="wf-author" value="관리자" />
+    </div>
+    <div class="wf-row">
+      <label>내용</label>
+      <textarea id="wf-content" placeholder="내용을 입력하세요 (선택)"></textarea>
+    </div>
+    <div class="wf-checks">
+      <label><input type="checkbox" id="wf-pin" /> 📌 공지 고정</label>
+      <label><input type="checkbox" id="wf-hot" /> 🔥 HOT</label>
+    </div>
+    <div class="wf-row" style="margin-top:.5rem;">
+      <label>🔒 관리자 비밀번호</label>
+      <input type="password" id="wf-pw" placeholder="비밀번호 입력" />
+    </div>
+    <div class="wf-msg" id="wf-msg"></div>
+    <div class="wf-btns">
+      <button class="wf-cancel" onclick="closeWriteModal()">취소</button>
+      <button class="wf-submit" id="wf-submit" onclick="submitPost()">등록하기</button>
+    </div>
+  </div>
+</div>
+
+<button class="float-cta" onclick="go('donate')">💛 후원하기</button>
+
+<script>
+  const navbar    = document.getElementById('navbar');
+  const mobileNav = document.getElementById('mobileNav');
+
+  // ── URL 경로로 페이지 자동 이동 ──
+  const _pathPage = { '/greeting':'greeting','/mission':'mission','/location':'location','/education':'education','/events':'events','/network':'network','/news':'news','/donate':'donate' };
+  const _initPage = _pathPage[window.location.pathname];
+  if (_initPage) { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); const _t=document.getElementById('page-'+_initPage); if(_t){_t.classList.add('active');} }
+
+  // ── 페이지 전환 ──
+  function go(pageId, e) {
+    if (e) e.preventDefault();
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('page-' + pageId);
+    if (target) target.classList.add('active');
+
+    if (pageId === 'home') {
+      navbar.classList.remove('white', 'scrolled');
+      window.scrollTo({ top: 0 });
+    } else {
+      navbar.classList.add('white');
+      navbar.classList.remove('scrolled');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    mobileNav.classList.remove('open');
+    setTimeout(() => {
+      if (target) target.querySelectorAll('.fi:not(.v)').forEach(el => {
+        if (isVisible(el)) el.classList.add('v');
+      });
+    }, 100);
+  }
+  function mgo(id) { go(id); }
+
+  // ── NAV 스크롤 ──
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ── 햄버거 ──
+  document.getElementById('hamburger').addEventListener('click', () => mobileNav.classList.toggle('open'));
+
+  // ── 페이드인 ──
+  function isVisible(el) {
+    const r = el.getBoundingClientRect();
+    return r.top < window.innerHeight * 0.92;
+  }
+  const fiObserver = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('v'); }),
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll('.fi').forEach(el => fiObserver.observe(el));
+
+  // ── 카운터 ──
+  function runCounter(el) {
+    if (el._done) return;
+    el._done = true;
+    const tgt = parseInt(el.dataset.target);
+    const duration = 1400;
+    const start = performance.now();
+    function step(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * tgt);
+      if (progress < 1) { requestAnimationFrame(step); }
+      else { el.textContent = tgt; el.classList.add('popped'); }
+    }
+    requestAnimationFrame(step);
+  }
+  new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.stat-num[data-target]').forEach(runCounter);
+        e.target.querySelectorAll('.stat-collecting').forEach(function(el) {
+          el.classList.add('popped');
+        });
+      }
+    }),
+    { threshold: 0.5 }
+  ).observe(document.getElementById('stats'));
+
+  // ── 실시간 날짜 ──
+  (function() {
+    var dateEl = document.getElementById('lb-date');
+    if (!dateEl) return;
+    function updateDate() {
+      var now = new Date();
+      dateEl.textContent = now.getFullYear() + '년 ' + (now.getMonth()+1) + '월 ' + now.getDate() + '일 기준';
+    }
+    updateDate();
+    setInterval(updateDate, 60000);
+  })();
+
+  // ── 게시판 ──
+  var _boardCache = {};
+
+  function switchTab(btn, tab) {
+    btn.closest('.board-tabs').querySelectorAll('.btab').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    ['notice','activity','press','youtube'].forEach(function(t) {
+      var el = document.getElementById('tab-' + t);
+      if (el) el.style.display = t === tab ? 'block' : 'none';
+    });
+    loadBoardTab(tab);
+  }
+
+  function loadBoardTab(cat) {
+    if (cat === 'press') { renderBoardRows('press', []); }
+    if (cat === 'youtube') { renderYoutube(null); loadYoutube(); return; }
+    if (_boardCache[cat]) { renderBoardRows(cat, _boardCache[cat]); return; }
+    fetch('https://homepage-ruby-pi.vercel.app/api/posts?category=' + cat)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        _boardCache[cat] = data;
+        renderBoardRows(cat, data);
+        if (cat === 'notice') renderSidebarNotices(data);
+      })
+      .catch(function() {
+        if (cat !== 'press') {
+          var el = document.getElementById('rows-' + cat);
+          if (el) el.innerHTML = '<div class="board-empty">불러오기 실패. 잠시 후 다시 시도해주세요.</div>';
+        }
+      });
+  }
+
+  var _ytLoaded = false;
+  function loadYoutube() {
+    if (_ytLoaded) return;
+    fetch('https://homepage-ruby-pi.vercel.app/api/youtube')
+      .then(function(r) { return r.json(); })
+      .then(function(videos) {
+        _ytLoaded = true;
+        renderYoutube(videos);
+      })
+      .catch(function() {
+        var el = document.getElementById('rows-youtube');
+        if (el) el.innerHTML = '<div class="board-empty">영상을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</div>';
+      });
+  }
+  function renderYoutube(videos) {
+    var el = document.getElementById('rows-youtube');
+    if (!el) return;
+    if (!videos) { el.innerHTML = '<div class="board-loading">불러오는 중…</div>'; return; }
+    if (!videos.length) { el.innerHTML = '<div class="board-empty">업로드된 영상이 없습니다.</div>'; return; }
+    var html = videos.map(function(v) {
+      return '<a href="' + escHtmlAttr(v.url) + '" target="_blank" class="pc-card">'
+        + '<div class="pc-thumb"><img src="' + escHtmlAttr(v.thumb) + '" alt="' + escHtml(v.title) + '" loading="lazy" /></div>'
+        + '<div class="pc-body">'
+        + '<div class="pc-meta"><span class="pc-outlet" style="background:rgba(255,0,0,.1);color:#cc0000;">YouTube</span><span class="pc-date">' + escHtml(v.published) + '</span></div>'
+        + '<div class="pc-title">' + escHtml(v.title) + '</div>'
+        + '<span class="pc-link" style="color:#cc0000;">영상 보기 →</span>'
+        + '</div></a>';
+    }).join('');
+    el.innerHTML = html;
+  }
+
+  var PRESS_SEED = [
+    { id: 1, category:'press', title:'허브릿지·마포청년나루, 청년 창업가 대상 실전 IR 및 커뮤니케이션 교육 실시', media:'컨슈머타임스', link:'https://www.cstimes.com/news/articleView.html?idxno=707960', thumb:'https://www.cstimes.com/news/photo/202606/707960_627732_1630.jpg', created_at:'2026-06-01T00:00:00Z' },
+    { id: 2, category:'press', title:'허브릿지, 봉앤설이니셔티브 박강빈 PM과 청년 창업가 대상 브랜딩 교육 진행', media:'데일리경제', link:'https://www.kdpress.co.kr/news/articleView.html?idxno=205673', thumb:'https://cdn.kdpress.co.kr/news/photo/202605/205673_131938_1332.jpg', created_at:'2026-05-28T00:00:00Z' }
+  ];
+
+  function renderBoardRows(cat, posts) {
+    var el = document.getElementById('rows-' + cat);
+    if (!el) return;
+
+    if (cat === 'press') {
+      // API 데이터와 seed 데이터 병합 (중복 link 제거)
+      var seedLinks = PRESS_SEED.map(function(p){ return p.link; });
+      var apiExtra = (posts || []).filter(function(p){ return !seedLinks.includes(p.link); });
+      var all = PRESS_SEED.concat(apiExtra);
+      var html = '';
+      all.forEach(function(p) {
+        var date = p.created_at ? p.created_at.substring(0,10).replace(/-/g,'.') : '';
+        var thumb = p.thumb ? '<img src="' + escHtmlAttr(p.thumb) + '" alt="' + escHtml(p.media||'') + '" loading="lazy" />' : '';
+        html += '<a href="' + escHtmlAttr(p.link||'#') + '" target="_blank" class="pc-card">'
+          + '<div class="pc-thumb">' + thumb + '</div>'
+          + '<div class="pc-body">'
+          + '<div class="pc-meta"><span class="pc-outlet">' + escHtml(p.media||'보도') + '</span><span class="pc-date">' + date + '</span></div>'
+          + '<div class="pc-title">' + escHtml(p.title) + '</div>'
+          + '<span class="pc-link">기사 보기 →</span>'
+          + '</div></a>';
+      });
+      el.innerHTML = html || '<div class="board-empty">등록된 보도자료가 없습니다.</div>';
+      return;
+    }
+
+    if (!posts || !posts.length) {
+      el.innerHTML = '<div class="board-empty">등록된 게시물이 없습니다.</div>';
+      return;
+    }
+    var html = '';
+    var nonPinned = posts.filter(function(p) { return !p.is_pinned; });
+    posts.forEach(function(p, i) {
+      var num = p.is_pinned ? '📌' : nonPinned.indexOf(p) + 1;
+      var badge = '';
+      if (p.is_pinned) badge = '<span class="badge badge-n">NEW</span>';
+      else if (p.is_hot) badge = '<span class="badge badge-h">HOT</span>';
+      var date = p.created_at ? p.created_at.substring(2,10).replace(/-/g,'.') : '';
+      var author = p.author || '관리자';
+      var titleHtml = p.link
+        ? '<a href="' + escHtmlAttr(p.link) + '" target="_blank" style="color:inherit;text-decoration:none;">' + escHtml(p.title) + '</a>'
+        : escHtml(p.title);
+      html += '<div class="board-row">'
+        + '<span class="bnum">' + num + '</span>'
+        + '<div class="btitle">' + badge + titleHtml + '</div>'
+        + '<span class="bauthor">' + escHtml(author) + '</span>'
+        + '<span class="bdate">' + date + '</span>'
+        + '</div>';
+    });
+    el.innerHTML = html;
+  }
+
+  function renderSidebarNotices(posts) {
+    var el = document.getElementById('sidebar-notices');
+    if (!el) return;
+    var top3 = posts.slice(0, 3);
+    if (!top3.length) { el.innerHTML = '<div class="sc-item" style="color:var(--gray-500);font-size:0.82rem;">등록된 공지가 없습니다.</div>'; return; }
+    el.innerHTML = top3.map(function(p) {
+      var date = p.created_at ? p.created_at.substring(0,10).replace(/-/g,'.') : '';
+      return '<div class="sc-item"><span class="sc-item-title">' + escHtml(p.title) + '</span><div class="sc-item-date">' + date + '</div></div>';
+    }).join('');
+  }
+
+  function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function escHtmlAttr(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  // ── 작성 모달 ──
+  function openPwModal() { openWriteModal(); } // 하위호환
+  function openWriteModal() {
+    document.getElementById('wf-title').value = '';
+    document.getElementById('wf-content').value = '';
+    document.getElementById('wf-author').value = '관리자';
+    document.getElementById('wf-media').value = '';
+    document.getElementById('wf-link').value = '';
+    document.getElementById('wf-pw').value = '';
+    document.getElementById('wf-pin').checked = false;
+    document.getElementById('wf-hot').checked = false;
+    document.getElementById('wf-msg').className = 'wf-msg';
+    document.getElementById('wf-msg').textContent = '';
+    document.getElementById('wf-submit').disabled = false;
+    var activeTab = document.querySelector('.btab.active');
+    var tabText = activeTab ? activeTab.textContent.trim() : '';
+    document.getElementById('wf-cat').value = tabText === '보도자료' ? 'press' : tabText === '활동 소식' ? 'activity' : 'notice';
+    togglePressFields();
+    document.getElementById('writeOverlay').classList.add('open');
+    setTimeout(function(){ document.getElementById('wf-title').focus(); }, 100);
+  }
+  function closeWriteModal() {
+    document.getElementById('writeOverlay').classList.remove('open');
+  }
+  function togglePressFields() {
+    var isPress = document.getElementById('wf-cat').value === 'press';
+    document.getElementById('wf-media-wrap').style.display = isPress ? 'block' : 'none';
+    document.getElementById('wf-link-wrap').style.display  = isPress ? 'block' : 'none';
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var catSel = document.getElementById('wf-cat');
+    if (catSel) catSel.addEventListener('change', togglePressFields);
+    document.getElementById('writeOverlay').addEventListener('click', function(e){ if(e.target===this) closeWriteModal(); });
+  });
+  function submitPost() {
+    var title = document.getElementById('wf-title').value.trim();
+    var cat   = document.getElementById('wf-cat').value;
+    var pw    = document.getElementById('wf-pw').value;
+    if (!title) { showWfMsg('제목을 입력해주세요.', 'err'); return; }
+    if (!pw)    { showWfMsg('관리자 비밀번호를 입력해주세요.', 'err'); return; }
+    var body = {
+      category: cat,
+      title: title,
+      content: document.getElementById('wf-content').value.trim(),
+      author:  document.getElementById('wf-author').value.trim() || '관리자',
+      is_pinned: document.getElementById('wf-pin').checked,
+      is_hot:    document.getElementById('wf-hot').checked,
+      media: document.getElementById('wf-media').value.trim(),
+      link:  document.getElementById('wf-link').value.trim()
+    };
+    document.getElementById('wf-submit').disabled = true;
+    showWfMsg('등록 중…', '');
+    fetch('https://homepage-ruby-pi.vercel.app/api/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': pw },
+      body: JSON.stringify(body)
+    }).then(function(r) {
+      if (r.status === 401) throw new Error('auth');
+      if (!r.ok) throw new Error('fail');
+      return r.json();
+    }).then(function() {
+      showWfMsg('✅ 등록되었습니다!', 'ok');
+      _boardCache = {};
+      setTimeout(function() {
+        closeWriteModal();
+        loadBoardTab(cat);
+        var tabMap = { notice:'공지사항', activity:'활동 소식', press:'보도자료' };
+        var activeTab = document.querySelector('.btab.active');
+        if (activeTab && activeTab.textContent.trim() !== tabMap[cat]) {
+          var targetBtn = Array.from(document.querySelectorAll('.btab')).find(function(b){ return b.textContent.trim() === tabMap[cat]; });
+          if (targetBtn) switchTab(targetBtn, cat);
+        }
+      }, 1000);
+    }).catch(function(e) {
+      showWfMsg(e.message === 'auth' ? '비밀번호가 틀렸습니다.' : '등록 실패. 다시 시도해주세요.', 'err');
+      document.getElementById('wf-submit').disabled = false;
+    });
+  }
+  function showWfMsg(msg, type) {
+    var el = document.getElementById('wf-msg');
+    el.textContent = msg;
+    el.className = 'wf-msg' + (type ? ' ' + type : '');
+  }
+
+  // 소식 페이지 진입 시 공지사항 자동 로드
+  document.addEventListener('DOMContentLoaded', function() {
+    var newsPage = document.getElementById('page-news');
+    if (newsPage) {
+      var observer = new MutationObserver(function() {
+        if (newsPage.style.display !== 'none' && !_boardCache['notice']) {
+          loadBoardTab('notice');
+        }
+      });
+      observer.observe(newsPage, { attributes: true, attributeFilter: ['style'] });
+    }
+  });
+
+  // ── 후원 금액 선택 ──
+  function selAmt(btn) {
+    btn.closest('.amount-grid').querySelectorAll('.amt-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // ── Hero Carousel ──
+  (function() {
+    var carousel = document.getElementById('hero-carousel');
+    if (!carousel) return;
+    var track  = carousel.querySelector('.hc-track');
+    var slides = carousel.querySelectorAll('.hc-slide');
+    var dots   = carousel.querySelectorAll('.hc-dot');
+    var cur = 0, timer;
+
+    function goTo(n) {
+      cur = ((n % slides.length) + slides.length) % slides.length;
+      track.style.transform = 'translateX(-' + (cur * 100) + '%)';
+      dots.forEach(function(d, i) { d.classList.toggle('active', i === cur); });
+    }
+    function startAuto() { timer = setInterval(function(){ goTo(cur + 1); }, 5000); }
+    function resetAuto()  { clearInterval(timer); startAuto(); }
+
+    carousel.querySelector('.hc-prev').addEventListener('click', function(){ goTo(cur - 1); resetAuto(); });
+    carousel.querySelector('.hc-next').addEventListener('click', function(){ goTo(cur + 1); resetAuto(); });
+    dots.forEach(function(d) {
+      d.addEventListener('click', function(){ goTo(parseInt(d.dataset.idx)); resetAuto(); });
+    });
+    startAuto();
+  })();
+
+  // ══════════════════════════════════════════
+  //  하이라이트 슬라이더 (자동 슬라이드)
+  // ══════════════════════════════════════════
+  var _hlAll = [], _hlFiltered = [], _hlIdx = 0, _hlTimer = null;
+  var HL_INTERVAL = 3500;
+
+  function hlVisible() {
+    return window.innerWidth <= 560 ? 1 : window.innerWidth <= 900 ? 2 : 4;
+  }
+
+  function hlInit() {
+    _hlAll = Array.from(document.querySelectorAll('.hl-card'));
+    _hlFiltered = _hlAll.slice();
+    _hlIdx = 0;
+    hlBuildDots();
+    hlRender();
+    hlStartAuto();
+    var wrap = document.querySelector('.hl-slider-wrap');
+    if (wrap) {
+      wrap.addEventListener('mouseenter', hlStopAuto);
+      wrap.addEventListener('mouseleave', hlStartAuto);
+    }
+  }
+
+  function hlBuildDots() {
+    var dotsWrap = document.getElementById('hl-dots-wrap');
+    if (!dotsWrap) return;
+    var vis = hlVisible();
+    var total = Math.ceil(_hlFiltered.length / vis);
+    dotsWrap.innerHTML = '';
+    for (var i = 0; i < total; i++) {
+      (function(idx){
+        var btn = document.createElement('button');
+        btn.style.cssText = 'width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;padding:0;transition:all .3s;background:var(--gray-200);';
+        btn.addEventListener('click', function(){ hlGoTo(idx * vis); hlResetAuto(); });
+        btn.dataset.dotIdx = idx;
+        dotsWrap.appendChild(btn);
+      })(i);
+    }
+    hlUpdateDots();
+  }
+
+  function hlUpdateDots() {
+    var dotsWrap = document.getElementById('hl-dots-wrap');
+    if (!dotsWrap) return;
+    var vis = hlVisible();
+    var curGroup = Math.floor(_hlIdx / vis);
+    Array.from(dotsWrap.children).forEach(function(btn, i) {
+      if (i === curGroup) {
+        btn.style.background = 'var(--primary)';
+        btn.style.width = '22px';
+        btn.style.borderRadius = '100px';
+      } else {
+        btn.style.background = 'var(--gray-200)';
+        btn.style.width = '8px';
+        btn.style.borderRadius = '50%';
+      }
+    });
+  }
+
+  function hlFilter(type, btn) {
+    document.querySelectorAll('.hl-tab').forEach(function(t){ t.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    _hlFiltered = type === 'all' ? _hlAll.slice() : _hlAll.filter(function(c){ return c.dataset.type === type; });
+    _hlAll.forEach(function(c){ c.style.display = 'none'; });
+    _hlFiltered.forEach(function(c){ c.style.display = ''; });
+    _hlIdx = 0;
+    hlBuildDots();
+    hlRender();
+    hlResetAuto();
+  }
+
+  function hlGoTo(idx) {
+    var vis = hlVisible();
+    var max = Math.max(0, _hlFiltered.length - vis);
+    _hlIdx = Math.min(Math.max(idx, 0), max);
+    hlRender();
+  }
+
+  function hlManualMove(dir) {
+    var vis = hlVisible();
+    hlGoTo(_hlIdx + dir);
+    hlResetAuto();
+  }
+
+  function hlRender() {
+    var track = document.getElementById('hl-track');
+    if (!track || !_hlFiltered.length) return;
+    var vis = hlVisible();
+    var max = Math.max(0, _hlFiltered.length - vis);
+    _hlIdx = Math.min(_hlIdx, max);
+    var cardW = _hlFiltered[0] ? (_hlFiltered[0].offsetWidth + 20) : 0;
+    track.style.transform = 'translateX(-' + (_hlIdx * cardW) + 'px)';
+    var prev = document.getElementById('hl-prev');
+    var next = document.getElementById('hl-next');
+    if (prev) prev.style.opacity = _hlIdx <= 0 ? '0.3' : '1';
+    if (next) next.style.opacity = _hlIdx >= max ? '0.3' : '1';
+    hlUpdateDots();
+  }
+
+  function hlAutoStep() {
+    var vis = hlVisible();
+    var max = Math.max(0, _hlFiltered.length - vis);
+    _hlIdx = _hlIdx >= max ? 0 : _hlIdx + 1;
+    hlRender();
+  }
+
+  function hlStartAuto() {
+    hlStopAuto();
+    _hlTimer = setInterval(hlAutoStep, HL_INTERVAL);
+  }
+  function hlStopAuto()  { if (_hlTimer) { clearInterval(_hlTimer); _hlTimer = null; } }
+  function hlResetAuto() { hlStopAuto(); hlStartAuto(); }
+
+  window.addEventListener('resize', function(){ hlBuildDots(); hlRender(); });
+  setTimeout(hlInit, 300);
+
+  // ══════════════════════════════════════════
+  //  프로그램 신청 폼 (localStorage)
+  // ══════════════════════════════════════════
+  var APPLY_KEY = 'hubr_apply_v1';
+
+  function loadApplyData() {
+    try { return JSON.parse(localStorage.getItem(APPLY_KEY) || '[]'); } catch(e) { return []; }
+  }
+  function saveApplyData(data) {
+    localStorage.setItem(APPLY_KEY, JSON.stringify(data));
+  }
+
+  function maskName(name) {
+    if (!name) return '○○○';
+    if (name.length === 1) return name + '○○';
+    if (name.length === 2) return name[0] + '○';
+    return name[0] + '○○';
+  }
+
+  function fmtDate(iso) {
+    var d = new Date(iso);
+    var mm = String(d.getMonth()+1).padStart(2,'0');
+    var dd = String(d.getDate()).padStart(2,'0');
+    var hh = String(d.getHours()).padStart(2,'0');
+    var mi = String(d.getMinutes()).padStart(2,'0');
+    return mm + '.' + dd + ' ' + hh + ':' + mi;
+  }
+
+  function renderApplyList() {
+    var data = loadApplyData();
+    var body = document.getElementById('al-body');
+    var countBadge = document.getElementById('al-count-badge');
+    var lastTime = document.getElementById('al-last-time');
+    var totalEl = document.getElementById('ac-total');
+    var progListEl = document.getElementById('ac-prog-list');
+
+    if (totalEl) totalEl.textContent = data.length;
+    if (countBadge) countBadge.textContent = '총 ' + data.length + '명';
+
+    if (lastTime && data.length > 0) {
+      lastTime.textContent = '최근 접수: ' + fmtDate(data[data.length-1].time);
+    }
+
+    // 프로그램별 집계
+    if (progListEl) {
+      var progCount = {};
+      data.forEach(function(d){ progCount[d.program] = (progCount[d.program]||0) + 1; });
+      progListEl.innerHTML = Object.keys(progCount).map(function(k){
+        return '<div class="ac-prog-item"><strong>' + progCount[k] + '명</strong> ' + k + '</div>';
+      }).join('');
+    }
+
+    if (!body) return;
+    if (data.length === 0) {
+      body.innerHTML = '<div class="al-empty">아직 접수된 신청이 없습니다.</div>';
+      return;
+    }
+
+    var rows = data.slice().reverse().map(function(d, i) {
+      return '<div class="al-row">'
+        + '<span class="al-num">' + (data.length - i) + '</span>'
+        + '<span class="al-name">' + escHtml(maskName(d.name)) + '</span>'
+        + '<span class="al-prog"><span class="al-prog">' + escHtml(d.program) + '</span></span>'
+        + '<span class="al-date">' + fmtDate(d.time) + '</span>'
+        + '<span class="al-status">접수완료</span>'
+        + '</div>';
+    }).join('');
+    body.innerHTML = rows;
+  }
+
+  function submitApply() {
+    var name    = (document.getElementById('af-name')    || {}).value || '';
+    var phone   = (document.getElementById('af-phone')   || {}).value || '';
+    var email   = (document.getElementById('af-email')   || {}).value || '';
+    var program = (document.getElementById('af-program') || {}).value || '';
+    var motive  = (document.getElementById('af-motive')  || {}).value || '';
+    var msgEl   = document.getElementById('af-msg');
+    var btnEl   = document.getElementById('af-submit');
+
+    msgEl.className = 'af-msg';
+    msgEl.style.display = 'none';
+
+    if (!name.trim())    { showApplyMsg('err','이름을 입력해 주세요.'); return; }
+    if (!phone.trim())   { showApplyMsg('err','연락처를 입력해 주세요.'); return; }
+    if (!program)        { showApplyMsg('err','신청 프로그램을 선택해 주세요.'); return; }
+
+    btnEl.disabled = true;
+    btnEl.textContent = '처리 중…';
+
+    setTimeout(function() {
+      var data = loadApplyData();
+      data.push({ name: name.trim(), phone: phone.trim(), email: email.trim(), program: program, motive: motive.trim(), time: new Date().toISOString() });
+      saveApplyData(data);
+
+      document.getElementById('af-name').value    = '';
+      document.getElementById('af-phone').value   = '';
+      document.getElementById('af-email').value   = '';
+      document.getElementById('af-program').value = '';
+      document.getElementById('af-motive').value  = '';
+
+      btnEl.disabled = false;
+      btnEl.textContent = '신청하기';
+      showApplyMsg('ok','✓ 신청이 완료되었습니다! 담당자가 연락드리겠습니다.');
+      renderApplyList();
+    }, 600);
+  }
+
+  function showApplyMsg(type, txt) {
+    var el = document.getElementById('af-msg');
+    el.className = 'af-msg ' + type;
+    el.textContent = txt;
+    el.style.display = 'block';
+  }
+
+  // 페이지 전환 시 목록 갱신
+  var _origGo = go;
+  go = function(pageId, e) {
+    _origGo(pageId, e);
+    if (pageId === 'apply') {
+      setTimeout(function(){ renderApplyList(); hlInit(); }, 150);
+    }
+  };
+
+  // 초기 렌더
+  renderApplyList();
+
+  // ══════════════════════════════════════════
+  //  협력업체 신청 모달
+  // ══════════════════════════════════════════
+  function openPartnerModal() {
+    document.getElementById('partner-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closePartnerModal() {
+    document.getElementById('partner-modal').classList.remove('open');
+    document.body.style.overflow = '';
+    var msg = document.getElementById('pf-msg');
+    if (msg) { msg.style.display='none'; msg.textContent=''; }
+  }
+  function submitPartner() {
+    var company = (document.getElementById('pf-company')||{}).value||'';
+    var name    = (document.getElementById('pf-name')   ||{}).value||'';
+    var phone   = (document.getElementById('pf-phone')  ||{}).value||'';
+    var type    = (document.getElementById('pf-type')   ||{}).value||'';
+    var msg     = document.getElementById('pf-msg');
+
+    if (!company.trim()) { showPfMsg('err','기업/기관명을 입력해 주세요.'); return; }
+    if (!name.trim())    { showPfMsg('err','담당자명을 입력해 주세요.'); return; }
+    if (!phone.trim())   { showPfMsg('err','연락처를 입력해 주세요.'); return; }
+
+    showPfMsg('ok','✓ 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.');
+    setTimeout(function(){ closePartnerModal(); }, 2000);
+  }
+  function showPfMsg(type, txt) {
+    var el = document.getElementById('pf-msg');
+    el.style.display = 'block';
+    el.style.background = type === 'ok' ? '#f0fdf4' : '#fef2f2';
+    el.style.color = type === 'ok' ? '#059669' : '#dc2626';
+    el.textContent = txt;
+  }
+</script>
+</body>
+</html>
+
