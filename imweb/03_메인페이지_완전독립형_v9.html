@@ -285,8 +285,8 @@
     .press-link { display: inline-flex; align-items: center; gap: 0.3rem; margin-top: 1rem; color: var(--primary); font-size: 13px; font-weight: 700; transition: gap 0.2s; }
     .press-card:hover .press-link { gap: 0.5rem; }
     .review-cta { text-align: center; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--gray-200); }
-    .review-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary); color: var(--white); padding: 0.8rem 2rem; border-radius: 100px; font-size: 0.92rem; font-weight: 700; text-decoration: none; transition: all 0.2s; box-shadow: 0 4px 14px rgba(29,78,216,0.25); }
-    .review-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(29,78,216,0.35); }
+    .review-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary); color: var(--white); padding: 0.8rem 2rem; border-radius: 100px; font-size: 0.92rem; font-weight: 700; text-decoration: none; transition: all 0.2s; box-shadow: 0 4px 14px rgba(29,78,216,0.25); border: 2px solid var(--primary); cursor: pointer; font-family: inherit; }
+    .review-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(29,78,216,0.35); background: var(--primary-dark); border-color: var(--primary-dark); }
     @media(max-width:768px) { .press-grid { grid-template-columns: 1fr; } }
 
     /* ── DONATE SECTION ── */
@@ -1109,7 +1109,6 @@
         <div class="review-cta">
           <p style="font-size:0.9rem;color:var(--gray-500);margin-bottom:1rem;">허브릿지를 경험하셨나요? 여러분의 이야기를 들려주세요.</p>
           <button class="review-btn" onclick="openReviewModal()">✏️ 후기 남기기</button>
-          <button onclick="openAdminReview()" style="margin-left:.75rem;background:none;border:1px solid var(--gray-300);color:var(--gray-500);padding:.5rem 1rem;border-radius:100px;font-size:.78rem;cursor:pointer;">관리자</button>
         </div>
       </div>
     </div>
@@ -1538,14 +1537,14 @@
         <div>
           <div class="board-toolbar">
             <div class="board-tabs">
-              <button class="btab active" onclick="switchTab(this,'notice')">공지사항</button>
+              <button class="btab" onclick="switchTab(this,'notice')">공지사항</button>
               <button class="btab" onclick="switchTab(this,'activity')">활동 소식</button>
-              <button class="btab" onclick="switchTab(this,'press')">보도자료</button>
+              <button class="btab active" onclick="switchTab(this,'press')">보도자료</button>
               <button class="btab" onclick="switchTab(this,'youtube')">유튜브</button>
             </div>
             <button class="btn-write" onclick="openPwModal()">+ 작성하기</button>
           </div>
-          <div id="tab-notice" class="board-list">
+          <div id="tab-notice" class="board-list" style="display:none">
             <div class="board-list-hdr"><span style="text-align:center">번호</span><span>제목</span><span>작성자</span><span>날짜</span></div>
             <div id="rows-notice" class="board-rows-wrap"><div class="board-loading">불러오는 중…</div></div>
           </div>
@@ -1553,7 +1552,7 @@
             <div class="board-list-hdr"><span style="text-align:center">번호</span><span>제목</span><span>작성자</span><span>날짜</span></div>
             <div id="rows-activity" class="board-rows-wrap"><div class="board-loading">불러오는 중…</div></div>
           </div>
-          <div id="tab-press" style="display:none">
+          <div id="tab-press">
             <div id="rows-press" class="press-cards-wrap"><div class="board-loading">불러오는 중…</div></div>
           </div>
           <div id="tab-youtube" style="display:none">
@@ -1573,7 +1572,7 @@
             </a>
           </div>
           <div class="sidebar-card">
-            <a href="https://www.youtube.com/@hub_ridge" target="_blank" style="display:flex;align-items:center;gap:.75rem;padding:.85rem 1.2rem;text-decoration:none;background:#FEF2F2;border-radius:12px;transition:background .2s;" onmouseover="this.style.background='#FECACA'" onmouseout="this.style.background='#FEF2F2'">
+            <a href="https://www.youtube.com/@허브릿지" target="_blank" style="display:flex;align-items:center;gap:.75rem;padding:.85rem 1.2rem;text-decoration:none;background:#FEF2F2;border-radius:12px;transition:background .2s;" onmouseover="this.style.background='#FECACA'" onmouseout="this.style.background='#FEF2F2'">
               <span style="font-size:1.3rem;flex-shrink:0;">▶️</span>
               <span style="flex:1;font-size:.85rem;font-weight:600;color:#7F1D1D;line-height:1.4;">교육 현장·활동 영상 보기</span>
               <span style="font-size:.78rem;font-weight:700;color:#991B1B;white-space:nowrap;">채널 가기 →</span>
@@ -1771,7 +1770,7 @@
             </a>
 
             <!-- ── 유튜브 1 ── -->
-            <a class="hl-card" data-type="yt" href="https://www.youtube.com/@hub_ridge" target="_blank" rel="noopener" style="text-decoration:none;">
+            <a class="hl-card" data-type="yt" href="https://www.youtube.com/@허브릿지" target="_blank" rel="noopener" style="text-decoration:none;">
               <div class="hl-thumb" style="background:#0f172a;">
                 <img src="https://homepage-ruby-pi.vercel.app/34.png" alt="유튜브" loading="lazy" style="opacity:.88;" />
                 <div class="hl-play">
@@ -1788,7 +1787,7 @@
             </a>
 
             <!-- ── 유튜브 2 ── -->
-            <a class="hl-card" data-type="yt" href="https://www.youtube.com/@hub_ridge" target="_blank" rel="noopener" style="text-decoration:none;">
+            <a class="hl-card" data-type="yt" href="https://www.youtube.com/@허브릿지" target="_blank" rel="noopener" style="text-decoration:none;">
               <div class="hl-thumb" style="background:#0f172a;">
                 <img src="https://homepage-ruby-pi.vercel.app/44.JPG" alt="유튜브" loading="lazy" style="opacity:.88;" />
                 <div class="hl-play">
@@ -1942,29 +1941,30 @@
       <label style="display:block;font-size:.8rem;font-weight:600;color:var(--gray-700);margin-bottom:.3rem;">후기 내용 <span style="color:var(--primary)">*</span></label>
       <textarea id="rv-text" placeholder="허브릿지를 통해 경험한 성장 이야기를 자유롭게 적어주세요." rows="4" style="width:100%;padding:.6rem .9rem;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.9rem;font-family:inherit;resize:vertical;box-sizing:border-box;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--gray-200)'"></textarea>
     </div>
+    <div style="margin-bottom:1rem;">
+      <label style="display:block;font-size:.8rem;font-weight:600;color:var(--gray-700);margin-bottom:.3rem;">수정·삭제 비밀번호 <span style="font-weight:400;color:var(--gray-500);">(선택)</span></label>
+      <input type="password" id="rv-pw" placeholder="나중에 수정·삭제할 때 사용할 비밀번호" style="width:100%;padding:.6rem .9rem;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.9rem;font-family:inherit;box-sizing:border-box;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--gray-200)'" />
+    </div>
     <div id="rv-msg" style="font-size:.82rem;margin-bottom:.65rem;padding:.5rem .8rem;border-radius:8px;display:none;"></div>
     <button onclick="submitReview()" style="width:100%;padding:.85rem;background:var(--primary);color:#fff;border:none;border-radius:100px;font-size:.93rem;font-weight:700;cursor:pointer;font-family:inherit;transition:transform .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">후기 등록하기</button>
   </div>
 </div>
 
-<!-- ── 관리자 후기 삭제 모달 ── -->
-<div class="pw-overlay" id="admin-review-modal" onclick="if(event.target===this)closeAdminReview()">
-  <div class="pw-box" style="max-width:500px;text-align:left;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
-      <h4 style="font-size:1.05rem;margin:0;">후기 관리</h4>
-      <button onclick="closeAdminReview()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--gray-500);line-height:1;">&times;</button>
+<!-- ── 후기 삭제 확인 모달 ── -->
+<div class="pw-overlay" id="delete-review-modal" onclick="if(event.target===this)closeDeleteReview()">
+  <div class="pw-box" style="max-width:400px;text-align:left;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <h4 style="font-size:1rem;margin:0;">후기 삭제</h4>
+      <button onclick="closeDeleteReview()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--gray-500);line-height:1;">&times;</button>
     </div>
-    <div id="admin-pw-wrap">
-      <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-700);margin-bottom:.5rem;">관리자 비밀번호</label>
-      <div style="display:flex;gap:.5rem;">
-        <input type="password" id="admin-pw-input" placeholder="비밀번호 입력" style="flex:1;padding:.6rem .9rem;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.9rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--gray-200)'" onkeydown="if(event.key==='Enter')checkAdminPw()" />
-        <button onclick="checkAdminPw()" style="padding:.6rem 1.2rem;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:.9rem;cursor:pointer;font-family:inherit;">확인</button>
-      </div>
-      <div id="admin-pw-msg" style="font-size:.8rem;color:#dc2626;margin-top:.4rem;display:none;">비밀번호가 틀렸습니다.</div>
+    <div id="del-preview" style="font-size:.83rem;color:var(--gray-600);background:var(--gray-100);border-radius:8px;padding:.75rem;margin-bottom:1rem;line-height:1.5;"></div>
+    <label style="display:block;font-size:.82rem;font-weight:600;color:var(--gray-700);margin-bottom:.4rem;">비밀번호 입력</label>
+    <p style="font-size:.78rem;color:var(--gray-500);margin-bottom:.6rem;">작성 시 설정한 비밀번호 또는 관리자 비밀번호를 입력하세요.</p>
+    <div style="display:flex;gap:.5rem;">
+      <input type="password" id="del-pw-input" placeholder="비밀번호" style="flex:1;padding:.6rem .9rem;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.9rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--gray-200)'" onkeydown="if(event.key==='Enter')confirmDeleteReview()" />
+      <button onclick="confirmDeleteReview()" style="padding:.6rem 1.2rem;background:#dc2626;color:#fff;border:none;border-radius:8px;font-size:.9rem;cursor:pointer;font-family:inherit;">삭제</button>
     </div>
-    <div id="admin-list-wrap" style="display:none;">
-      <div id="admin-review-list"></div>
-    </div>
+    <div id="del-pw-msg" style="font-size:.8rem;color:#dc2626;margin-top:.5rem;display:none;">비밀번호가 틀렸습니다.</div>
   </div>
 </div>
 
@@ -2764,14 +2764,19 @@
   }
 
   // ── 후기 시스템 ──
-  var REVIEW_KEY = 'hubr_reviews_v1';
-  var ADMIN_PW   = '1204';
-  var AV_COLORS  = ['sa','sb','sc','sd'];
+  var REVIEW_KEY   = 'hubr_reviews_v1';
+  var ADMIN_PW     = '1204';
+  var AV_COLORS    = ['sa','sb','sc','sd'];
+  var _delTargetIdx = -1;
 
   function loadReviews() {
     try { return JSON.parse(localStorage.getItem(REVIEW_KEY) || '[]'); } catch(e) { return []; }
   }
   function saveReviews(arr) { localStorage.setItem(REVIEW_KEY, JSON.stringify(arr)); }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
 
   function renderReviews() {
     var track = document.getElementById('story-track');
@@ -2781,17 +2786,19 @@
       track.innerHTML = '<div style="padding:2rem;color:var(--gray-400);font-size:.9rem;">아직 등록된 후기가 없습니다. 첫 번째 후기를 남겨주세요!</div>';
       return;
     }
-    // 무한 롤링을 위해 2배 복제
-    var all = reviews.concat(reviews);
+    var all = reviews.concat(reviews.length < 4 ? reviews : []);
     track.innerHTML = all.map(function(r, i) {
-      var av = AV_COLORS[i % 4];
+      var realIdx = i % reviews.length;
+      var av = AV_COLORS[realIdx % 4];
       var initial = r.name ? r.name.charAt(0) : '?';
-      return '<div class="story-card"><p class="story-text">' + escHtml(r.text) + '</p><div class="story-prof"><div class="s-av ' + av + '">' + escHtml(initial) + '</div><div><div style="font-size:.82rem;font-weight:700;color:var(--gray-900);">' + escHtml(r.name) + '</div><div style="font-size:.76rem;color:var(--gray-500);">' + escHtml(r.role || '허브릿지 참여자') + '</div></div></div></div>';
+      return '<div class="story-card" onclick="openDeleteReview(' + realIdx + ')" style="cursor:pointer;" title="클릭하면 삭제할 수 있습니다">'
+        + '<p class="story-text">' + escHtml(r.text) + '</p>'
+        + '<div class="story-prof"><div class="s-av ' + av + '">' + escHtml(initial) + '</div>'
+        + '<div><div style="font-size:.82rem;font-weight:700;color:var(--gray-900);">' + escHtml(r.name) + '</div>'
+        + '<div style="font-size:.76rem;color:var(--gray-500);">' + escHtml(r.role || '허브릿지 참여자') + '</div></div></div>'
+        + '<div style="font-size:.7rem;color:var(--gray-400);margin-top:.5rem;text-align:right;">🗑 삭제</div>'
+        + '</div>';
     }).join('');
-  }
-
-  function escHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   function openReviewModal() {
@@ -2808,60 +2815,52 @@
     var name = (document.getElementById('rv-name')||{}).value||'';
     var role = (document.getElementById('rv-role')||{}).value||'';
     var text = (document.getElementById('rv-text')||{}).value||'';
+    var pw   = (document.getElementById('rv-pw')  ||{}).value||'';
     var msg  = document.getElementById('rv-msg');
     if (!name.trim()) { msg.style.display='block'; msg.style.background='#fef2f2'; msg.style.color='#dc2626'; msg.textContent='이름을 입력해 주세요.'; return; }
     if (!text.trim()) { msg.style.display='block'; msg.style.background='#fef2f2'; msg.style.color='#dc2626'; msg.textContent='후기 내용을 입력해 주세요.'; return; }
     var reviews = loadReviews();
-    reviews.unshift({ name: name.trim(), role: role.trim(), text: text.trim(), time: new Date().toISOString() });
+    reviews.unshift({ name: name.trim(), role: role.trim(), text: text.trim(), pw: pw.trim(), time: new Date().toISOString() });
     saveReviews(reviews);
     renderReviews();
     document.getElementById('rv-name').value = '';
     document.getElementById('rv-role').value = '';
     document.getElementById('rv-text').value = '';
+    document.getElementById('rv-pw').value   = '';
     msg.style.display='block'; msg.style.background='#f0fdf4'; msg.style.color='#059669'; msg.textContent='✓ 후기가 등록되었습니다. 감사합니다!';
     setTimeout(closeReviewModal, 1500);
   }
 
-  function openAdminReview() {
-    document.getElementById('admin-review-modal').style.display = 'flex';
-    document.getElementById('admin-pw-wrap').style.display = 'block';
-    document.getElementById('admin-list-wrap').style.display = 'none';
-    document.getElementById('admin-pw-input').value = '';
-    document.getElementById('admin-pw-msg').style.display = 'none';
+  function openDeleteReview(idx) {
+    _delTargetIdx = idx;
+    var reviews = loadReviews();
+    var r = reviews[idx];
+    if (!r) return;
+    document.getElementById('del-preview').textContent = '"' + r.text.substring(0,60) + (r.text.length>60?'…':'') + '" — ' + r.name;
+    document.getElementById('del-pw-input').value = '';
+    document.getElementById('del-pw-msg').style.display = 'none';
+    document.getElementById('delete-review-modal').style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    setTimeout(function(){ var el=document.getElementById('del-pw-input'); if(el) el.focus(); }, 100);
   }
-  function closeAdminReview() {
-    document.getElementById('admin-review-modal').style.display = 'none';
+  function closeDeleteReview() {
+    document.getElementById('delete-review-modal').style.display = 'none';
     document.body.style.overflow = '';
+    _delTargetIdx = -1;
   }
-  function checkAdminPw() {
-    var pw = (document.getElementById('admin-pw-input')||{}).value||'';
-    if (pw === ADMIN_PW) {
-      document.getElementById('admin-pw-wrap').style.display = 'none';
-      document.getElementById('admin-list-wrap').style.display = 'block';
-      renderAdminList();
+  function confirmDeleteReview() {
+    var pw = (document.getElementById('del-pw-input')||{}).value||'';
+    var reviews = loadReviews();
+    var r = reviews[_delTargetIdx];
+    if (!r) { closeDeleteReview(); return; }
+    if (pw === ADMIN_PW || (r.pw && pw === r.pw)) {
+      reviews.splice(_delTargetIdx, 1);
+      saveReviews(reviews);
+      renderReviews();
+      closeDeleteReview();
     } else {
-      document.getElementById('admin-pw-msg').style.display = 'block';
+      document.getElementById('del-pw-msg').style.display = 'block';
     }
-  }
-  function renderAdminList() {
-    var reviews = loadReviews();
-    var wrap = document.getElementById('admin-review-list');
-    if (reviews.length === 0) { wrap.innerHTML = '<p style="color:var(--gray-400);font-size:.9rem;padding:.5rem 0;">등록된 후기가 없습니다.</p>'; return; }
-    wrap.innerHTML = reviews.map(function(r, i) {
-      return '<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid var(--gray-100);gap:.75rem;">'
-        + '<div style="flex:1;min-width:0;"><div style="font-size:.82rem;font-weight:700;">' + escHtml(r.name) + ' · <span style="font-weight:400;color:var(--gray-500);">' + escHtml(r.role||'') + '</span></div>'
-        + '<div style="font-size:.82rem;color:var(--gray-700);margin-top:.2rem;word-break:keep-all;">' + escHtml(r.text) + '</div></div>'
-        + '<button onclick="deleteReview(' + i + ')" style="flex-shrink:0;background:#fef2f2;border:none;color:#dc2626;padding:.3rem .7rem;border-radius:6px;font-size:.78rem;cursor:pointer;">삭제</button></div>';
-    }).join('');
-  }
-  function deleteReview(idx) {
-    if (!confirm('이 후기를 삭제할까요?')) return;
-    var reviews = loadReviews();
-    reviews.splice(idx, 1);
-    saveReviews(reviews);
-    renderReviews();
-    renderAdminList();
   }
 
   // 페이지 로드 시 후기 렌더링
