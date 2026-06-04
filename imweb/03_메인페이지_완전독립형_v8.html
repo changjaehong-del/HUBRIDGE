@@ -1801,14 +1801,7 @@
         </div>
         <div class="af-row">
           <label>신청 프로그램 <span class="req">*</span></label>
-          <select id="af-program">
-            <option value="">— 선택하세요 —</option>
-            <option value="청년교육 및 인턴십">청년교육 및 인턴십</option>
-            <option value="창업 워크숍">창업 워크숍</option>
-            <option value="행사기획 실무 교육">행사기획 실무 교육</option>
-            <option value="네트워킹 프로그램">네트워킹 프로그램</option>
-            <option value="기타">기타</option>
-          </select>
+          <input type="text" id="af-program" placeholder="신청하실 프로그램명을 입력해 주세요" />
         </div>
         <div class="af-row">
           <label>신청 동기 / 궁금한 점</label>
@@ -1820,6 +1813,28 @@
     </div>
   </section>
 
+  <!-- 실시간 접수 명단 -->
+  <section class="sec">
+    <div class="cont">
+      <div class="sec-head fi">
+        <span class="sec-tag">실시간 접수 현황</span>
+        <h2 class="sec-title">접수자 명단</h2>
+        <p class="sec-desc">개인정보 보호를 위해 이름 일부는 마스킹 처리됩니다</p>
+      </div>
+      <div class="apply-list-wrap fi">
+        <div class="al-hdr">
+          <h4>접수 명단 <span id="al-count-badge" style="font-size:.8rem;font-weight:500;color:var(--gray-500);margin-left:.5rem;">총 0명</span></h4>
+          <span id="al-last-time" style="font-size:.78rem;color:var(--gray-500);"></span>
+        </div>
+        <div class="al-table-hdr">
+          <span>번호</span><span>이름</span><span>신청 프로그램</span><span>신청일</span><span>상태</span>
+        </div>
+        <div id="al-body">
+          <div class="al-empty">아직 접수된 신청이 없습니다.</div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 
 <!-- ── 협력업체 신청 모달 ── -->
@@ -2522,27 +2537,36 @@
 
     if (!name.trim())    { showApplyMsg('err','이름을 입력해 주세요.'); return; }
     if (!phone.trim())   { showApplyMsg('err','연락처를 입력해 주세요.'); return; }
-    if (!program)        { showApplyMsg('err','신청 프로그램을 선택해 주세요.'); return; }
+    if (!program.trim()) { showApplyMsg('err','신청 프로그램을 입력해 주세요.'); return; }
 
     btnEl.disabled = true;
     btnEl.textContent = '처리 중…';
 
-    setTimeout(function() {
-      var data = loadApplyData();
-      data.push({ name: name.trim(), phone: phone.trim(), email: email.trim(), program: program, motive: motive.trim(), time: new Date().toISOString() });
-      saveApplyData(data);
+    // 구글 폼 전송
+    var GF_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSddePrHSdoFrtftVlkE2fp2PiO5cBgVrtSbhPQqMYNrxmi-_Q/formResponse';
+    var body = new URLSearchParams();
+    body.append('entry.179707359',  name.trim());
+    body.append('entry.726886353',  phone.trim());
+    body.append('entry.1250477054', email.trim());
+    body.append('entry.1898706537', program.trim());
+    body.append('entry.337459165',  motive.trim());
+    fetch(GF_URL, { method: 'POST', mode: 'no-cors', body: body });
 
-      document.getElementById('af-name').value    = '';
-      document.getElementById('af-phone').value   = '';
-      document.getElementById('af-email').value   = '';
-      document.getElementById('af-program').value = '';
-      document.getElementById('af-motive').value  = '';
+    // 로컬 명단에도 저장
+    var data = loadApplyData();
+    data.push({ name: name.trim(), phone: phone.trim(), email: email.trim(), program: program.trim(), motive: motive.trim(), time: new Date().toISOString() });
+    saveApplyData(data);
 
-      btnEl.disabled = false;
-      btnEl.textContent = '신청하기';
-      showApplyMsg('ok','✓ 신청이 완료되었습니다! 담당자가 연락드리겠습니다.');
-      renderApplyList();
-    }, 600);
+    document.getElementById('af-name').value    = '';
+    document.getElementById('af-phone').value   = '';
+    document.getElementById('af-email').value   = '';
+    document.getElementById('af-program').value = '';
+    document.getElementById('af-motive').value  = '';
+
+    btnEl.disabled = false;
+    btnEl.textContent = '신청하기';
+    showApplyMsg('ok','✓ 신청이 완료되었습니다! 담당자가 연락드리겠습니다.');
+    renderApplyList();
   }
 
   function showApplyMsg(type, txt) {
