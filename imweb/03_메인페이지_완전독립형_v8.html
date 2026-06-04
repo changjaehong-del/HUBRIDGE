@@ -2605,12 +2605,21 @@
     var company = (document.getElementById('pf-company')||{}).value||'';
     var name    = (document.getElementById('pf-name')   ||{}).value||'';
     var phone   = (document.getElementById('pf-phone')  ||{}).value||'';
+    var email   = (document.getElementById('pf-email')  ||{}).value||'';
     var type    = (document.getElementById('pf-type')   ||{}).value||'';
-    var msg     = document.getElementById('pf-msg');
 
     if (!company.trim()) { showPfMsg('err','기업/기관명을 입력해 주세요.'); return; }
     if (!name.trim())    { showPfMsg('err','담당자명을 입력해 주세요.'); return; }
     if (!phone.trim())   { showPfMsg('err','연락처를 입력해 주세요.'); return; }
+
+    var GF_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfqq9Rbrm9q5ub4VPI_mNv3rYlYxtBcxVTjZ91rWFdcwt5oIQ/formResponse';
+    var body = new URLSearchParams();
+    body.append('entry.1323161414', company.trim());
+    body.append('entry.680870807',  name.trim());
+    body.append('entry.1603533754', phone.trim());
+    body.append('entry.1495325289', email.trim());
+    body.append('entry.1823502338', type.trim());
+    fetch(GF_URL, { method: 'POST', mode: 'no-cors', body: body });
 
     showPfMsg('ok','✓ 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.');
     setTimeout(function(){ closePartnerModal(); }, 2000);
